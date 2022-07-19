@@ -53,7 +53,10 @@ private: // Functions
 		strings.push_back(playerName);
 		floats.push_back(playerHeight);
 	}
-	~DebugList();
+	~DebugList()
+	{
+
+	}
 
 public:
 	void update()

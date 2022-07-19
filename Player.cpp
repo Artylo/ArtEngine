@@ -8,14 +8,14 @@ Player::Player(SDL_Renderer* renderer)
 		texture = SDL_CreateTextureFromSurface(renderer, sprite);
 		box = new SDL_Rect{ x,y,sprite->w,sprite->h };
 	}
-};
+}
 
 Player::~Player()
 {
 	SDL_DestroyTexture(texture);
-};
+}
 
-void Player::draw_player(SDL_Renderer* renderer, SDL_Window* window)
+void Player::draw_self(SDL_Renderer* renderer, SDL_Window* window)
 {
 	if (texture != NULL)
 	{

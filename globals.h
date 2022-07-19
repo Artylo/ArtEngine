@@ -53,6 +53,6 @@ public:
 	Player(SDL_Renderer* renderer);
 	~Player();
 
-	void draw_player(SDL_Renderer* renderer, SDL_Window* window);
+	void draw_self(SDL_Renderer* renderer, SDL_Window* window);
 	void update();
 };

@@ -1,20 +1,27 @@
 #include "globals.h"
-#include "debug.h"
-#include "Input.h"
-
-//#include "pong.h" //@TEMP
 
 SDL_Window* window;
 SDL_Renderer* renderer;
 
+#include "debug.h"
+#include "Input.h"
+#include "Skeleton.h"
+
+
 int main(int argc, char *argv[])
 {
+	//Seed RNG
+	srand((unsigned int)time(NULL));
+
+	//Predefined Colours
 	SDL_Color colBackground = c_black;
 	SDL_Color colLines = c_white;
 
+	//Init SDL Components
 	TTF_Init();
 	SDL_Init(SDL_INIT_EVERYTHING);
 
+	//Init SDL Window and Renderer
 	window = SDL_CreateWindow("ArtENGINE v0.1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, SDL_WINDOW_SHOWN);
 	if (window == NULL)
 	{
@@ -28,16 +35,14 @@ int main(int argc, char *argv[])
 	SDL_SetRenderDrawColor(renderer, colBackground.r, colBackground.g, colBackground.b, colBackground.a);
 	SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
 
+	//Init gamestate variables
 	bool gameActive = true;
 	SDL_Event event;
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
-
+	//Init important objects
 	Input input; // Init input handler.
 	Player player(renderer); // Init player.
-
-
-
 
 	//Draw Tiled Background
 	//@TEMP Attempt at tile system with repeating texture genereted from file on disk to RAM before generating texture with blitted surface.
@@ -60,31 +65,24 @@ int main(int argc, char *argv[])
 	
 	SDL_SetRenderTarget(renderer, NULL);
 
-	/* @CLEANUP Software tile minupulation in RAM.
-	for (int i = 0; i < w_width / 32; i++)
-	{
-		for (int j = 0; j < w_height / 32; j++)
-		{
-			SDL_BlitSurface(tile, NULL, tileBlit, new SDL_Rect{ i*32,j*32,32,32 });
-		}
-	}
-	*/
-
-	//@TEMP @CLEANUP Deallocate textures and free surfaces.
-	//SDL_Texture* tileTex = SDL_CreateTextureFromSurface(renderer,tileBlit);
-	//SDL_FreeSurface(tileBlit);
-
-	//SDL_DestroyTexture(tileTex); @CLEANUP Run in tile engine destructor to allow for dynamic texture changes at runtime.
-	//SDL_DestroyTexture(tilesrcTex); 
-	//SDL_DestroyTexture(preTileTex); 
-
-	//Pong pong; //@TEMP
-
-
-
+	//Text Initis
 	SDL_Surface* msg = NULL;
 	std::string msgTxt = "COCK AND BALLS";
 	const char* c = msgTxt.c_str();
+
+	const int numSkel = 5;
+	//Skeleton skeletons[numSkel];
+	std::vector<Skeleton> skeletons;
+
+	//GENERATE SKELETONS
+	for (int i = 0; i < numSkel; i++)
+	{
+		skeletons.push_back(Skeleton());
+		//skeletons[i] = Skeleton(renderer);
+		skeletons[i].x = rand() % w_width;
+		skeletons[i].y = rand() % w_height;
+		skeletons[i].texture = SDL_CreateTextureFromSurface(renderer, skeletons[i].sprite);
+	}
 
 	while (gameActive)
 	{
@@ -93,11 +91,9 @@ int main(int argc, char *argv[])
 		SDL_PumpEvents();
 
 		/****Draw Calls****/
-		// @TEMP Render blitted tile surface.
-		SDL_RenderCopy(renderer, preTileTex, NULL, NULL);
 
-		//@TEMP
-		//pong.play(renderer,keystate);
+		//Draw Background
+		SDL_RenderCopy(renderer, preTileTex, NULL, NULL);
 
 		//Draw Grid
    		if (keystate[SDL_SCANCODE_SPACE])
@@ -107,9 +103,8 @@ int main(int argc, char *argv[])
 
 		//Update Player
 		player.update();
-		
 		//Draw Player
-		player.draw_player(renderer, window);
+		player.draw_self(renderer, window);
 
 		//Draw Message
 		c = msgTxt.c_str();
@@ -117,6 +112,22 @@ int main(int argc, char *argv[])
 		SDL_Texture* msgTex = SDL_CreateTextureFromSurface(renderer, msg);
 		SDL_RenderCopy(renderer, msgTex, NULL, new SDL_Rect{0,0,640,128});
 
+		//Draw Skeletons
+		for (int i = 0; i < numSkel; i++)
+		{
+			skeletons[i].update();
+			skeletons[i].draw_self(renderer,window);
+			SDL_RenderCopy(renderer,skeletons[i].texture,NULL,skeletons[i].box);
+
+			if (keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
+			{
+				SDL_Rect* temp = skeletons[i].box;
+				draw_set_color(renderer, c_red);
+				SDL_RenderDrawRect(renderer, temp);
+				draw_set_color(renderer, c_default);
+			}
+
+		}		
 
 		//Push to Screen
 		SDL_RenderPresent(renderer);
@@ -124,15 +135,16 @@ int main(int argc, char *argv[])
 		//Handle Inputs
 		input.update(&gameActive, &event, &msgTxt, &player);
 
+		//Delay Before Next Frame
 		SDL_Delay(1000/gameFramerate);
 	}
 
 	//Quit
 	SDL_DestroyRenderer(renderer);
-	//SDL_DestroyWindow(window);
 	IMG_Quit();
 	TTF_Quit();
 	SDL_Quit();
+	//SDL_DestroyWindow(window);
 
 	return 0;
 }
