@@ -1,0 +1,7 @@
+[] Refactor resources into /lib and /img type folders and load them.
+[] Start loading PNGs instead of BMPs.
+[] Figure out if alpha blending is eating shit with new image format.
+[] Figure out how to host the files in the binary itself so you don't have to distribute them as loose files. If not make a .dat file.
+[] Make functioning txt file loading system for levels.
+[] Make functioning level editor.
+[] Make functioning entity index system.
