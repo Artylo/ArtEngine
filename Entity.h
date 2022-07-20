@@ -1,5 +1,6 @@
 #pragma once
 #include "globals.h"
+
 class Entity
 {
 private:
@@ -12,7 +13,7 @@ public:
 	int speed = 5;
 	int hspeed = 0;
 	int vspeed = 0;
-	SDL_Surface* sprite = NULL;
+	SDL_Surface* sprite = SDL_LoadBMP("img/tile.bmp");
 	SDL_Texture* texture = NULL;
 	SDL_Rect* box = NULL;
 

@@ -3,7 +3,11 @@
 
 void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Player* player)
 {
+	//Mouse Events
+	mouse_buttons = SDL_GetMouseState(&mouse_x,&mouse_y);
+
 	std::string msgTxt;
+	//Keyboard Events
 	while (SDL_PollEvent(eventPtr))
 	{
 		//Handle inputs.
@@ -62,4 +66,17 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 			break;
 		}
 	}
+}
+
+bool Input::mouseIsHovering(Entity entity)
+{
+	if (mouse_x < entity.x + entity.box->w && mouse_x > entity.x)
+	{
+		if (mouse_y < entity.y + entity.box->h && mouse_y > entity.y)
+		{
+			return true;
+		}
+		
+	}
+	return false;
 }

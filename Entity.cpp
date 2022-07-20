@@ -2,20 +2,18 @@
 
 Entity::Entity()
 {
-	sprite = SDL_LoadBMP("img/tile.bmp");
-	if (sprite != NULL)
-	{
-		box = new SDL_Rect{ x,y,sprite->w,sprite->h };
-	}
+	
 }
 
 Entity::~Entity()
 {
-	SDL_DestroyTexture(texture);
+	//if (sprite != NULL)  SDL_FreeSurface(sprite);
+	if (texture != NULL) SDL_DestroyTexture(texture);
 }
 
 void Entity::draw_self(SDL_Renderer* renderer, SDL_Window* window)
 {
+
 	if (sprite != NULL)
 	{
 		texture = SDL_CreateTextureFromSurface(renderer, sprite);
@@ -32,6 +30,11 @@ void Entity::draw_self(SDL_Renderer* renderer, SDL_Window* window)
 
 void Entity::update()
 {
+	if (sprite != NULL)
+	{
+		box = new SDL_Rect{ x,y,sprite->w,sprite->h };
+	}
+
 	x += hspeed;
 	y += vspeed;
 

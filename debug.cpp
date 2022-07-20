@@ -1,4 +1,6 @@
 ﻿#include "globals.h"
+#include "debug.h"
+#include "Entity.h"
 
 void draw_set_color(SDL_Renderer* renderer, SDL_Color color)
 {
@@ -27,6 +29,78 @@ void draw_grid(SDL_Renderer *renderer, SDL_Color color, Uint8 alpha)
 		SDL_RenderDrawLine(renderer, j * 32, 0, j * 32, w_height);
 	}
 	draw_reset_color(renderer);
+}
+
+DebugText::DebugText(SDL_Renderer* renderer, std::string inputText, int posX, int posY, int width, int height)
+{
+	x = posX;
+	y = posY;
+	w = width;
+	h = height;
+	text = inputText;
+	constChar = text.c_str();
+	create_surface();
+	draw_text(renderer);
+}
+
+DebugText::~DebugText()
+{
+	SDL_FreeSurface(textSurface);
+	SDL_DestroyTexture(textTexture);
+	Entity entity;
+}
+
+void DebugText::create_surface()
+{
+	textBox->x = x;
+	textBox->y = y;
+	if (textSurface == NULL)
+	{
+		textBox->w = w;
+		textBox->h = h;
+		TTF_Font* font = TTF_OpenFont("arial.ttf", w);
+		textSurface = TTF_RenderText_Solid(font, constChar, c_white);
+		
+	}
+}
+
+void DebugText::draw_text(SDL_Renderer* renderer)
+{	
+	if (textTexture == NULL)
+	{
+		textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+	}
+	if (textTexture != NULL)
+	{
+		draw_outline(renderer,2,c_black);
+		SDL_RenderCopy(renderer, textTexture, NULL, textBox);
+	}
+}
+
+void DebugText::draw_outline(SDL_Renderer* renderer, unsigned int thickness, SDL_Colour colour)
+{
+	int offset = 1;
+	SDL_Colour col = c_black;
+
+	offset = thickness;
+	col = colour;
+
+	SDL_Rect* textBoxCopy = new SDL_Rect{x, y, w, h};
+
+	SDL_Surface* outlineSurface = TTF_RenderText_Solid(TTF_OpenFont("arial.ttf", w), constChar, col);
+	SDL_Texture* outlineTexture = SDL_CreateTextureFromSurface(renderer,outlineSurface);
+
+		textBoxCopy->x -= offset;
+			SDL_RenderCopy(renderer, outlineTexture, NULL, textBoxCopy);
+		textBoxCopy->y -= offset;
+			SDL_RenderCopy(renderer, outlineTexture, NULL, textBoxCopy);
+		textBoxCopy->x += 2*offset;
+			SDL_RenderCopy(renderer, outlineTexture, NULL, textBoxCopy);
+		textBoxCopy->y += 2*offset;
+			SDL_RenderCopy(renderer, outlineTexture, NULL, textBoxCopy);
+
+	SDL_FreeSurface(outlineSurface);
+	SDL_DestroyTexture(outlineTexture);
 }
 
 class DebugList

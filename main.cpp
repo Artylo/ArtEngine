@@ -70,22 +70,23 @@ int main(int argc, char *argv[])
 	std::string msgTxt = "COCK AND BALLS";
 	const char* c = msgTxt.c_str();
 
-	const int numSkel = 5;
+	const int numSkel = 50;
 	//Skeleton skeletons[numSkel];
 	std::vector<Skeleton> skeletons;
 
 	//GENERATE SKELETONS
-	for (int i = 0; i < numSkel; i++)
+	for (int i = 0; i < numSkel-1; i++)
 	{
 		skeletons.push_back(Skeleton());
-		//skeletons[i] = Skeleton(renderer);
 		skeletons[i].x = rand() % w_width;
 		skeletons[i].y = rand() % w_height;
-		skeletons[i].texture = SDL_CreateTextureFromSurface(renderer, skeletons[i].sprite);
 	}
 
 	while (gameActive)
 	{
+		//Handle Inputs
+		input.update(&gameActive, &event, &msgTxt, &player);
+
 		//Clear Screen
 		SDL_RenderClear(renderer);
 		SDL_PumpEvents();
@@ -113,7 +114,7 @@ int main(int argc, char *argv[])
 		SDL_RenderCopy(renderer, msgTex, NULL, new SDL_Rect{0,0,640,128});
 
 		//Draw Skeletons
-		for (int i = 0; i < numSkel; i++)
+		for (int i = 0; i < numSkel-1; i++)
 		{
 			skeletons[i].update();
 			skeletons[i].draw_self(renderer,window);
@@ -125,15 +126,17 @@ int main(int argc, char *argv[])
 				draw_set_color(renderer, c_red);
 				SDL_RenderDrawRect(renderer, temp);
 				draw_set_color(renderer, c_default);
-			}
 
+				if (input.mouseIsHovering(skeletons[i]))
+				{
+					DebugText skeletonID(renderer, "0x" + std::to_string((unsigned)std::addressof(skeletons[i])), skeletons[i].x - skeletons[i].w, skeletons[i].box->y - 32, skeletons[i].w * 4, skeletons[i].h);
+					//DebugText skeletonID(renderer, "x: " + std::to_string(skeletons[i].x) + " y: " + std::to_string(skeletons[i].y), skeletons[i].x - skeletons[i].w, skeletons[i].box->y - 32, skeletons[i].w * 4, skeletons[i].h);
+				}
+			}
 		}		
 
 		//Push to Screen
 		SDL_RenderPresent(renderer);
-
-		//Handle Inputs
-		input.update(&gameActive, &event, &msgTxt, &player);
 
 		//Delay Before Next Frame
 		SDL_Delay(1000/gameFramerate);
