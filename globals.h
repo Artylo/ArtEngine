@@ -48,7 +48,8 @@ public:
 	int vspeed = 0;
 	SDL_Surface* sprite = NULL;
 	SDL_Texture* texture = NULL;
-	SDL_Rect* box = NULL;
+	SDL_Rect box = { 0,0,1,1 };
+	SDL_Point origin = { 16,16 };
 
 	Player(SDL_Renderer* renderer);
 	~Player();

@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
 	SDL_FreeSurface(tile);
 	SDL_Texture* preTileTex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, w_width, w_height);
 	//SDL_Surface* tileBlit = SDL_CreateRGBSurface(NULL, w_width, w_height, 32, 0, 0, 0, 0);
+	SDL_Rect tileRect;
 
 	SDL_SetRenderTarget(renderer,preTileTex);
 
@@ -59,7 +60,8 @@ int main(int argc, char *argv[])
 	{
 		for (int j = 0; j < w_height / 32; j++)
 		{
-			SDL_RenderCopy(renderer, tilesrcTex, NULL, new SDL_Rect{ i * 32,j * 32,32,32 });
+			tileRect = SDL_Rect{i * 32,j * 32,32,32};
+			SDL_RenderCopy(renderer, tilesrcTex, NULL, &tileRect);
 		}
 	}
 	
@@ -68,22 +70,26 @@ int main(int argc, char *argv[])
 	//Text Initis
 	SDL_Surface* msg = NULL;
 	std::string msgTxt = "COCK AND BALLS";
+	TTF_Font* msgFont = default_font;
 	const char* c = msgTxt.c_str();
+	SDL_Rect msgRect = SDL_Rect{0,0,640,128};
 
-	const int numSkel = 50;
-	//Skeleton skeletons[numSkel];
+	const int numSkel = 1;
+	Skeleton originalskel;
 	std::vector<Skeleton> skeletons;
 
 	//GENERATE SKELETONS
-	for (int i = 0; i < numSkel-1; i++)
+	for (int i = 0; i < numSkel; i++)
 	{
-		skeletons.push_back(Skeleton());
+		skeletons.push_back(originalskel);
+		skeletons[i].init(renderer);
 		skeletons[i].x = rand() % w_width;
 		skeletons[i].y = rand() % w_height;
 	}
 
 	while (gameActive)
 	{
+		
 		//Handle Inputs
 		input.update(&gameActive, &event, &msgTxt, &player);
 
@@ -91,12 +97,13 @@ int main(int argc, char *argv[])
 		SDL_RenderClear(renderer);
 		SDL_PumpEvents();
 
-		/****Draw Calls****/
+		//Draw Calls
 
 		//Draw Background
 		SDL_RenderCopy(renderer, preTileTex, NULL, NULL);
 
 		//Draw Grid
+
    		if (keystate[SDL_SCANCODE_SPACE])
 		{
 			draw_grid(renderer, c_white, 128);
@@ -107,36 +114,50 @@ int main(int argc, char *argv[])
 		//Draw Player
 		player.draw_self(renderer, window);
 
+		
 		//Draw Message
 		c = msgTxt.c_str();
-		msg = TTF_RenderText_Solid(default_font, c, c_white);
+		msg = TTF_RenderText_Solid(msgFont, c, c_white);
 		SDL_Texture* msgTex = SDL_CreateTextureFromSurface(renderer, msg);
-		SDL_RenderCopy(renderer, msgTex, NULL, new SDL_Rect{0,0,640,128});
+		SDL_RenderCopy(renderer, msgTex, NULL, &msgRect);
+		SDL_FreeSurface(msg);
+		SDL_DestroyTexture(msgTex);
 
+		
 		//Draw Skeletons
-		for (int i = 0; i < numSkel-1; i++)
+		for (int i = 0; i < numSkel; i++)
 		{
-			skeletons[i].update();
 			skeletons[i].draw_self(renderer,window);
-			SDL_RenderCopy(renderer,skeletons[i].texture,NULL,skeletons[i].box);
-
+			SDL_RenderCopy(renderer,skeletons[i].texture,NULL,&skeletons[i].box);
 			if (keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
 			{
-				SDL_Rect* temp = skeletons[i].box;
 				draw_set_color(renderer, c_red);
-				SDL_RenderDrawRect(renderer, temp);
+				SDL_RenderDrawRect(renderer, &skeletons[i].box);
 				draw_set_color(renderer, c_default);
+			}
+		}
 
+		
+		//Draw Skeleton Debug
+		for (int i = 0; i < numSkel; i++)
+		{
+			if (keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
+			{
 				if (input.mouseIsHovering(skeletons[i]))
 				{
-					DebugText skeletonID(renderer, "0x" + std::to_string((unsigned)std::addressof(skeletons[i])), skeletons[i].x - skeletons[i].w, skeletons[i].box->y - 32, skeletons[i].w * 4, skeletons[i].h);
+					Skeleton s = skeletons[i];
+					DebugText skeletonID(renderer, "id: " + std::to_string(i), s.x - s.w, s.box.y - 32, s.w * 2, s.h);
+					//DebugText skeletonID(renderer, "0x" + std::to_string((unsigned)std::addressof(s)), s.x - s.w, s.box->y - 32, s.w * 4, s.h);
+					DebugText skeletonCords(renderer, "x: " + std::to_string(s.x) + "y:" + std::to_string(s.y), s.x - s.w, s.box.y - 64, s.w * 4, s.h);
 					//DebugText skeletonID(renderer, "x: " + std::to_string(skeletons[i].x) + " y: " + std::to_string(skeletons[i].y), skeletons[i].x - skeletons[i].w, skeletons[i].box->y - 32, skeletons[i].w * 4, skeletons[i].h);
 				}
 			}
-		}		
+		}
+		
 
 		//Push to Screen
 		SDL_RenderPresent(renderer);
+
 
 		//Delay Before Next Frame
 		SDL_Delay(1000/gameFramerate);

@@ -41,24 +41,25 @@ DebugText::DebugText(SDL_Renderer* renderer, std::string inputText, int posX, in
 	constChar = text.c_str();
 	create_surface();
 	draw_text(renderer);
+	TTF_CloseFont(font);
+	font = TTF_OpenFont("arial.ttf", w);
 }
 
 DebugText::~DebugText()
 {
 	SDL_FreeSurface(textSurface);
 	SDL_DestroyTexture(textTexture);
-	Entity entity;
+	TTF_CloseFont(font);
 }
 
 void DebugText::create_surface()
 {
-	textBox->x = x;
-	textBox->y = y;
+	textBox.x = x;
+	textBox.y = y;
 	if (textSurface == NULL)
 	{
-		textBox->w = w;
-		textBox->h = h;
-		TTF_Font* font = TTF_OpenFont("arial.ttf", w);
+		textBox.w = w;
+		textBox.h = h;
 		textSurface = TTF_RenderText_Solid(font, constChar, c_white);
 		
 	}
@@ -73,7 +74,7 @@ void DebugText::draw_text(SDL_Renderer* renderer)
 	if (textTexture != NULL)
 	{
 		draw_outline(renderer,2,c_black);
-		SDL_RenderCopy(renderer, textTexture, NULL, textBox);
+		SDL_RenderCopy(renderer, textTexture, NULL, &textBox);
 	}
 }
 
@@ -85,19 +86,19 @@ void DebugText::draw_outline(SDL_Renderer* renderer, unsigned int thickness, SDL
 	offset = thickness;
 	col = colour;
 
-	SDL_Rect* textBoxCopy = new SDL_Rect{x, y, w, h};
+	SDL_Rect textBoxCopy = SDL_Rect{x, y, w, h};
 
-	SDL_Surface* outlineSurface = TTF_RenderText_Solid(TTF_OpenFont("arial.ttf", w), constChar, col);
+	SDL_Surface* outlineSurface = TTF_RenderText_Solid(font, constChar, col);
 	SDL_Texture* outlineTexture = SDL_CreateTextureFromSurface(renderer,outlineSurface);
 
-		textBoxCopy->x -= offset;
-			SDL_RenderCopy(renderer, outlineTexture, NULL, textBoxCopy);
-		textBoxCopy->y -= offset;
-			SDL_RenderCopy(renderer, outlineTexture, NULL, textBoxCopy);
-		textBoxCopy->x += 2*offset;
-			SDL_RenderCopy(renderer, outlineTexture, NULL, textBoxCopy);
-		textBoxCopy->y += 2*offset;
-			SDL_RenderCopy(renderer, outlineTexture, NULL, textBoxCopy);
+		textBoxCopy.x -= offset;
+			SDL_RenderCopy(renderer, outlineTexture, NULL, &textBoxCopy);
+		textBoxCopy.y -= offset;
+			SDL_RenderCopy(renderer, outlineTexture, NULL, &textBoxCopy);
+		textBoxCopy.x += 2*offset;
+			SDL_RenderCopy(renderer, outlineTexture, NULL, &textBoxCopy);
+		textBoxCopy.y += 2*offset;
+			SDL_RenderCopy(renderer, outlineTexture, NULL, &textBoxCopy);
 
 	SDL_FreeSurface(outlineSurface);
 	SDL_DestroyTexture(outlineTexture);
@@ -129,7 +130,7 @@ private: // Functions
 	}
 	~DebugList()
 	{
-
+		
 	}
 
 public:

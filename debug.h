@@ -15,7 +15,8 @@ public:
 	const char* constChar = NULL;
 	SDL_Surface* textSurface = NULL;
 	SDL_Texture* textTexture = NULL;
-	SDL_Rect* textBox = new SDL_Rect{ 0,0,0,0 };
+	SDL_Rect textBox = SDL_Rect{ 0,0,0,0 };
+	TTF_Font* font = TTF_OpenFont("arial.ttf", 24);
 
 	DebugText(SDL_Renderer* renderer, std::string inputText, int x, int y, int w, int h);
 	~DebugText();
