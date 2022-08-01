@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	SDL_Color colLines = c_white;
 
 	//Init SDL Components
-	TTF_Init();
+	TTF_Init(); // Init TTF font loading.
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	//Init SDL Window and Renderer
@@ -35,6 +35,13 @@ int main(int argc, char *argv[])
 	SDL_SetRenderDrawColor(renderer, colBackground.r, colBackground.g, colBackground.b, colBackground.a);
 	SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
 
+	//Init PNG loading.
+	//int imgFlags = IMG_INIT_PNG;
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL_Image Error", IMG_GetError(), window);
+	}
+
 	//Init gamestate variables
 	bool gameActive = true;
 	SDL_Event event;
@@ -42,7 +49,8 @@ int main(int argc, char *argv[])
 
 	//Init important objects
 	Input input; // Init input handler.
-	Player player(renderer); // Init player.
+	Player player; // Init player.
+	player.init(renderer, window);
 
 	//Draw Tiled Background
 	//@TEMP Attempt at tile system with repeating texture genereted from file on disk to RAM before generating texture with blitted surface.
@@ -74,7 +82,7 @@ int main(int argc, char *argv[])
 	const char* c = msgTxt.c_str();
 	SDL_Rect msgRect = SDL_Rect{0,0,640,128};
 
-	const int numSkel = 1;
+	const int numSkel = 50;
 	Skeleton originalskel;
 	std::vector<Skeleton> skeletons;
 
@@ -82,9 +90,10 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < numSkel; i++)
 	{
 		skeletons.push_back(originalskel);
-		skeletons[i].init(renderer);
 		skeletons[i].x = rand() % w_width;
 		skeletons[i].y = rand() % w_height;
+		skeletons[i].init(renderer, window);
+		
 	}
 
 	while (gameActive)
@@ -109,12 +118,6 @@ int main(int argc, char *argv[])
 			draw_grid(renderer, c_white, 128);
 		}
 
-		//Update Player
-		player.update();
-		//Draw Player
-		player.draw_self(renderer, window);
-
-		
 		//Draw Message
 		c = msgTxt.c_str();
 		msg = TTF_RenderText_Solid(msgFont, c, c_white);
@@ -125,19 +128,28 @@ int main(int argc, char *argv[])
 
 		
 		//Draw Skeletons
+		
 		for (int i = 0; i < numSkel; i++)
 		{
-			skeletons[i].draw_self(renderer,window);
+			skeletons[i].update();
+			skeletons[i].draw_self();
 			SDL_RenderCopy(renderer,skeletons[i].texture,NULL,&skeletons[i].box);
 			if (keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
 			{
+				//Render Box
+				Skeleton s = skeletons[i];
 				draw_set_color(renderer, c_red);
 				SDL_RenderDrawRect(renderer, &skeletons[i].box);
+				draw_set_color(renderer, c_default);
+
+				//Bounding Box
+				draw_set_color(renderer, c_green);
+				SDL_RenderDrawLine(renderer,s.box.x,s.box.y,s.box.x+s.box.w,s.box.y);
+				SDL_RenderDrawLine(renderer, s.box.x + s.box.w, s.box.y, s.box.x+s.box.w, s.box.y+s.box.h);
 				draw_set_color(renderer, c_default);
 			}
 		}
 
-		
 		//Draw Skeleton Debug
 		for (int i = 0; i < numSkel; i++)
 		{
@@ -147,17 +159,18 @@ int main(int argc, char *argv[])
 				{
 					Skeleton s = skeletons[i];
 					DebugText skeletonID(renderer, "id: " + std::to_string(i), s.x - s.w, s.box.y - 32, s.w * 2, s.h);
-					//DebugText skeletonID(renderer, "0x" + std::to_string((unsigned)std::addressof(s)), s.x - s.w, s.box->y - 32, s.w * 4, s.h);
 					DebugText skeletonCords(renderer, "x: " + std::to_string(s.x) + "y:" + std::to_string(s.y), s.x - s.w, s.box.y - 64, s.w * 4, s.h);
-					//DebugText skeletonID(renderer, "x: " + std::to_string(skeletons[i].x) + " y: " + std::to_string(skeletons[i].y), skeletons[i].x - skeletons[i].w, skeletons[i].box->y - 32, skeletons[i].w * 4, skeletons[i].h);
 				}
 			}
 		}
-		
 
+		//Update Player
+		player.update();
+		//Draw Player
+		player.draw_self();
+		
 		//Push to Screen
 		SDL_RenderPresent(renderer);
-
 
 		//Delay Before Next Frame
 		SDL_Delay(1000/gameFramerate);

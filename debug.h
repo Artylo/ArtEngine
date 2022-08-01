@@ -3,6 +3,8 @@
 void draw_set_color(SDL_Renderer* renderer, SDL_Color color);
 void draw_reset_color(SDL_Renderer* renderer);
 void draw_grid(SDL_Renderer* renderer, SDL_Color color, Uint8 alpha);
+void draw_circle(SDL_Renderer* renderer, int centerX, int centerY, int radius);
+void draw_fillcircle(SDL_Renderer* renderer, int centerX, int centerY, int radius);
 
 class DebugText
 {

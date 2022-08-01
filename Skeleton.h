@@ -4,6 +4,5 @@ class Skeleton : public Entity
 {
 public:
     Skeleton();
-    void update();
 };
 

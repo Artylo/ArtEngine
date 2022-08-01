@@ -70,9 +70,9 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 
 bool Input::mouseIsHovering(Entity entity)
 {
-	if (mouse_x < entity.x + entity.box.w && mouse_x > entity.x)
+	if (mouse_x < entity.box.x + entity.box.w && mouse_x > entity.box.x)
 	{
-		if (mouse_y < entity.y + entity.box.h && mouse_y > entity.y)
+		if (mouse_y < entity.box.y + entity.box.h && mouse_y > entity.box.y)
 		{
 			return true;
 		}

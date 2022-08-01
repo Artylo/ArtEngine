@@ -2,10 +2,5 @@
 
 Skeleton::Skeleton()
 {
-	sprite = SDL_LoadBMP("img/enemy.bmp");
-}
-
-void Skeleton::update()
-{
-
+	sprite = IMG_Load("img/skeleton.png");
 }

@@ -31,6 +31,75 @@ void draw_grid(SDL_Renderer *renderer, SDL_Color color, Uint8 alpha)
 	draw_reset_color(renderer);
 }
 
+void draw_circle(SDL_Renderer* renderer, int centerX, int centerY, int radius)
+{
+	const int diameter = radius * 2;
+	int x = radius - 1;
+	int y = 0;
+	int tx = 1;
+	int ty = 1;
+	int error = tx - diameter;
+
+	while (x >= y)
+	{
+		SDL_RenderDrawPoint(renderer, centerX + x, centerY - y);
+		SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
+		SDL_RenderDrawPoint(renderer, centerX - x, centerY - y);
+		SDL_RenderDrawPoint(renderer, centerX - x, centerY + y);
+		SDL_RenderDrawPoint(renderer, centerX + y, centerY - x);
+		SDL_RenderDrawPoint(renderer, centerX + y, centerY + x);
+		SDL_RenderDrawPoint(renderer, centerX - y, centerY - x);
+		SDL_RenderDrawPoint(renderer, centerX - y, centerY + x);
+
+		if (error <= 0)
+		{
+			++y;
+			error += ty;
+			ty += 2;
+		}
+		if (error > 0)
+		{
+			--x;
+			tx += 2;
+			error += (tx - diameter);
+		}
+	}
+}
+
+void draw_fillcircle(SDL_Renderer* renderer, int x, int y, int radius)
+{
+	int offsetx, offsety, d;
+
+	offsetx = 0;
+	offsety = radius;
+	d = radius - 1;
+
+	while (offsety >= offsetx)
+	{
+		SDL_RenderDrawLine(renderer, x - offsety, y + offsetx, x + offsety, y + offsetx);
+		SDL_RenderDrawLine(renderer, x - offsetx, y + offsety, x + offsetx, y + offsety);
+		SDL_RenderDrawLine(renderer, x - offsetx, y - offsety, x + offsetx, y - offsety);
+		SDL_RenderDrawLine(renderer, x - offsety, y - offsetx, x + offsety, y - offsetx);
+		
+		if (d >= 2 * offsetx)
+		{
+			d -= 2 * offsetx + 1;
+			offsetx += 1;
+		}
+		else if (d < 2 * (radius - offsety))
+		{
+			d += 2 * offsety - 1;
+			offsety -= 1;
+		}
+		else
+		{
+			d += 2 * (offsety - offsetx - 1);
+			offsety -= 1;
+			offsetx += 1;
+		}
+	}
+}
+
 DebugText::DebugText(SDL_Renderer* renderer, std::string inputText, int posX, int posY, int width, int height)
 {
 	x = posX;

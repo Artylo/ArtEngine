@@ -13,6 +13,8 @@ public:
 	int speed = 5;
 	int hspeed = 0;
 	int vspeed = 0;
+	SDL_Renderer* gameRenderer = NULL;
+	SDL_Window* gameWindow = NULL;
 	SDL_Surface* sprite = SDL_LoadBMP("img/tile.bmp");
 	SDL_Texture* texture = NULL;
 	SDL_Rect box = {0,0,1,1};
@@ -20,8 +22,9 @@ public:
 
 	Entity();
 
-	void draw_self(SDL_Renderer* renderer, SDL_Window* window);
-	void init(SDL_Renderer* renderer);
+	void init(SDL_Renderer* renderer, SDL_Window* window);
+	void draw_shadow();
+	void draw_self();
 	void update();
 
 	~Entity();

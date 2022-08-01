@@ -87,6 +87,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="pong.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="globals.h" />
@@ -107,6 +108,8 @@
   <ItemGroup>
     <Image Include="img\enemy.bmp" />
     <Image Include="img\player.bmp" />
+    <Image Include="img\player.png" />
+    <Image Include="img\skeleton.png" />
     <Image Include="img\tile.bmp" />
     <Image Include="img\tile2.bmp" />
   </ItemGroup>
