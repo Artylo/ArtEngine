@@ -2,6 +2,37 @@
 #include "debug.h"
 #include "Entity.h"
 
+double degtorad(double deg)
+{
+	return deg * (M_PI / 180);
+}
+
+double radtodeg(double rad)
+{
+	//return tan(rad * M_PI / 180);
+	return rad * (180 / M_PI);
+}
+
+double lengthdir_x(int dist, double angle)
+{
+	return dist * cos(degtorad(angle));
+}
+
+double lengthdir_y(int dist, double angle)
+{
+	return dist * -sin(degtorad(angle));
+}
+
+double point_distance(int x1, int y1, int x2, int y2)
+{
+	return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+
+double point_direction(int x1, int y1, int x2, int y2)
+{
+	return -radtodeg(atan2(y1 - y2, x1 - x2)) + 180;
+}
+
 void draw_set_color(SDL_Renderer* renderer, SDL_Color color)
 {
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
@@ -31,7 +62,7 @@ void draw_grid(SDL_Renderer *renderer, SDL_Color color, Uint8 alpha)
 	draw_reset_color(renderer);
 }
 
-void draw_circle(SDL_Renderer* renderer, int centerX, int centerY, int radius)
+void draw_circle(SDL_Renderer* renderer, int centerX, int centerY, int radius) // @FIX: Line-based drawing (has overlapping lines which mess with alpha blending)
 {
 	const int diameter = radius * 2;
 	int x = radius - 1;
@@ -66,7 +97,23 @@ void draw_circle(SDL_Renderer* renderer, int centerX, int centerY, int radius)
 	}
 }
 
-void draw_fillcircle(SDL_Renderer* renderer, int x, int y, int radius)
+void draw_fillcircle(SDL_Renderer* renderer, int x, int y, int radius) // Point-based fill (works as presumed)
+{
+	for (int w = 0; w < radius * 2; w++)
+	{
+		for (int h = 0; h < radius * 2; h++)
+		{
+			int dx = radius - w; // horizontal offset
+			int dy = radius - h; // vertical offset
+			if ((dx * dx + dy * dy) <= (radius * radius))
+			{
+				SDL_RenderDrawPoint(renderer, x + dx, y + dy);
+			}
+		}
+	}
+}
+
+void draw_fillcircle2(SDL_Renderer* renderer, int x, int y, int radius)
 {
 	int offsetx, offsety, d;
 
@@ -80,7 +127,7 @@ void draw_fillcircle(SDL_Renderer* renderer, int x, int y, int radius)
 		SDL_RenderDrawLine(renderer, x - offsetx, y + offsety, x + offsetx, y + offsety);
 		SDL_RenderDrawLine(renderer, x - offsetx, y - offsety, x + offsetx, y - offsety);
 		SDL_RenderDrawLine(renderer, x - offsety, y - offsetx, x + offsety, y - offsetx);
-		
+
 		if (d >= 2 * offsetx)
 		{
 			d -= 2 * offsetx + 1;

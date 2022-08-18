@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "debug.h"
 #include "Input.h"
 
 void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Player* player)
@@ -35,6 +36,8 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 			case SDLK_d: // 
 				*str = "RIGHT";
 				player->hspeed = player->speed;
+				break;
+			case SDLK_SPACE:
 				break;
 			default:
 				break;

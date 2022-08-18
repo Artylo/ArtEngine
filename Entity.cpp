@@ -27,11 +27,12 @@ void Entity::init(SDL_Renderer* renderer, SDL_Window* window)
 
 void Entity::draw_shadow()
 {
-	int shadowAlpha = 128;
+	Uint8 shadowAlpha = 128;
 	SDL_Colour shadowColour = { 0,0,0,shadowAlpha };
 
 	//Draw Shadow
 	draw_set_color(gameRenderer, shadowColour); // Set shadow alpha to 50%
+	//draw_fillcircle2(gameRenderer, x, y + (h / 4) + 4, w / 2);
 	draw_fillcircle(gameRenderer, x, y + (h / 4) + 4, w / 2);
 	draw_reset_color(gameRenderer); // Reset shadow alpha change.
 }
