@@ -68,10 +68,10 @@ BEGIN
         BLOCK "080904b0"
         BEGIN
             VALUE "CompanyName", "Arty"
-            VALUE "FileDescription", "Hopefully a OpenGL 3D game engine."
+            VALUE "FileDescription", "ArtENGINE 0.1"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "ArtEngine.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2021"
+            VALUE "LegalCopyright", "Copyright (C) 2022"
             VALUE "OriginalFilename", "ArtEngine.exe"
             VALUE "ProductName", "ArtENGINE"
             VALUE "ProductVersion", "1.0.0.1"

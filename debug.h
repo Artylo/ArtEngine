@@ -22,15 +22,19 @@ public:
 	int w = 0;
 	int h = 0;
 	std::string text = "ERROR";
-	const char* constChar = NULL;
+	const char* textChar = NULL;
+	bool surfaceExists = false;
 	SDL_Surface* textSurface = NULL;
+	bool textureExists = false;
 	SDL_Texture* textTexture = NULL;
 	SDL_Rect textBox = SDL_Rect{ 0,0,0,0 };
 	TTF_Font* font = TTF_OpenFont("arial.ttf", 24);
+	bool fontExists = true;
+	SDL_Renderer* rend = NULL;
 
-	DebugText(SDL_Renderer* renderer, std::string inputText, int x, int y, int w, int h);
+	DebugText(SDL_Renderer* renderer);
 	~DebugText();
 	void create_surface();
-	void draw_text(SDL_Renderer* renderer);
-	void draw_outline(SDL_Renderer* renderer, unsigned int thickness, SDL_Colour colour);
+	void draw_text(std::string inputText, int posX, int posY, int width, int height);
+	void draw_outline(unsigned int thickness, SDL_Colour colour);
 };

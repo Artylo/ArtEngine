@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <assert.h>
 
 //Window Constants
 #define gameFramerate 30
