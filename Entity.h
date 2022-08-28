@@ -15,12 +15,12 @@ public:
 	int vspeed = 0;
 	SDL_Renderer* gameRenderer = NULL;
 	SDL_Window* gameWindow = NULL;
-	SDL_Surface* sprite = SDL_LoadBMP("img/tile.bmp");
-	SDL_Texture* texture = NULL;
+	std::shared_ptr<SDL_Surface> sprite = nullptr;
+	std::shared_ptr <SDL_Texture> texture = nullptr;
 	SDL_Rect box = {0,0,1,1};
 	SDL_Point origin = {16,16};
 
-	Entity();
+	//Entity();
 
 	void init(SDL_Renderer* renderer, SDL_Window* window);
 	void draw_shadow();

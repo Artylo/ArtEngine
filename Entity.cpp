@@ -1,10 +1,6 @@
 #include "Entity.h"
 #include "debug.h"
 
-Entity::Entity()
-{
-	
-}
 
 void Entity::init(SDL_Renderer* renderer, SDL_Window* window)
 {
@@ -21,7 +17,11 @@ void Entity::init(SDL_Renderer* renderer, SDL_Window* window)
 
 	if (sprite != NULL)
 	{
-		texture = SDL_CreateTextureFromSurface(gameRenderer, sprite); // Generate hardware texture from sprite.
+		texture = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(gameRenderer, sprite.get()), SDL_DestroyTexture); // Generate hardware texture from sprite.
+		if (texture.get() == NULL)
+		{
+			SDL_Log("Failed to create skele");
+		}
 	}
 }
 
@@ -43,7 +43,7 @@ void Entity::draw_self()
 	if (texture != NULL)
 	{
 		//SDL_RenderCopy(gameRenderer,texture,NULL,&box);
-		SDL_RenderCopyEx(gameRenderer, texture, NULL, &box, 0, &origin, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(gameRenderer, texture.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
 	}
 	else SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "Failed to render entity texture.", gameWindow);
 }
@@ -58,6 +58,11 @@ void Entity::update()
 
 Entity::~Entity()
 {
-	//SDL_FreeSurface(sprite);
-	//if(texture != NULL) SDL_DestroyTexture(texture);
+	/*
+	SDL_FreeSurface(sprite.get());
+	sprite = nullptr;
+	
+	SDL_DestroyTexture(texture);
+	texture = nullptr;
+	*/
 }

@@ -1,2 +1,8 @@
-﻿  debug.cpp
+﻿  Entity.cpp
+  Input.cpp
+  Player.cpp
+  debug.cpp
+  main.cpp
+  pong.cpp
+  Generating Code...
   ArtEngine.vcxproj -> D:\ArtEngine\x64\Debug\ArtEngine.exe

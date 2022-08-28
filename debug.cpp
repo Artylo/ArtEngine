@@ -150,32 +150,40 @@ void draw_fillcircle2(SDL_Renderer* renderer, int x, int y, int radius)
 DebugText::DebugText(SDL_Renderer* renderer)
 {
 	rend = renderer;
+	font = TTF_OpenFont("arial.ttf", 24);
 }
 
 DebugText::~DebugText()
 {
 	
 	// Asserts always come back negative and all of this is prone to exceptions. If this causes a memory leak, I don't know how to fix it.
+	// The issue is that this destructor is being called after SDL_Quit has been called, despite my best efforts. So none of the SDL specific functions can execute for obvious reasons.
 
 	/*
+	//Surface is NULL at this point in runtime.
 	assert(textSurface != NULL);
-	if (surfaceExists)
+	if (textSurface != NULL)
 	{
 		SDL_FreeSurface(textSurface);
-		textSurface = NULL;
 	}
+	*/
+	
+	/*
+	//Texture is NULL at this point in runtime.
 	assert(textTexture != NULL);
-	if (textureExists)
+	if (textTexture != NULL)
 	{
 		SDL_DestroyTexture(textTexture);
-		textTexture = NULL;
 	}
+	*/
+	
 	assert(font != NULL);
 	if (fontExists)
 	{
 		TTF_CloseFont(font);
+		fontExists = false;
+		font = NULL;
 	}
-	*/
 	
 }
 
@@ -190,7 +198,7 @@ void DebugText::create_surface()
 	}
 	if (!surfaceExists)
 	{
-		textSurface = TTF_RenderText_Solid(font, textChar, c_white);
+   		textSurface = TTF_RenderText_Solid(font, textChar, c_white);
 		assert(textSurface != NULL);
 		surfaceExists = true;
 	}

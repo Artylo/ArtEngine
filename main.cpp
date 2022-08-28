@@ -22,7 +22,15 @@ int main(int argc, char *argv[])
 
 	//Init SDL Components
 	TTF_Init(); // Init TTF font loading.
-	SDL_Init(SDL_INIT_EVERYTHING);
+	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+	{
+		SDL_Log("Successfully loaded SDL: %s", SDL_GetError());
+	}
+	else
+	{
+		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+		return 1;
+	}
 
 	//Init SDL Window and Renderer
 	window = SDL_CreateWindow("ArtENGINE v0.1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
@@ -86,6 +94,7 @@ int main(int argc, char *argv[])
 
 	const int numSkel = 50;
 	Skeleton originalskel;
+	originalskel.init(renderer,window);
 	std::vector<Skeleton> skeletons;
 
 	//@TEMP: GENERATE SKELETONS
@@ -94,8 +103,7 @@ int main(int argc, char *argv[])
 		skeletons.push_back(originalskel);
 		skeletons[i].x = rand() % w_width;
 		skeletons[i].y = rand() % w_height;
-		skeletons[i].init(renderer, window);
-		
+		//skeletons[i].init(renderer, window);
 	}
 
 	//Debug Text
@@ -161,7 +169,7 @@ int main(int argc, char *argv[])
 		{
 			skeletons[i].update();
 			skeletons[i].draw_self();
-			SDL_RenderCopy(renderer,skeletons[i].texture,NULL,&skeletons[i].box);
+			SDL_RenderCopy(renderer,skeletons[i].texture.get(),NULL,&skeletons[i].box);
 			if (keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
 			{
 				//Render Box
@@ -240,11 +248,17 @@ int main(int argc, char *argv[])
 	}
 
 	//Quit
+	SDL_Log("Destroying Renderer");
 	SDL_DestroyRenderer(renderer);
+	SDL_Log("Destroying Window");
 	SDL_DestroyWindow(window);
-	IMG_Quit();
-	TTF_Quit();
-	SDL_Quit();
+	SDL_Log("Unloading SDL_IMG");
+	std::atexit(IMG_Quit);
+	SDL_Log("Unloading SDL_TTF");
+	std::atexit(TTF_Quit);
+	SDL_Log("Unloading SDL2");
+	std::atexit(SDL_Quit);
+	SDL_Log("SUCCESSFULLY SHUT DOWN");
 
 	return 0;
 }

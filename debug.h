@@ -28,8 +28,8 @@ public:
 	bool textureExists = false;
 	SDL_Texture* textTexture = NULL;
 	SDL_Rect textBox = SDL_Rect{ 0,0,0,0 };
-	TTF_Font* font = TTF_OpenFont("arial.ttf", 24);
-	bool fontExists = true;
+	TTF_Font* font = NULL;
+	bool fontExists = false;
 	SDL_Renderer* rend = NULL;
 
 	DebugText(SDL_Renderer* renderer);
