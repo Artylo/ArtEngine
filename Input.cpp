@@ -2,10 +2,24 @@
 #include "debug.h"
 #include "Input.h"
 
+Input::Input(SDL_Renderer* renderer, SDL_Window* window)
+{
+	wind = window;
+	rend = renderer;
+}
+
+Input::~Input()
+{
+
+}
+
 void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Player* player)
 {
+	/*
 	//Mouse Events
-	mouse_buttons = SDL_GetMouseState(&mouse_x,&mouse_y);
+	mouse_buttons = SDL_GetMouseState(&rawMouse_x,&rawMouse_y); // Gets Mouse coords relative to window, not renderer. Needs scaling to work properly but doesn't fully account for non 16:9 aspect ratios.
+	*/
+	setMouseScale();
 
 	std::string msgTxt;
 	//Keyboard Events
@@ -64,6 +78,11 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 			}
 			break;
 
+		case SDL_MOUSEMOTION: // Alternative Mouse Coordinates (this is renderer-relative not window-relative)
+			rawMouse_x = eventPtr->motion.x;
+			rawMouse_y = eventPtr->motion.y;
+			break;
+
 		case SDL_QUIT: // Press X on window to close game.
 			*gameState = false;
 			break;
@@ -73,6 +92,7 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 
 bool Input::mouseIsHovering(Entity entity)
 {
+	//@TODO: Replace with SDL_EnclosePoints();
 	if (mouse_x < entity.box.x + entity.box.w && mouse_x > entity.box.x)
 	{
 		if (mouse_y < entity.box.y + entity.box.h && mouse_y > entity.box.y)
@@ -82,4 +102,51 @@ bool Input::mouseIsHovering(Entity entity)
 		
 	}
 	return false;
+}
+
+void Input::setMouseScale()
+{
+	bool doScaling = false;
+
+	/*
+	//Debug
+	SDL_Log("rMouseX = %d \n", rawMouse_x);
+	SDL_Log("rMouseY = %d \n", rawMouse_y);
+	SDL_Log("MouseX = %d \n", mouse_x);
+	SDL_Log("MouseY = %d \n", mouse_y);
+	*/
+
+	if (doScaling) //@CLEANUP: This may come useful at some point, I do not fully anticipate needing it right now.
+	{
+		//Display Size
+		SDL_DisplayMode DM;
+		SDL_GetCurrentDisplayMode(0, &DM);
+		int screenWidth = DM.w;
+		int screenHeight = DM.h;
+
+		int currentWindowWidth;
+		int currentWindowHeight;
+
+		/*
+		int rendW, rendH;
+		SDL_RenderGetLogicalSize(rend,&rendW,&rendH);
+		*/
+
+		SDL_GetWindowSize(wind, &currentWindowWidth, &currentWindowHeight);
+
+		mouseScaleX = (int)((float)currentWindowWidth / (float)w_width);
+		mouseScaleY = (int)((float)currentWindowHeight / (float)w_height);
+
+		int Xoffset = (DM.w - w_width * mouseScaleX) / 2;
+
+		mouse_x = (int)(rawMouse_x / mouseScaleX);
+		mouse_y = (int)(rawMouse_y / mouseScaleY);
+
+		mouse_x += Xoffset;
+	}
+	else
+	{
+		mouse_x = rawMouse_x;
+		mouse_y = rawMouse_y;
+	}
 }

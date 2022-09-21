@@ -155,52 +155,23 @@ DebugText::DebugText(SDL_Renderer* renderer)
 
 DebugText::~DebugText()
 {
-	
-	// Asserts always come back negative and all of this is prone to exceptions. If this causes a memory leak, I don't know how to fix it.
-	// The issue is that this destructor is being called after SDL_Quit has been called, despite my best efforts. So none of the SDL specific functions can execute for obvious reasons.
-
-	/*
-	//Surface is NULL at this point in runtime.
-	assert(textSurface != NULL);
-	if (textSurface != NULL)
-	{
-		SDL_FreeSurface(textSurface);
-	}
-	*/
-	
-	/*
-	//Texture is NULL at this point in runtime.
-	assert(textTexture != NULL);
-	if (textTexture != NULL)
-	{
-		SDL_DestroyTexture(textTexture);
-	}
-	*/
-	
 	assert(font != NULL);
-	if (fontExists)
-	{
-		TTF_CloseFont(font);
-		fontExists = false;
-		font = NULL;
-	}
-	
+	TTF_CloseFont(font);
+	font = NULL;
 }
 
 void DebugText::create_surface()
 {
-	if (surfaceExists)
+	if (textSurface != NULL)
 	{
 		SDL_FreeSurface(textSurface);
 		textSurface = NULL;
 		assert(textSurface == NULL);
-		surfaceExists = false;
 	}
-	if (!surfaceExists)
+	if (textSurface == NULL)
 	{
    		textSurface = TTF_RenderText_Solid(font, textChar, c_white);
 		assert(textSurface != NULL);
-		surfaceExists = true;
 	}
 }
 
@@ -222,19 +193,18 @@ void DebugText::draw_text(std::string inputText, int posX, int posY, int width, 
 
 		create_surface();
 
-		if (textureExists)
+		if (textTexture != NULL)
 		{
 			SDL_DestroyTexture(textTexture);
-			textureExists = false;
+			textTexture = NULL;
 		}
-		if (!textureExists)
+		if (textTexture == NULL)
 		{
 			textTexture = SDL_CreateTextureFromSurface(rend, textSurface);
-			textureExists = true;
 		}
 	}
 
-	if (textureExists)
+	if (textTexture != NULL)
 	{
 		draw_outline(2, c_black);
 		SDL_RenderCopy(rend, textTexture, NULL, &textBox);
@@ -266,55 +236,3 @@ void DebugText::draw_outline(unsigned int thickness, SDL_Colour colour)
 	SDL_FreeSurface(outlineSurface);
 	SDL_DestroyTexture(outlineTexture);
 }
-
-class DebugList
-{
-private: // Variables
-	std::string preprocessedDebugList;
-	DebugEntry<int> playerX = {"PlayerX", 1};
-	DebugEntry<int> playerY = {"PlayerY", 2};
-	DebugEntry<std::string> playerName = {"Name", "jimmothy"};
-	DebugEntry<float> playerHeight = { "PlayerHeight", 5.11f };
-
-public:
-	//std::vector<std::string> arr;
-
-	std::vector<DebugEntry<int>> ints;
-	std::vector<DebugEntry<float>> floats;
-	std::vector<DebugEntry<std::string>> strings;
-
-private: // Functions
-	DebugList()
-	{
-		ints.push_back(playerX);
-		ints.push_back(playerY);
-		strings.push_back(playerName);
-		floats.push_back(playerHeight);
-	}
-	~DebugList()
-	{
-		
-	}
-
-public:
-	void update()
-	{
-		preprocessedDebugList.clear();
-		for (int i = 0; i < ints.size(); i++)
-		{
-			preprocessedDebugList += ints[i].EntryName + ": " + std::to_string(ints[i].value) + "\n";
-		}
-		for (int i = 0; i < floats.size(); i++)
-		{
-			preprocessedDebugList += floats[i].EntryName + ": " + std::to_string(floats[i].value) + "\n";
-		}
-		for (int i = 0; i < floats.size(); i++)
-		{
-			preprocessedDebugList += strings[i].EntryName + ": " + strings[i].value + "\n";
-		}
-	}
-	void print()
-	{
-		std::cout << preprocessedDebugList << std::endl;
-	}
-};

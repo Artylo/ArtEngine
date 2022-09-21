@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL_Image Error", IMG_GetError(), window);
 	}
+	SDL_SetHint(SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "letterbox");
+	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_SCALING, "0");
 	SDL_RenderSetLogicalSize(renderer,w_width,w_height);
 
 	//Init gamestate variables
@@ -58,7 +60,7 @@ int main(int argc, char *argv[])
 	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
 	//Init important objects
-	Input input; // Init input handler.
+	Input input(renderer, window); // Init input handler.
 	Player player; // Init player.
 	player.init(renderer, window);
 
@@ -198,6 +200,24 @@ int main(int argc, char *argv[])
 					skeletonDebug.draw_text("x: " + std::to_string(s.x) + " y:" + std::to_string(s.y), s.x - s.w, s.box.y - 64, s.w * 4, s.h);
 					skeletonDebug.draw_text("id:  " + std::to_string(i), s.x - s.w, s.box.y - 32, s.w * 4, s.h);
 				}
+
+				//Raw Mouse
+				draw_set_color(renderer, c_green);
+				draw_circle(renderer, input.rawMouse_x, input.rawMouse_y, 3);
+				draw_circle(renderer, input.rawMouse_x, input.rawMouse_y, 7);
+				SDL_RenderDrawPoint(renderer, input.rawMouse_x, input.rawMouse_y);
+				draw_set_color(renderer, c_blue);
+				draw_circle(renderer, input.rawMouse_x, input.rawMouse_y, 5);
+				draw_reset_color(renderer);
+
+				//Scaled Mouse
+				draw_set_color(renderer,c_red);
+				draw_circle(renderer,input.mouse_x,input.mouse_y,5);
+				draw_set_color(renderer, c_black);
+				draw_circle(renderer, input.mouse_x, input.mouse_y, 4);
+				draw_circle(renderer, input.mouse_x, input.mouse_y, 6);
+				SDL_RenderDrawPoint(renderer, input.mouse_x, input.mouse_y);
+				draw_reset_color(renderer);
 			}
 		}
 

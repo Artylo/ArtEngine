@@ -23,13 +23,10 @@ public:
 	int h = 0;
 	std::string text = "ERROR";
 	const char* textChar = NULL;
-	bool surfaceExists = false;
 	SDL_Surface* textSurface = NULL;
-	bool textureExists = false;
 	SDL_Texture* textTexture = NULL;
 	SDL_Rect textBox = SDL_Rect{ 0,0,0,0 };
 	TTF_Font* font = NULL;
-	bool fontExists = false;
 	SDL_Renderer* rend = NULL;
 
 	DebugText(SDL_Renderer* renderer);
