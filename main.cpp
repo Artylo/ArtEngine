@@ -57,7 +57,6 @@ int main(int argc, char *argv[])
 	//Init gamestate variables
 	bool gameActive = true;
 	SDL_Event event;
-	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
 	//Init important objects
 	Input input(renderer, window); // Init input handler.
@@ -124,6 +123,9 @@ int main(int argc, char *argv[])
 	Uint32 framecount = 0;
 	Uint32 framespersecond = 0;
 	memset(frametimes, 0, sizeof(frametimes)); // Essentially shorthand for looping though frametimes and setting to 0. Very C-like.
+	Uint32 frametimesindex = framecount % 10;
+	Uint32 getticks = SDL_GetTicks();
+	Uint32 count;
 
 
 	/* ################### */
@@ -151,7 +153,7 @@ int main(int argc, char *argv[])
 		SDL_RenderCopy(renderer, preTileTex, NULL, NULL);
 
 		//Draw Grid
-   		if (keystate[SDL_SCANCODE_SPACE])
+   		if (input.keystate[SDL_SCANCODE_SPACE])
 		{
 			draw_grid(renderer, c_white, 128);
 		}
@@ -172,7 +174,7 @@ int main(int argc, char *argv[])
 			skeletons[i].update();
 			skeletons[i].draw_self();
 			SDL_RenderCopy(renderer,skeletons[i].texture.get(),NULL,&skeletons[i].box);
-			if (keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
+			if (input.keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
 			{
 				//Render Box
 				Skeleton s = skeletons[i];
@@ -191,15 +193,18 @@ int main(int argc, char *argv[])
 		//Draw Skeleton Debug
 		for (int i = 0; i < numSkel; i++)
 		{
-			if (keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
+			Skeleton s = skeletons[i];
+			if (input.keystate[SDL_SCANCODE_SPACE]) // @DEBUG: Squares around skeleton positions.
 			{
 				if (input.mouseIsHovering(skeletons[i]))
 				{
-					Skeleton s = skeletons[i];
-					//@DEBUGTEXT
-					skeletonDebug.draw_text("x: " + std::to_string(s.x) + " y:" + std::to_string(s.y), s.x - s.w, s.box.y - 64, s.w * 4, s.h);
-					skeletonDebug.draw_text("id:  " + std::to_string(i), s.x - s.w, s.box.y - 32, s.w * 4, s.h);
+					//@DEBUG
+					skeletonDebug.draw_text("x: " + std::to_string(s.x) + " y:" + std::to_string(s.y), s.x - s.w, s.box.y - 64);
+					skeletonDebug.draw_text("id:  " + std::to_string(i), s.x - s.w, s.box.y - 32);
 				}
+
+				//@DEBUG
+				skeletonDebug.draw_text(std::to_string(i), s.x-skeletonDebug.w/2, s.y - skeletonDebug.h/2); // Show id
 
 				//Raw Mouse
 				draw_set_color(renderer, c_green);
@@ -228,11 +233,13 @@ int main(int argc, char *argv[])
 
 		//Draw Framerate
 		//DebugText frameCounter(renderer, std::to_string(framespersecond), w_width - 74, 0, 64, 64);
-		std::string tempFPSstring = "FPS: " + std::to_string(framespersecond);
+		std::string tempFPSstring = "FPS: " + std::to_string(framespersecond) + " " + "ms: " + std::to_string(SDL_GetTicks() - frametimelast);
 		const char* tempFPSchar = tempFPSstring.c_str();
 		SDL_Surface* tempFPSsurface = TTF_RenderText_Solid(msgFont, tempFPSchar, c_white);
 		SDL_Texture* tempFPStexture = SDL_CreateTextureFromSurface(renderer, tempFPSsurface);
-		SDL_Rect tempFPSrect = SDL_Rect{ w_width - 74, w_height - 64, 64, 64 };
+		int tempFPSw, tempFPSh;
+		TTF_SizeText(msgFont,tempFPSchar,&tempFPSw, &tempFPSh);
+		SDL_Rect tempFPSrect = SDL_Rect{ w_width - tempFPSw/4, w_height - tempFPSh/4, tempFPSw/4, tempFPSh/4 };
 		SDL_RenderCopy(renderer, tempFPStexture, NULL, &tempFPSrect);
 		SDL_FreeSurface(tempFPSsurface);
 		SDL_DestroyTexture(tempFPStexture);
@@ -248,9 +255,9 @@ int main(int argc, char *argv[])
 		SDL_Delay(1000/gameFramerate);
 
 		//Calculate Average Framerate
-		Uint32 frametimesindex = framecount % 10;
-		Uint32 getticks = SDL_GetTicks();
-		Uint32 count;
+		frametimesindex = framecount % 10;
+		getticks = SDL_GetTicks();
+		count = 0;
 		
 		frametimes[frametimesindex] = getticks - frametimelast;
 		frametimelast = getticks;

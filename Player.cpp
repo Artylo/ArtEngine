@@ -9,10 +9,7 @@ Player::Player()
 
 void Player::update()
 {
-	x += hspeed;
-	y += vspeed;
-	box.x = x - origin.x;
-	box.y = y - origin.y;
+	Entity::update();
 }
 
 void Player::draw_self()

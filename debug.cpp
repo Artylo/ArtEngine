@@ -2,6 +2,16 @@
 #include "debug.h"
 #include "Entity.h"
 
+int random(int max)
+{
+	return rand() % (max+1);
+}
+
+int random_range(int min, int max)
+{
+	return (rand() % (max - min)) + min;
+}
+
 double degtorad(double deg)
 {
 	return deg * (M_PI / 180);
@@ -38,11 +48,21 @@ void draw_set_color(SDL_Renderer* renderer, SDL_Color color)
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
+
+
+
+
 void draw_reset_color(SDL_Renderer* renderer)
 {
 	SDL_Color color = c_default;
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
+
+void draw_set_texture_color_blend(SDL_Color col, SDL_Texture* tex)
+{
+	SDL_SetTextureColorMod(tex, col.r, col.g, col.b);
+}
+
 
 void draw_grid(SDL_Renderer *renderer, SDL_Color color, Uint8 alpha)
 {	
@@ -175,12 +195,13 @@ void DebugText::create_surface()
 	}
 }
 
-void DebugText::draw_text(std::string inputText, int posX, int posY, int width, int height)
+void DebugText::draw_text(std::string inputText, int posX, int posY)
 {	
    	x = posX;
 	y = posY;
-	w = width;
-	h = height;
+	//w = width;
+	//h = height;
+	TTF_SizeText(font, inputText.c_str(), &w, &h);
 	textBox.x = x;
 	textBox.y = y;
 	textBox.w = w;

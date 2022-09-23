@@ -18,6 +18,7 @@ void Entity::init(SDL_Renderer* renderer, SDL_Window* window)
 	if (sprite != NULL)
 	{
 		texture = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(gameRenderer, sprite.get()), SDL_DestroyTexture); // Generate hardware texture from sprite.
+
 		if (texture.get() == NULL)
 		{
 			SDL_Log("Failed to create skele");

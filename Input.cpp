@@ -21,43 +21,12 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 	*/
 	setMouseScale();
 
-	std::string msgTxt;
-	//Keyboard Events
+	//Single Press
 	while (SDL_PollEvent(eventPtr))
 	{
-		//Handle inputs.
+		//Handle inputs - Single Press.
 		switch (eventPtr->type)
 		{
-		case SDL_KEYDOWN:
-			switch (eventPtr->key.keysym.sym)
-			{
-			case SDLK_ESCAPE: // Press Esc to close game.
-				*gameState = false;
-				break;
-
-			case SDLK_w: // Player Movement Binds
-				*str = "UP";
-				player->vspeed = -player->speed;
-				break;
-			case SDLK_a: // 
-				*str = "LEFT";
-				player->hspeed = -player->speed;
-				break;
-			case SDLK_s: // 
-				*str = "DOWN";
-				player->vspeed = player->speed;
-				break;
-			case SDLK_d: // 
-				*str = "RIGHT";
-				player->hspeed = player->speed;
-				break;
-			case SDLK_SPACE:
-				break;
-			default:
-				break;
-			}
-			break;
-
 		case SDL_KEYUP:
 			switch (eventPtr->key.keysym.sym)
 			{
@@ -78,6 +47,19 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 			}
 			break;
 
+		case SDL_KEYDOWN:
+			switch (eventPtr->key.keysym.sym)
+			{
+			case SDLK_ESCAPE: // Press Esc to close game.
+				*gameState = false;
+				break;
+			case SDLK_SPACE:
+				break;
+			default:
+				break;
+			}
+			break;
+
 		case SDL_MOUSEMOTION: // Alternative Mouse Coordinates (this is renderer-relative not window-relative)
 			rawMouse_x = eventPtr->motion.x;
 			rawMouse_y = eventPtr->motion.y;
@@ -88,11 +70,37 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 			break;
 		}
 	}
+
+	//Continuous-respone Keys
+
+	//Player Inputs
+	if (keystate[SDL_SCANCODE_A])
+	{
+		*str = "LEFT";
+		player->hspeed = -player->speed;
+		
+	}
+	if (keystate[SDL_SCANCODE_D])
+	{
+		*str = "RIGHT";
+		player->hspeed = player->speed;
+	}
+	if (keystate[SDL_SCANCODE_W])
+	{
+		*str = "UP";
+		player->vspeed = -player->speed;
+	}
+	if (keystate[SDL_SCANCODE_S])
+	{
+		*str = "DOWN";
+		player->vspeed = player->speed;
+	}
 }
 
 bool Input::mouseIsHovering(Entity entity)
 {
 	//@TODO: Replace with SDL_EnclosePoints();
+	/*
 	if (mouse_x < entity.box.x + entity.box.w && mouse_x > entity.box.x)
 	{
 		if (mouse_y < entity.box.y + entity.box.h && mouse_y > entity.box.y)
@@ -102,6 +110,17 @@ bool Input::mouseIsHovering(Entity entity)
 		
 	}
 	return false;
+	*/
+
+	SDL_Point mouse = { mouse_x, mouse_y };
+	SDL_Rect boxHover = { entity.box.x,entity.box.y,entity.box.w,entity.box.h };
+	
+	if (SDL_EnclosePoints(&mouse, 1, &boxHover, nullptr))
+	{
+		return true;
+	}
+	return false;
+
 }
 
 void Input::setMouseScale()
