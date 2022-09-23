@@ -89,12 +89,8 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="pong.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="Skeleton.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp" />
