@@ -14,7 +14,7 @@ void Player::update()
 
 void Player::draw_self()
 {
-	draw_shadow();
+	//draw_shadow();
 	if (texture != NULL)
 	{
 		SDL_RenderCopyEx(gameRenderer, texture.get(), NULL, &box, (((double)x / w_width) * 3600.0), &origin, SDL_FLIP_NONE);

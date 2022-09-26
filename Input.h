@@ -27,7 +27,7 @@ class Input
 		int mouse_y = 0;
 		Uint32 mouse_buttons = 0;
 		
-		void update(bool* gameState, SDL_Event* eventPtr,  std::string* str, Player* player);
+		void update(bool* gameState, SDL_Event* eventPtr, Player* player);
 		bool mouseIsHovering(Entity entity);
 		void setMouseScale();
 };

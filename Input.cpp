@@ -13,7 +13,7 @@ Input::~Input()
 
 }
 
-void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Player* player)
+void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
 {
 	/*
 	//Mouse Events
@@ -76,23 +76,19 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, std::string* str, Playe
 	//Player Inputs
 	if (keystate[SDL_SCANCODE_A])
 	{
-		*str = "LEFT";
 		player->hspeed = -player->speed;
 		
 	}
 	if (keystate[SDL_SCANCODE_D])
 	{
-		*str = "RIGHT";
 		player->hspeed = player->speed;
 	}
 	if (keystate[SDL_SCANCODE_W])
 	{
-		*str = "UP";
 		player->vspeed = -player->speed;
 	}
 	if (keystate[SDL_SCANCODE_S])
 	{
-		*str = "DOWN";
 		player->vspeed = player->speed;
 	}
 }

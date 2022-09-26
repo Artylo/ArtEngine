@@ -1,6 +1,6 @@
 #pragma once
 
-int random(int max);
+Uint8 random(int max);
 int random_range(int min, int max);
 double degtorad(double deg);
 double radtodeg(double rad);
@@ -25,16 +25,18 @@ public:
 	int w = 0;
 	int h = 0;
 	std::string text = "ERROR";
-	const char* textChar = NULL;
+	const char* textChar = text.c_str();
 	SDL_Surface* textSurface = NULL;
 	SDL_Texture* textTexture = NULL;
 	SDL_Rect textBox = SDL_Rect{ 0,0,0,0 };
 	TTF_Font* font = NULL;
+	TTF_Font* font_outline = NULL;
+	Uint16 outline_thickness = 1;
 	SDL_Renderer* rend = NULL;
 
 	DebugText(SDL_Renderer* renderer);
 	~DebugText();
 	void create_surface();
 	void draw_text(std::string inputText, int posX, int posY);
-	void draw_outline(unsigned int thickness, SDL_Colour colour);
+	void draw_outline(SDL_Colour colour);
 };

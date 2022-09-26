@@ -2,7 +2,7 @@
 #include "debug.h"
 #include "Entity.h"
 
-int random(int max)
+Uint8 random(int max)
 {
 	return rand() % (max+1);
 }
@@ -117,7 +117,7 @@ void draw_circle(SDL_Renderer* renderer, int centerX, int centerY, int radius) /
 	}
 }
 
-void draw_fillcircle(SDL_Renderer* renderer, int x, int y, int radius) // Point-based fill (works as presumed)
+void draw_fillcircle(SDL_Renderer* renderer, int x, int y, int radius) // Point-based fill (works as presumed) - causes massive slow-down and FPS issues
 {
 	for (int w = 0; w < radius * 2; w++)
 	{
@@ -170,14 +170,24 @@ void draw_fillcircle2(SDL_Renderer* renderer, int x, int y, int radius)
 DebugText::DebugText(SDL_Renderer* renderer)
 {
 	rend = renderer;
+
 	font = TTF_OpenFont("arial.ttf", 24);
+
+	font_outline = TTF_OpenFont("arial.ttf", 24);
+	TTF_SetFontOutline(font_outline, outline_thickness);
 }
 
 DebugText::~DebugText()
 {
+	//Contents Font
 	assert(font != NULL);
 	TTF_CloseFont(font);
 	font = NULL;
+
+	//Outline Font
+	assert(font_outline != NULL);
+	TTF_CloseFont(font_outline);
+	font_outline = NULL;
 }
 
 void DebugText::create_surface()
@@ -199,13 +209,6 @@ void DebugText::draw_text(std::string inputText, int posX, int posY)
 {	
    	x = posX;
 	y = posY;
-	//w = width;
-	//h = height;
-	TTF_SizeText(font, inputText.c_str(), &w, &h);
-	textBox.x = x;
-	textBox.y = y;
-	textBox.w = w;
-	textBox.h = h;
 
 	if(inputText != text)
 	{
@@ -225,35 +228,35 @@ void DebugText::draw_text(std::string inputText, int posX, int posY)
 		}
 	}
 
+	TTF_SizeText(font, text.c_str(), &w, &h);
+
+	//@CLEANUP: I think it's redundant to have independent coords and a SDL_Rect.
+	textBox.x = x;
+	textBox.y = y;
+	textBox.w = w;
+	textBox.h = h;
+
+	SDL_RenderDrawRect(rend, &textBox);
+
 	if (textTexture != NULL)
 	{
-		draw_outline(2, c_black);
+		draw_outline(c_black);
 		SDL_RenderCopy(rend, textTexture, NULL, &textBox);
 	}
 }
 
-void DebugText::draw_outline(unsigned int thickness, SDL_Colour colour)
+void DebugText::draw_outline(SDL_Colour colour)
 {
-	int offset = 1;
-	SDL_Colour col = c_black;
+	SDL_Color outline_colour = colour;
 
-	offset = thickness;
-	col = colour;
-
-	SDL_Rect textBoxCopy = SDL_Rect{x, y, w, h};
-
-	SDL_Surface* outlineSurface = TTF_RenderText_Solid(font, textChar, col);
+	SDL_Surface* outlineSurface = TTF_RenderText_Solid(font_outline, textChar, outline_colour);
 	SDL_Texture* outlineTexture = SDL_CreateTextureFromSurface(rend,outlineSurface);
 
-		textBoxCopy.x -= offset;
-			SDL_RenderCopy(rend, outlineTexture, NULL, &textBoxCopy);
-		textBoxCopy.y -= offset;
-			SDL_RenderCopy(rend, outlineTexture, NULL, &textBoxCopy);
-		textBoxCopy.x += 2*offset;
-			SDL_RenderCopy(rend, outlineTexture, NULL, &textBoxCopy);
-		textBoxCopy.y += 2*offset;
-			SDL_RenderCopy(rend, outlineTexture, NULL, &textBoxCopy);
+	SDL_Rect* rect = new SDL_Rect{ textBox.x - outline_thickness, textBox.y - outline_thickness, outlineSurface->w, outlineSurface->h};
+
+	SDL_RenderCopy(rend, outlineTexture, NULL, rect);
 
 	SDL_FreeSurface(outlineSurface);
 	SDL_DestroyTexture(outlineTexture);
+	delete rect;
 }

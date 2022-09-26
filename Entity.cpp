@@ -40,7 +40,7 @@ void Entity::draw_shadow()
 
 void Entity::draw_self()
 {
-	draw_shadow();
+	//draw_shadow();
 	if (texture != NULL)
 	{
 		//SDL_RenderCopy(gameRenderer,texture,NULL,&box);
