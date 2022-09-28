@@ -1,6 +1,10 @@
-﻿#include "globals.h"
-#include "debug.h"
+﻿#include "debug.h"
 #include "Entity.h"
+
+bool checkCollision(SDL_Rect a, SDL_Rect b)
+{
+	return SDL_HasIntersection(&a,&b);
+}
 
 Uint8 random(int max)
 {

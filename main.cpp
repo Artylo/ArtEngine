@@ -4,8 +4,10 @@ SDL_Window* window;
 SDL_Renderer* renderer;
 
 #include "debug.h"
+#include "Player.h"
 #include "Input.h"
 #include "Skeleton.h"
+#include "Wall.h"
 
 
 int main(int argc, char *argv[])
@@ -60,8 +62,11 @@ int main(int argc, char *argv[])
 
 	//Init important objects
 	Input input(renderer, window); // Init input handler.
-	Player player; // Init player.
+
+	//INIT PLAYER
+	Player player;
 	player.init(renderer, window);
+	player.get_input(&input);
 
 	//Draw Tiled Background //@TODO: Make into its own class.
 	SDL_Surface* tile = SDL_LoadBMP("img/tile2.bmp");
@@ -86,19 +91,45 @@ int main(int argc, char *argv[])
 	SDL_SetRenderTarget(renderer, NULL);
 	//@CLEANUP where background draw update was
 
-	
+	//@TEMP: GENERATE SKELETONS
 	const int numSkel = 50;
 	Skeleton originalskel;
 	originalskel.init(renderer,window);
 	std::vector<Skeleton> skeletons;
 
-	//@TEMP: GENERATE SKELETONS
 	for (int i = 0; i < numSkel; i++)
 	{
 		skeletons.push_back(originalskel);
 		skeletons[i].x = rand() % w_width;
 		skeletons[i].y = rand() % w_height;
 		//skeletons[i].init(renderer, window);
+	}
+
+	//@TEMP: Generate Walls
+	const int wallSize = 5;
+	//Wall testPreBuilding[wallSize][wallSize];
+	std::vector<Wall> testBuilding;
+	for (int i = 0; i < wallSize; i++)
+	{
+		for (int j = 0; j < wallSize; j++)
+		{
+			if (i == 0 || i == wallSize - 1)
+			{
+				Wall w;
+				testBuilding.push_back(w);
+				testBuilding[testBuilding.size() - 1].init(renderer, window, &player);
+				testBuilding[testBuilding.size() - 1].pos.x = j * 32;
+				testBuilding[testBuilding.size() - 1].pos.y = i * 32;
+			}
+			else if (j == 0 || j == wallSize - 1)
+			{
+				Wall w;
+				testBuilding.push_back(w);
+				testBuilding[testBuilding.size() - 1].init(renderer, window, &player);
+				testBuilding[testBuilding.size() - 1].pos.x = j * 32;
+				testBuilding[testBuilding.size() - 1].pos.y = i * 32;
+			}
+		}
 	}
 
 	//Debug Text
@@ -180,6 +211,19 @@ int main(int argc, char *argv[])
 			//SDL_RenderCopy(renderer,skeletons[i].texture.get(),NULL,&skeletons[i].box);
 		}
 
+		//Draw Walls
+		for (int i = 0; i < testBuilding.size(); i++)
+		{
+			//skeletons[i].update();
+			testBuilding[i].draw_self();
+			SDL_RenderDrawRect(renderer, &testBuilding[i].box);
+		}
+
+		//Update Player
+		player.update();
+		//Draw Player
+		player.draw_self();
+
 		//Draw Skeleton Debug
 		for (int i = 0; i < numSkel; i++)
 		{
@@ -194,14 +238,9 @@ int main(int argc, char *argv[])
 				}
 
 				//@DEBUG
-				debug_text.draw_text(std::to_string(i), s->x-debug_text.w/2, s->y - debug_text.h/2); // Show id
+				debug_text.draw_text(std::to_string(i), s->x - debug_text.w / 2, s->y - debug_text.h / 2); // Show id
 			}
 		}
-
-		//Update Player
-		player.update();
-		//Draw Player
-		player.draw_self();
 
 		//Draw Framerate
 		std::string tempFPSstring = 

@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "debug.h"
+#include "Entity.h"
 #include "Input.h"
 
 Input::Input(SDL_Renderer* renderer, SDL_Window* window)
@@ -73,6 +74,8 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
 
 	//Continuous-respone Keys
 
+	/*
+	//@CLEANUP - MOVED TO PLAYER.CPP
 	//Player Inputs
 	if (keystate[SDL_SCANCODE_A])
 	{
@@ -91,6 +94,7 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
 	{
 		player->vspeed = player->speed;
 	}
+	*/
 }
 
 bool Input::mouseIsHovering(Entity entity)

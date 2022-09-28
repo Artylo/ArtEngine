@@ -1,6 +1,7 @@
 #pragma once
-#include "Entity.h"
 #include "Player.h"
+
+class Player; // Forward Declaration of Player for cyclic dependency;
 
 class Input
 {

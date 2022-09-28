@@ -1,5 +1,11 @@
 #pragma once
 
+#include "globals.h"
+
+//Collision
+bool checkCollision(SDL_Rect a, SDL_Rect b);
+
+//Loose Math Functions
 Uint8 random(int max);
 int random_range(int min, int max);
 double degtorad(double deg);
@@ -9,6 +15,7 @@ double lengthdir_y(int dist, double angle);
 double point_distance(int x1, int y1, int x2, int y2);
 double point_direction(int x1, int y1, int x2, int y2);
 
+//Loose Draw Functions
 void draw_set_color(SDL_Renderer* renderer, SDL_Color color);
 void draw_set_texture_color_blend(SDL_Color col, SDL_Texture* tex);
 void draw_reset_color(SDL_Renderer* renderer);
@@ -17,6 +24,7 @@ void draw_circle(SDL_Renderer* renderer, int centerX, int centerY, int radius);
 void draw_fillcircle(SDL_Renderer* renderer, int x, int y, int radius);
 void draw_fillcircle2(SDL_Renderer* renderer, int centerX, int centerY, int radius);
 
+//Debug Elements
 class DebugText
 {
 public:
@@ -40,3 +48,18 @@ public:
 	void draw_text(std::string inputText, int posX, int posY);
 	void draw_outline(SDL_Colour colour);
 };
+
+//Templates
+//@CLEANUP: This is super ugly but if defined in source it causes a compiler error - https://stackoverflow.com/questions/456713/why-do-i-get-unresolved-external-symbol-errors-when-using-templates
+
+template<class T>
+T choose(std::initializer_list<T> list)
+{
+	//SDL_Log("Choosing from %i choices.\n", list.size());
+	std::vector<T> choices;
+	for (auto n : list)
+	{
+		choices.push_back(n);
+	}
+	return choices[random(choices.size() - 1)];
+}

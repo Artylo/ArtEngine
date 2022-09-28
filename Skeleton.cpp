@@ -1,4 +1,5 @@
 #include "Skeleton.h"
+#include "globals.h"
 #include "debug.h"
 
 Skeleton::Skeleton()
@@ -32,7 +33,10 @@ void Skeleton::draw_self()
 
 void Skeleton::generate_clothes_textures()
 {
-	hairCol = { random(255),random(255),random(255),255 };
+	SDL_Color black = c_black;
+	SDL_Color white = c_white;
+	hairCol = choose<SDL_Color>({ c_black });
+	//hairCol = { random(255),random(255),random(255),255 };
 	shirtCol = { random(255),random(255),random(255),255 };
 	pantsCol = { random(255),random(255),random(255),255 };
 

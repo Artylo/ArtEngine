@@ -1,5 +1,6 @@
-#include "Entity.h"
 #include "debug.h"
+#include "Entity.h"
+
 
 
 void Entity::init(SDL_Renderer* renderer, SDL_Window* window)
@@ -53,6 +54,7 @@ void Entity::update()
 {
 	x += hspeed;
 	y += vspeed;
+
 	box.x = x - origin.x; // Set coordinates of bounding box to object coordinates.
 	box.y = y - origin.y;
 }
