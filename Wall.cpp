@@ -31,10 +31,37 @@ void Wall::update()
 	if(box.x != pos.x) box.x = pos.x;
 	if(box.y != pos.y) box.y = pos.y;
 
-	if (checkCollision(box, player->premovementBox))
+	verticalCollisionBox   = box;
+	horizontalCollisionBox = box;
+
+	if (player->vspeed)
 	{
-		player->isColliding = true;
-		player->boxColliding = &box;
+		verticalCollisionBox.y += -player->vspeed;
+		draw_set_color(gameRenderer,c_blue);
+		SDL_RenderDrawRect(gameRenderer, &verticalCollisionBox);
+	}
+	if (player->hspeed)
+	{
+		horizontalCollisionBox.x += -player->hspeed;
+		draw_set_color(gameRenderer, c_red);
+		SDL_RenderDrawRect(gameRenderer, &horizontalCollisionBox);
+	}
+	draw_reset_color(gameRenderer);
+
+
+	if (checkCollision(verticalCollisionBox, player->verticalMovementBox))
+	{
+		player->verticallyColliding = true;
+		player->wallColliding = this;
+		//player->boxCollidingList.push_back(&box); // Inserts every frame, which is bad.
+		player->boxCollidingList.insert(&box);
+	}
+	if (checkCollision(horizontalCollisionBox, player->horizontalMovementBox))
+	{
+		player->horizontallyColliding = true;
+		player->wallColliding = this;
+		//player->boxCollidingList.push_back(&box); // Inserts every frame, which is bad.
+		player->boxCollidingList.insert(&box);
 	}
 }
 

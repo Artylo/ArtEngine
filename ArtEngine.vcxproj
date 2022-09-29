@@ -103,17 +103,6 @@
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="img\enemy.bmp" />
-    <Image Include="img\player.bmp" />
-    <Image Include="img\player.png" />
-    <Image Include="img\skeleton.png" />
-    <Image Include="img\tile.bmp" />
-    <Image Include="img\tile2.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="arial.ttf" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

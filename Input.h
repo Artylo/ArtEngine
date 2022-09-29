@@ -2,6 +2,7 @@
 #include "Player.h"
 
 class Player; // Forward Declaration of Player for cyclic dependency;
+class Wall; // Forward Deckaratuib of Wall for cyclic dependency;
 
 class Input
 {
@@ -30,6 +31,7 @@ class Input
 		
 		void update(bool* gameState, SDL_Event* eventPtr, Player* player);
 		bool mouseIsHovering(Entity entity);
+		bool mouseIsHovering(Wall wall);
 		void setMouseScale();
 };
 

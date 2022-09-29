@@ -1,4 +1,7 @@
 #pragma once
+
+class Player; // Player reference for circular dependency.
+
 class Wall
 {
 public:
@@ -8,6 +11,9 @@ public:
 	std::shared_ptr<SDL_Surface> sprite = nullptr;
 	std::shared_ptr <SDL_Texture> texture = nullptr;
 	SDL_Rect box = { 0,0,1,1 };
+
+	SDL_Rect verticalCollisionBox   = { 0,0,1,1 };
+	SDL_Rect horizontalCollisionBox = { 0,0,1,1 };
 
 	Player* player;
 

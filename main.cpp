@@ -211,12 +211,27 @@ int main(int argc, char *argv[])
 			//SDL_RenderCopy(renderer,skeletons[i].texture.get(),NULL,&skeletons[i].box);
 		}
 
+		/*
+		* This is a glorious first step in creating new things at runtime.
+		* I screeched at my screen like a banshee when it made new walls 
+		* appear on screen and they worked like they should have.
+		*/
+
+		if (input.keystate[SDL_SCANCODE_B])
+		{
+			testBuilding.emplace_back(Wall());
+			Wall* temp = &testBuilding[testBuilding.size() - 1];
+			temp->init(renderer, window, &player);
+			temp->pos.x = input.mouse_x;
+			temp->pos.y = input.mouse_y;
+		}
+
 		//Draw Walls
 		for (int i = 0; i < testBuilding.size(); i++)
 		{
 			//skeletons[i].update();
 			testBuilding[i].draw_self();
-			SDL_RenderDrawRect(renderer, &testBuilding[i].box);
+			//SDL_RenderDrawRect(renderer, &testBuilding[i].box);
 		}
 
 		//Update Player

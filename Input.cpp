@@ -97,7 +97,7 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
 	*/
 }
 
-bool Input::mouseIsHovering(Entity entity)
+bool Input::mouseIsHovering(Entity entity) // Entity-version
 {
 	//@TODO: Replace with SDL_EnclosePoints();
 	/*
@@ -122,6 +122,19 @@ bool Input::mouseIsHovering(Entity entity)
 	return false;
 
 }
+bool Input::mouseIsHovering(Wall wall) // Wall-version
+{
+	//@TODO: Convert to template for easier access.
+	SDL_Point mouse = { mouse_x, mouse_y };
+	SDL_Rect boxHover = { wall.box.x,wall.box.y,wall.box.w,wall.box.h };
+
+	if (SDL_EnclosePoints(&mouse, 1, &boxHover, nullptr))
+	{
+		return true;
+	}
+	return false;
+}
+
 
 void Input::setMouseScale()
 {
