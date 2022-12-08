@@ -8,6 +8,8 @@
 #include <list>
 #include <assert.h>
 #include <initializer_list>
+#include <algorithm>
+#include <tuple>
 
 //Window Constants
 #define gameFramerate 30

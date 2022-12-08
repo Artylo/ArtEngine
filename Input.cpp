@@ -14,7 +14,7 @@ Input::~Input()
 
 }
 
-void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
+void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player, bool(*keys)[322])
 {
 	/*
 	//Mouse Events
@@ -46,6 +46,8 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
 			default:
 				break;
 			}
+
+			(*keys)[eventPtr->key.keysym.sym] = false; // Set single release keystate in main
 			break;
 
 		case SDL_KEYDOWN:
@@ -56,9 +58,11 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
 				break;
 			case SDLK_SPACE:
 				break;
+			
 			default:
 				break;
 			}
+			(*keys)[eventPtr->key.keysym.sym] = true; // Set single press keystate in main
 			break;
 
 		case SDL_MOUSEMOTION: // Alternative Mouse Coordinates (this is renderer-relative not window-relative)

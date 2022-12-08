@@ -14,6 +14,9 @@ Wall::Wall()
 	box.h = sprite.get()->h;
 }
 
+
+
+
 void Wall::init(SDL_Renderer* renderer, SDL_Window* window, Player* plr)
 {
 	gameRenderer = renderer;
@@ -69,8 +72,12 @@ void Wall::draw_self()
 {
 	update();
 	generate_texture();
+
+	//@TEMP:
+
 	if (texture.get() != NULL)
 	{
+		SDL_SetTextureAlphaMod(texture.get(), 10);
 		SDL_RenderCopy(gameRenderer, texture.get(), NULL, &box);
 	}
 }

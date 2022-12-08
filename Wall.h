@@ -23,5 +23,20 @@ public:
 	void update();
 	void draw_self();
 	void generate_texture();
+	
+	//Operator Overloads
+	friend bool operator==(const Wall& lhs, const Wall& rhs)
+	{
+		return lhs.pos.x < rhs.pos.x&& lhs.pos.y == rhs.pos.y;
+	}
+	friend bool operator<(const Wall& lhs, const Wall& rhs)
+	{
+		return std::tie(lhs.pos.x, lhs.pos.y) < std::tie(rhs.pos.x, rhs.pos.y);
+	}
+	friend bool operator>(const Wall& lhs, const Wall& rhs)
+	{
+		return std::tie(lhs.pos.x, lhs.pos.y) > std::tie(rhs.pos.x, rhs.pos.y);
+	}
+
 };
 

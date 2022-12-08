@@ -62,6 +62,10 @@ int main(int argc, char *argv[])
 
 	//Init important objects
 	Input input(renderer, window); // Init input handler.
+	bool KEYS[322];
+	bool (*keys_ptr)[322] = &KEYS;
+	for (int i = 0; i < 322; i++) { KEYS[i] = false; }
+	
 
 	//INIT PLAYER
 	Player player;
@@ -106,6 +110,7 @@ int main(int argc, char *argv[])
 	}
 
 	//@TEMP: Generate Walls
+	//@CLEANUP: Consider converting to a set manually after construction: https://stackoverflow.com/questions/1041620/whats-the-most-efficient-way-to-erase-duplicates-and-sort-a-vector
 	const int wallSize = 5;
 	//Wall testPreBuilding[wallSize][wallSize];
 	std::vector<Wall> testBuilding;
@@ -184,7 +189,7 @@ int main(int argc, char *argv[])
 		else framespersecond = 0;
 
 		//Handle Inputs
-		input.update(&gameActive, &event, &player);
+		input.update(&gameActive, &event, &player, keys_ptr);
 
 		//Clear Screen
 		SDL_RenderClear(renderer);
@@ -216,15 +221,41 @@ int main(int argc, char *argv[])
 		* I screeched at my screen like a banshee when it made new walls 
 		* appear on screen and they worked like they should have.
 		*/
-
-		if (input.keystate[SDL_SCANCODE_B])
+		
+		if (KEYS[SDLK_b])
 		{
-			testBuilding.emplace_back(Wall());
-			Wall* temp = &testBuilding[testBuilding.size() - 1];
-			temp->init(renderer, window, &player);
-			temp->pos.x = input.mouse_x;
-			temp->pos.y = input.mouse_y;
+			bool isUnique = true;
+			int placeX = (input.mouse_x / 32) * 32;
+			int placeY = (input.mouse_y / 32) * 32;
+
+			if (testBuilding.size() > 0)
+			{
+				for (int i = 0; i < testBuilding.size(); i++)
+				{
+					if (testBuilding[i].pos.x == placeX)
+					{
+						if (testBuilding[i].pos.y == placeY)
+						{
+							isUnique = false;
+						}
+					}
+				}
+			}
+			if (isUnique)
+			{
+				testBuilding.emplace_back(Wall());
+				Wall* temp = &testBuilding[testBuilding.size() - 1];
+				temp->init(renderer, window, &player);
+				temp->pos.x = placeX;
+				temp->pos.y = placeY;
+			}
+			
+			//Make entries unique
+			//std::sort(testBuilding.begin(), testBuilding.end());
+			//testBuilding.erase(unique(testBuilding.begin(), testBuilding.end()), testBuilding.end());
 		}
+	
+
 
 		//Draw Walls
 		for (int i = 0; i < testBuilding.size(); i++)
