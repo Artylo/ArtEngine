@@ -15,6 +15,8 @@
 #define gameFramerate 30
 #define w_width  640
 #define w_height 480
+#define world_width  8000
+#define world_height 6000
 
 //Premade Colors
 #define c_red {255,0,0,255}

@@ -66,10 +66,14 @@ int main(int argc, char *argv[])
 	bool (*keys_ptr)[322] = &KEYS;
 	for (int i = 0; i < 322; i++) { KEYS[i] = false; }
 	
+	//Viewport or Camera
+	SDL_Rect worldBox = { 0,0,world_width,world_height };
+	SDL_Rect camera = { 0,0,640,480 };
+	SDL_Rect port = {0,0,w_width,w_height};
 
 	//INIT PLAYER
 	Player player;
-	player.init(renderer, window);
+	player.init(renderer, window, camera);
 	player.get_input(&input);
 
 	//Draw Tiled Background //@TODO: Make into its own class.
@@ -80,13 +84,13 @@ int main(int argc, char *argv[])
 
 	SDL_Texture* tilesrcTex = SDL_CreateTextureFromSurface(renderer, tile);
 	//SDL_FreeSurface(tile);
-	SDL_Texture* preTileTex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, w_width, w_height);
+	SDL_Texture* preTileTex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, world_width, world_height);
 	//SDL_Surface* tileBlit = SDL_CreateRGBSurface(NULL, w_width, w_height, 32, 0, 0, 0, 0);
 	SDL_Rect tileRect;
 	SDL_SetRenderTarget(renderer, preTileTex);
-	for (int i = 0; i < (winW / 32) + 1; i++)
+	for (int i = 0; i < (world_width / 32) + 1; i++)
 	{
-		for (int j = 0; j < (winH / 32) + 1; j++)
+		for (int j = 0; j < (world_height / 32) + 1; j++)
 		{
 			tileRect = SDL_Rect{ i * 32 , j * 32 , 32 , 32 };
 			SDL_RenderCopy(renderer, tilesrcTex, NULL, &tileRect);
@@ -95,23 +99,26 @@ int main(int argc, char *argv[])
 	SDL_SetRenderTarget(renderer, NULL);
 	//@CLEANUP where background draw update was
 
+	//Setup Camera Render Texture
+	SDL_Texture* gameTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, world_width, world_height);
+
 	//@TEMP: GENERATE SKELETONS
 	const int numSkel = 50;
 	Skeleton originalskel;
-	originalskel.init(renderer,window);
+	originalskel.init(renderer, window, camera);
 	std::vector<Skeleton> skeletons;
 
 	for (int i = 0; i < numSkel; i++)
 	{
 		skeletons.push_back(originalskel);
-		skeletons[i].x = rand() % w_width;
-		skeletons[i].y = rand() % w_height;
+		skeletons[i].x = rand() % world_width;
+		skeletons[i].y = rand() % world_height;
 		//skeletons[i].init(renderer, window);
 	}
 
 	//@TEMP: Generate Walls
 	//@CLEANUP: Consider converting to a set manually after construction: https://stackoverflow.com/questions/1041620/whats-the-most-efficient-way-to-erase-duplicates-and-sort-a-vector
-	const int wallSize = 5;
+	const int wallSize = 0;
 	//Wall testPreBuilding[wallSize][wallSize];
 	std::vector<Wall> testBuilding;
 	for (int i = 0; i < wallSize; i++)
@@ -198,9 +205,12 @@ int main(int argc, char *argv[])
 		// ####################
 		// #### Draw Calls ####
 		// ####################
+
+		//Set Render Target to Camera Texture
+		SDL_SetRenderTarget(renderer, gameTexture);
 		
 		//Draw Background
-		SDL_RenderCopy(renderer, preTileTex, NULL, NULL);
+		SDL_RenderCopy(renderer, preTileTex, NULL, &worldBox);
 
 		//Draw Grid
    		if (input.keystate[SDL_SCANCODE_SPACE])
@@ -225,8 +235,8 @@ int main(int argc, char *argv[])
 		if (KEYS[SDLK_b])
 		{
 			bool isUnique = true;
-			int placeX = (input.mouse_x / 32) * 32;
-			int placeY = (input.mouse_y / 32) * 32;
+			int placeX = ((input.mouse_x + camera.x) / 32) * 32;
+			int placeY = ((input.mouse_y + camera.y) / 32) * 32;
 
 			if (testBuilding.size() > 0)
 			{
@@ -265,6 +275,19 @@ int main(int argc, char *argv[])
 			//SDL_RenderDrawRect(renderer, &testBuilding[i].box);
 		}
 
+		//Update Camera Position
+		camera.x = player.x - camera.w / 2;
+		camera.y = player.y - camera.h / 2;
+		//port.x += camera.w;
+		//port.y += camera.h;
+		draw_set_color(renderer, c_red);
+		SDL_RenderDrawRect(renderer, &camera);
+		draw_set_color(renderer, c_blue);
+		SDL_RenderDrawRect(renderer, &worldBox);
+		draw_reset_color(renderer);
+		//SDL_RenderSetViewport(renderer,&port);
+		SDL_RenderSetClipRect(renderer, &camera);
+
 		//Update Player
 		player.update();
 		//Draw Player
@@ -294,6 +317,10 @@ int main(int argc, char *argv[])
 		" ms: " + std::to_string(SDL_GetTicks() - frametimelast);
 
 		debug_text.draw_text(tempFPSstring, debug_text.w, w_height - debug_text.h);
+
+		//Reset renderer to main texture
+		SDL_SetRenderTarget(renderer, NULL);
+		SDL_RenderCopy(renderer, gameTexture, &camera, &port);
 
 		/* ################### */
 		/* #### PAGE FLIP #### */

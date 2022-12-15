@@ -7,8 +7,8 @@ Player::Player()
 	//sprite = IMG_Load("img/player.png");
 	sprite = std::shared_ptr<SDL_Surface>(IMG_Load("img/player.png"), SDL_FreeSurface);
 
-	x = 320;
-	y = 240;
+	x = 0;
+	y = 0;
 
 	x += hspeed;
 	y += vspeed;

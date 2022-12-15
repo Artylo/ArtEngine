@@ -3,13 +3,17 @@
 
 
 
-void Entity::init(SDL_Renderer* renderer, SDL_Window* window)
+void Entity::init(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect camera)
 {
 	gameRenderer = renderer; // Get pointer reference of main game renderer.
 	gameWindow = window; // Get  pointer reference of main game window.
+	gameCamera = &camera; // Get pointer reference for main game camera.
 
 	box.x = x - origin.x; // Set coordinates of bounding box to object coordinates.
 	box.y = y - origin.y;
+
+	//box.x -= camera.x;
+	//box.y -= camera.y;
 
 	if (sprite != NULL)
 	{
@@ -57,6 +61,9 @@ void Entity::update()
 
 	box.x = x - origin.x; // Set coordinates of bounding box to object coordinates.
 	box.y = y - origin.y;
+
+	//box.x -= gameCamera->x;
+	//box.y -= gameCamera->y;
 }
 
 Entity::~Entity()
