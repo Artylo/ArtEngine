@@ -15,12 +15,13 @@ class Input
 			RELEASED
 		};
 
-		Input(SDL_Renderer* renderer, SDL_Window* window);
+		Input(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect* camera);
 		~Input();
 		
 		const Uint8* keystate = SDL_GetKeyboardState(NULL);
-		SDL_Window* wind = NULL;
-		SDL_Renderer* rend = NULL;
+		SDL_Window* gameWindow = NULL;
+		SDL_Renderer* gameRenderer = NULL;
+		SDL_Rect* gameCamera = NULL;
 		int rawMouse_x = 0;
 		int rawMouse_y = 0;
 		int mouseScaleX = 0;

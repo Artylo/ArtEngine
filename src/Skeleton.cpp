@@ -23,11 +23,14 @@ void Skeleton::draw_self()
 	Entity::draw_self(); // Draw The Skeleton
 	generate_clothes_textures(); // Generate Textures for Clothes
 
-	//Draw The Clothes
-	SDL_RenderCopyEx(gameRenderer, tex_pants.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
-	SDL_RenderCopyEx(gameRenderer, tex_shirt.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
-	SDL_RenderCopyEx(gameRenderer, tex_hair.get(),  NULL, &box, 0, &origin, SDL_FLIP_NONE);
-	
+	if (SDL_PointInRect(&pos, gameCamera))
+	{
+		//Draw The Clothes
+		SDL_RenderCopyEx(gameRenderer, tex_pants.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(gameRenderer, tex_shirt.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(gameRenderer, tex_hair.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
+
+	}
 	//SDL_RenderCopyEx(gameRenderer, texture.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
 }
 

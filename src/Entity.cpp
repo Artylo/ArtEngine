@@ -3,21 +3,21 @@
 
 
 
-void Entity::init(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect camera)
+void Entity::init(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect* camera)
 {
 	gameRenderer = renderer; // Get pointer reference of main game renderer.
 	gameWindow = window; // Get  pointer reference of main game window.
-	gameCamera = &camera; // Get pointer reference for main game camera.
+	gameCamera = camera; // Get pointer reference for main game camera.
 
-	box.x = x - origin.x; // Set coordinates of bounding box to object coordinates.
-	box.y = y - origin.y;
+	box.x = pos.x - origin.x; // Set coordinates of bounding box to object coordinates.
+	box.y = pos.y - origin.y;
 
 	//box.x -= camera.x;
 	//box.y -= camera.y;
 
 	if (sprite != NULL)
 	{
-		box = SDL_Rect{ x,y,sprite->w,sprite->h }; // Define bounding box width and height based off of sprite data.
+		box = SDL_Rect{ pos.x,pos.y,sprite->w,sprite->h }; // Define bounding box width and height based off of sprite data.
 	}
 
 	if (sprite != NULL)
@@ -39,28 +39,31 @@ void Entity::draw_shadow()
 	//Draw Shadow
 	draw_set_color(gameRenderer, shadowColour); // Set shadow alpha to 50%
 	//draw_fillcircle2(gameRenderer, x, y + (h / 4) + 4, w / 2);
-	draw_fillcircle(gameRenderer, x, y + (h / 4) + 4, w / 2);
+	draw_fillcircle(gameRenderer, pos.x, pos.y + (h / 4) + 4, w / 2);
 	draw_reset_color(gameRenderer); // Reset shadow alpha change.
 }
 
 void Entity::draw_self()
 {
 	//draw_shadow();
-	if (texture != NULL)
+	if (SDL_PointInRect(&pos,gameCamera))
 	{
-		//SDL_RenderCopy(gameRenderer,texture,NULL,&box);
-		SDL_RenderCopyEx(gameRenderer, texture.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
+		if (texture != NULL)
+		{
+			//SDL_RenderCopy(gameRenderer,texture,NULL,&box);
+			SDL_RenderCopyEx(gameRenderer, texture.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
+		}
+		else SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "Failed to render entity texture.", gameWindow);
 	}
-	else SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "Failed to render entity texture.", gameWindow);
 }
 
 void Entity::update()
 {
-	x += hspeed;
-	y += vspeed;
+	pos.x += hspeed;
+	pos.y += vspeed;
 
-	box.x = x - origin.x; // Set coordinates of bounding box to object coordinates.
-	box.y = y - origin.y;
+	box.x = pos.x - origin.x; // Set coordinates of bounding box to object coordinates.
+	box.y = pos.y - origin.y;
 
 	//box.x -= gameCamera->x;
 	//box.y -= gameCamera->y;

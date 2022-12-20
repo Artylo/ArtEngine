@@ -72,16 +72,16 @@ void draw_grid(SDL_Renderer *renderer, SDL_Color color, Uint8 alpha)
 {	
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, alpha);
 
-	int hTimes = w_height/32;
-	int wTimes = w_width/32;
+	int hTimes = world_height/32;
+	int wTimes = world_width/32;
 
 	for (int i = 0; i < hTimes; i++)
 	{
-		SDL_RenderDrawLine(renderer, 0, i * 32, w_width, i * 32);
+		SDL_RenderDrawLine(renderer, 0, i * 32, world_width, i * 32);
 	}
 	for (int j = 0; j < wTimes; j++)
 	{
-		SDL_RenderDrawLine(renderer, j * 32, 0, j * 32, w_height);
+		SDL_RenderDrawLine(renderer, j * 32, 0, j * 32, world_height);
 	}
 	draw_reset_color(renderer);
 }
@@ -171,9 +171,10 @@ void draw_fillcircle2(SDL_Renderer* renderer, int x, int y, int radius)
 	}
 }
 
-DebugText::DebugText(SDL_Renderer* renderer)
+DebugText::DebugText(SDL_Renderer* renderer, SDL_Rect* camera)
 {
 	rend = renderer;
+	gameCamera = camera;
 
 	font = TTF_OpenFont("arial.ttf", 24);
 
@@ -211,8 +212,9 @@ void DebugText::create_surface()
 
 void DebugText::draw_text(std::string inputText, int posX, int posY)
 {	
-   	x = posX;
-	y = posY;
+	
+	pos.x = posX;
+	pos.y = posY;
 
 	if(inputText != text)
 	{
@@ -235,18 +237,23 @@ void DebugText::draw_text(std::string inputText, int posX, int posY)
 	TTF_SizeText(font, text.c_str(), &w, &h);
 
 	//@CLEANUP: I think it's redundant to have independent coords and a SDL_Rect.
-	textBox.x = x;
-	textBox.y = y;
+	textBox.x = pos.x;
+	textBox.y = pos.y;
 	textBox.w = w;
 	textBox.h = h;
 
-	SDL_RenderDrawRect(rend, &textBox);
+	//@CLEANUP: Debug text rectangle
+	//SDL_RenderDrawRect(rend, &textBox);
 
-	if (textTexture != NULL)
+	if (SDL_PointInRect(&pos,gameCamera))
 	{
-		draw_outline(c_black);
-		SDL_RenderCopy(rend, textTexture, NULL, &textBox);
+		if (textTexture != NULL)
+		{
+			draw_outline(c_black);
+			SDL_RenderCopy(rend, textTexture, NULL, &textBox);
+		}
 	}
+	
 }
 
 void DebugText::draw_outline(SDL_Colour colour)

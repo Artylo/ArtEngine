@@ -7,14 +7,14 @@ Player::Player()
 	//sprite = IMG_Load("img/player.png");
 	sprite = std::shared_ptr<SDL_Surface>(IMG_Load("img/player.png"), SDL_FreeSurface);
 
-	x = 0;
-	y = 0;
+	pos.x = 0;
+	pos.y = 0;
 
-	x += hspeed;
-	y += vspeed;
+	pos.x += hspeed;
+	pos.y += vspeed;
 
-	box.x = x - origin.x; // Set coordinates of bounding box to object coordinates.
-	box.y = y - origin.y;
+	box.x = pos.x - origin.x; // Set coordinates of bounding box to object coordinates.
+	box.y = pos.y - origin.y;
 }
 
 void Player::get_input(Input* inpt)

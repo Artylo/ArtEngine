@@ -28,8 +28,7 @@ void draw_fillcircle2(SDL_Renderer* renderer, int centerX, int centerY, int radi
 class DebugText
 {
 public:
-	int x = 0;
-	int y = 0;
+	SDL_Point pos = { 0, 0 };
 	int w = 0;
 	int h = 0;
 	std::string text = "ERROR";
@@ -41,8 +40,9 @@ public:
 	TTF_Font* font_outline = NULL;
 	Uint16 outline_thickness = 1;
 	SDL_Renderer* rend = NULL;
+	SDL_Rect* gameCamera = NULL;
 
-	DebugText(SDL_Renderer* renderer);
+	DebugText(SDL_Renderer* renderer, SDL_Rect* camera);
 	~DebugText();
 	void create_surface();
 	void draw_text(std::string inputText, int posX, int posY);

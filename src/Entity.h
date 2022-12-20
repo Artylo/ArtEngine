@@ -7,8 +7,7 @@ class Entity
 private:
 
 public:
-	int x = 0;
-	int y = 0;
+	SDL_Point pos = {0,0};
 	int w = 32;
 	int h = 32;
 	int speed = 5;
@@ -24,7 +23,7 @@ public:
 
 	//Entity();
 
-	void init(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect camera);
+	void init(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect* camera);
 	void draw_shadow();
 	void draw_self();
 	void update();

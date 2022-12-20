@@ -9,6 +9,19 @@ SDL_Renderer* renderer;
 #include "Skeleton.h"
 #include "Wall.h"
 
+/*
+* TODO:
+* 1. Convert all position coordinates to translate to the new camera view.
+* 2. 
+* 3.
+* 4.
+* 5.
+* 6.
+* 7.
+* 8.
+* 9.
+* 10.
+*/
 
 int main(int argc, char *argv[])
 {
@@ -54,26 +67,27 @@ int main(int argc, char *argv[])
 	}
 	SDL_SetHint(SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "letterbox");
 	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_SCALING, "0");
+	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 	SDL_RenderSetLogicalSize(renderer,w_width,w_height);
 
 	//Init gamestate variables
 	bool gameActive = true;
 	SDL_Event event;
 
+	//Viewport or Camera
+	SDL_Rect worldBox = { 0,0,world_width,world_height };
+	SDL_Rect camera = { 0,0,640,480 };
+	SDL_Rect port = { 0,0,w_width,w_height };
+
 	//Init important objects
-	Input input(renderer, window); // Init input handler.
+	Input input(renderer, window, &camera); // Init input handler.
 	bool KEYS[322];
 	bool (*keys_ptr)[322] = &KEYS;
 	for (int i = 0; i < 322; i++) { KEYS[i] = false; }
 	
-	//Viewport or Camera
-	SDL_Rect worldBox = { 0,0,world_width,world_height };
-	SDL_Rect camera = { 0,0,640,480 };
-	SDL_Rect port = {0,0,w_width,w_height};
-
 	//INIT PLAYER
 	Player player;
-	player.init(renderer, window, camera);
+	player.init(renderer, window, &camera);
 	player.get_input(&input);
 
 	//Draw Tiled Background //@TODO: Make into its own class.
@@ -103,16 +117,16 @@ int main(int argc, char *argv[])
 	SDL_Texture* gameTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, world_width, world_height);
 
 	//@TEMP: GENERATE SKELETONS
-	const int numSkel = 50;
+	const int numSkel = 500;
 	Skeleton originalskel;
-	originalskel.init(renderer, window, camera);
+	originalskel.init(renderer, window, &camera);
 	std::vector<Skeleton> skeletons;
 
 	for (int i = 0; i < numSkel; i++)
 	{
 		skeletons.push_back(originalskel);
-		skeletons[i].x = rand() % world_width;
-		skeletons[i].y = rand() % world_height;
+		skeletons[i].pos.x = rand() % world_width;
+		skeletons[i].pos.y = rand() % world_height;
 		//skeletons[i].init(renderer, window);
 	}
 
@@ -149,7 +163,7 @@ int main(int argc, char *argv[])
 	//std::vector<DebugText> skeletonDebugs;
 	//skeletonDebugs.push_back();
 
-	DebugText debug_text(renderer);
+	DebugText debug_text(renderer, &camera);
 
 	//DebugText skeletonCords(renderer, "x: " + std::to_string(s.x) + "y:" + std::to_string(s.y), s.x - s.w, s.box.y - 64, s.w * 4, s.h);
 
@@ -207,10 +221,11 @@ int main(int argc, char *argv[])
 		// ####################
 
 		//Set Render Target to Camera Texture
+		//SDL_RenderSetClipRect(renderer, &camera);
 		SDL_SetRenderTarget(renderer, gameTexture);
 		
 		//Draw Background
-		SDL_RenderCopy(renderer, preTileTex, NULL, &worldBox);
+		SDL_RenderCopy(renderer, preTileTex, NULL, NULL);
 
 		//Draw Grid
    		if (input.keystate[SDL_SCANCODE_SPACE])
@@ -276,18 +291,19 @@ int main(int argc, char *argv[])
 		}
 
 		//Update Camera Position
-		camera.x = player.x - camera.w / 2;
-		camera.y = player.y - camera.h / 2;
-		//port.x += camera.w;
-		//port.y += camera.h;
+		camera.x = player.pos.x - camera.w / 2;
+		camera.y = player.pos.y - camera.h / 2;
+			//Restrain Camera
+			if (camera.x < 0) camera.x = 0;
+			if (camera.x + camera.w > world_width) camera.x = world_width - camera.w;
+			if (camera.y < 0) camera.y = 0;
+			if (camera.y + camera.h > world_height) camera.y = world_height - camera.y;
 		draw_set_color(renderer, c_red);
 		SDL_RenderDrawRect(renderer, &camera);
 		draw_set_color(renderer, c_blue);
 		SDL_RenderDrawRect(renderer, &worldBox);
 		draw_reset_color(renderer);
-		//SDL_RenderSetViewport(renderer,&port);
-		SDL_RenderSetClipRect(renderer, &camera);
-
+		
 		//Update Player
 		player.update();
 		//Draw Player
@@ -302,25 +318,32 @@ int main(int argc, char *argv[])
 				if (input.mouseIsHovering(skeletons[i]))
 				{
 					//@DEBUG
-					debug_text.draw_text("x: " + std::to_string(s->x) + " y:" + std::to_string(s->y), s->x - s->w, s->box.y - 64);
-					debug_text.draw_text("id:  " + std::to_string(i), s->x - s->w, s->box.y - 32);
+					debug_text.draw_text("x: " + std::to_string(s->pos.x) + " y:" + std::to_string(s->pos.y), s->pos.x - s->w, s->box.y - 64);
+					debug_text.draw_text("id:  " + std::to_string(i), s->pos.x - s->w, s->box.y - 32);
 				}
 
 				//@DEBUG
-				debug_text.draw_text(std::to_string(i), s->x - debug_text.w / 2, s->y - debug_text.h / 2); // Show id
+				debug_text.draw_text(std::to_string(i), s->pos.x - debug_text.w / 2, s->pos.y - debug_text.h / 2); // Show id
 			}
 		}
-
-		//Draw Framerate
-		std::string tempFPSstring = 
-		"FPS: " + std::to_string(framespersecond) +
-		" ms: " + std::to_string(SDL_GetTicks() - frametimelast);
-
-		debug_text.draw_text(tempFPSstring, debug_text.w, w_height - debug_text.h);
 
 		//Reset renderer to main texture
 		SDL_SetRenderTarget(renderer, NULL);
 		SDL_RenderCopy(renderer, gameTexture, &camera, &port);
+
+		/* ################### */
+		/* #### GUI LAYER #### */
+		/* ################### */
+
+		//Draw Framerate
+		std::string tempFPSstring =
+			"FPS: " + std::to_string(framespersecond) +
+			" ms: " + std::to_string(SDL_GetTicks() - frametimelast);
+
+		//@BUG: Should probably have post-modifiable debug-text entries for X, Y, W and H. Since this is causing the bug of the text moving. I cannot call the debug-text width or position in the call itself, since it is still set to that of the previous string.
+		//@CLEANUP: Take this off of debug_text and make a new GUI text object.
+		debug_text.draw_text(tempFPSstring, w_width - 200, w_height - 32);
+		debug_text.draw_text(" ", 0, 0);
 
 		/* ################### */
 		/* #### PAGE FLIP #### */

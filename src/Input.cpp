@@ -3,10 +3,11 @@
 #include "Entity.h"
 #include "Input.h"
 
-Input::Input(SDL_Renderer* renderer, SDL_Window* window)
+Input::Input(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect* camera)
 {
-	wind = window;
-	rend = renderer;
+	gameWindow = window;
+	gameRenderer = renderer;
+	gameCamera = camera;
 }
 
 Input::~Input()
@@ -103,20 +104,7 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player, bool(*k
 
 bool Input::mouseIsHovering(Entity entity) // Entity-version
 {
-	//@TODO: Replace with SDL_EnclosePoints();
-	/*
-	if (mouse_x < entity.box.x + entity.box.w && mouse_x > entity.box.x)
-	{
-		if (mouse_y < entity.box.y + entity.box.h && mouse_y > entity.box.y)
-		{
-			return true;
-		}
-		
-	}
-	return false;
-	*/
-
-	SDL_Point mouse = { mouse_x, mouse_y };
+	SDL_Point mouse = { mouse_x + gameCamera->x, mouse_y + gameCamera->y };
 	SDL_Rect boxHover = { entity.box.x,entity.box.y,entity.box.w,entity.box.h };
 	
 	if (SDL_EnclosePoints(&mouse, 1, &boxHover, nullptr))
@@ -168,7 +156,7 @@ void Input::setMouseScale()
 		SDL_RenderGetLogicalSize(rend,&rendW,&rendH);
 		*/
 
-		SDL_GetWindowSize(wind, &currentWindowWidth, &currentWindowHeight);
+		SDL_GetWindowSize(gameWindow, &currentWindowWidth, &currentWindowHeight);
 
 		mouseScaleX = (int)((float)currentWindowWidth / (float)w_width);
 		mouseScaleY = (int)((float)currentWindowHeight / (float)w_height);
