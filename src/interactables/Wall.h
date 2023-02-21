@@ -1,6 +1,9 @@
 #pragma once
+#include "../system/GameManager.h"
 
+class GameManager;
 class Player; // Player reference for circular dependency.
+class Input; // Forward Declaration of Input for cyclic dependency;
 
 class Wall
 {
@@ -16,10 +19,15 @@ public:
 	SDL_Rect horizontalCollisionBox = { 0,0,1,1 };
 
 	Player* player;
+	Input* input;
+
+	//Gameplay Elements
+	int initial_durability = 100;
+	int durability = initial_durability;
 
 	Wall();
 	~Wall();
-	void init(SDL_Renderer* renderer, SDL_Window* window, Player* plr);
+	void init(GameManager GM);
 	void update();
 	void draw_self();
 	void generate_texture();

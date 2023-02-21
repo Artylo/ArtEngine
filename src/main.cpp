@@ -1,41 +1,27 @@
-#include "globals.h"
-
-SDL_Window* window;
-SDL_Renderer* renderer;
-
-#include "debug.h"
-#include "Player.h"
-#include "Input.h"
-#include "Skeleton.h"
-#include "Wall.h"
-
-/*
-* TODO:
-* 1. Convert all position coordinates to translate to the new camera view.
-* 2. 
-* 3.
-* 4.
-* 5.
-* 6.
-* 7.
-* 8.
-* 9.
-* 10.
-*/
+#include "system/globals.h"
+#include "entities/Skeleton.h"
+#include "interactables/Tree.h"
+#include "system/GameManager.h"
+#include "system/debug.h"
+#include "system/Input.h"
 
 int main(int argc, char *argv[])
 {
 	/* ############## */
 	/* #### INIT #### */
 	/* ############## */
+
+
+
 	//Seed RNG
 	srand((unsigned int)time(NULL));
 
-	//Predefined Colours
-	SDL_Color colBackground = c_black;
-	SDL_Color colLines = c_white;
+
 
 	//Init SDL Components
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+
 	TTF_Init(); // Init TTF font loading.
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
@@ -58,7 +44,7 @@ int main(int argc, char *argv[])
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "You did not init your SDL renderer!", window);
 	}
-	SDL_SetRenderDrawColor(renderer, colBackground.r, colBackground.g, colBackground.b, colBackground.a);
+	draw_set_color(renderer, c_black);
 	SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
 	//Init PNG loading.
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
@@ -70,37 +56,45 @@ int main(int argc, char *argv[])
 	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 	SDL_RenderSetLogicalSize(renderer,w_width,w_height);
 
+
+
+
 	//Init gamestate variables
 	bool gameActive = true;
 	SDL_Event event;
+
+
+
 
 	//Viewport or Camera
 	SDL_Rect worldBox = { 0,0,world_width,world_height };
 	SDL_Rect camera = { 0,0,640,480 };
 	SDL_Rect port = { 0,0,w_width,w_height };
 
-	//Init important objects
+
+
+	//INIT INPUT HANDLER
 	Input input(renderer, window, &camera); // Init input handler.
-	bool KEYS[322];
-	bool (*keys_ptr)[322] = &KEYS;
-	for (int i = 0; i < 322; i++) { KEYS[i] = false; }
+
+
+
 	
 	//INIT PLAYER
 	Player player;
 	player.init(renderer, window, &camera);
 	player.get_input(&input);
 
+
+
+
 	//Draw Tiled Background //@TODO: Make into its own class.
 	SDL_Surface* tile = SDL_LoadBMP("img/tile2.bmp");
 	int winW, winH;
-	SDL_GetWindowSize(window, &winW, &winH); // Get size of resized windows.
-	//@CLEANUP background update code for fullscreen scaling
-
+	SDL_GetWindowSize(window, &winW, &winH); // Get size of resized windows
 	SDL_Texture* tilesrcTex = SDL_CreateTextureFromSurface(renderer, tile);
-	//SDL_FreeSurface(tile);
 	SDL_Texture* preTileTex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, world_width, world_height);
-	//SDL_Surface* tileBlit = SDL_CreateRGBSurface(NULL, w_width, w_height, 32, 0, 0, 0, 0);
 	SDL_Rect tileRect;
+
 	SDL_SetRenderTarget(renderer, preTileTex);
 	for (int i = 0; i < (world_width / 32) + 1; i++)
 	{
@@ -111,10 +105,15 @@ int main(int argc, char *argv[])
 		}
 	}
 	SDL_SetRenderTarget(renderer, NULL);
-	//@CLEANUP where background draw update was
+
+
+
 
 	//Setup Camera Render Texture
 	SDL_Texture* gameTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, world_width, world_height);
+
+
+
 
 	//@TEMP: GENERATE SKELETONS
 	const int numSkel = 500;
@@ -130,42 +129,11 @@ int main(int argc, char *argv[])
 		//skeletons[i].init(renderer, window);
 	}
 
-	//@TEMP: Generate Walls
-	//@CLEANUP: Consider converting to a set manually after construction: https://stackoverflow.com/questions/1041620/whats-the-most-efficient-way-to-erase-duplicates-and-sort-a-vector
-	const int wallSize = 0;
-	//Wall testPreBuilding[wallSize][wallSize];
-	std::vector<Wall> testBuilding;
-	for (int i = 0; i < wallSize; i++)
-	{
-		for (int j = 0; j < wallSize; j++)
-		{
-			if (i == 0 || i == wallSize - 1)
-			{
-				Wall w;
-				testBuilding.push_back(w);
-				testBuilding[testBuilding.size() - 1].init(renderer, window, &player);
-				testBuilding[testBuilding.size() - 1].pos.x = j * 32;
-				testBuilding[testBuilding.size() - 1].pos.y = i * 32;
-			}
-			else if (j == 0 || j == wallSize - 1)
-			{
-				Wall w;
-				testBuilding.push_back(w);
-				testBuilding[testBuilding.size() - 1].init(renderer, window, &player);
-				testBuilding[testBuilding.size() - 1].pos.x = j * 32;
-				testBuilding[testBuilding.size() - 1].pos.y = i * 32;
-			}
-		}
-	}
+
 
 	//Debug Text
-	
-	//std::vector<DebugText> skeletonDebugs;
-	//skeletonDebugs.push_back();
-
 	DebugText debug_text(renderer, &camera);
 
-	//DebugText skeletonCords(renderer, "x: " + std::to_string(s.x) + "y:" + std::to_string(s.y), s.x - s.w, s.box.y - 64, s.w * 4, s.h);
 
 	//Init framerate counter
 	//CLEANUP: Probably should move into DEBUG
@@ -180,11 +148,53 @@ int main(int argc, char *argv[])
 	Uint32 count;
 
 
+	GameManager GM;
+	GM.window = window;
+	GM.renderer = renderer;
+	GM.player = &player;
+	GM.input = &input;
+
+	//Init Walls
+	std::vector<Wall> testBuilding;
+
+	//Init Trees
+	//Tree testTree;
+	//testTree.init(renderer, window, &player);
+	//testTree.pos = { 64,64 };
+
+	//Tree* testTree = new Tree();
+	std::unique_ptr<Tree> testTree(new Tree());
+
+	testTree->init(GM,&testTree);
+	testTree->pos = { 64,64 };
+	
+
+
+	
+
+
+
+
+
+
+
+
+
+
 	/* ################### */
 	/* #### GAME LOOP #### */
 	/* ################### */
 	while (gameActive)
 	{
+
+
+
+
+
+
+
+
+
 		/* ####################### */
 		/* #### LOGIC UPDATES #### */
 		/* ####################### */
@@ -210,11 +220,28 @@ int main(int argc, char *argv[])
 		else framespersecond = 0;
 
 		//Handle Inputs
-		input.update(&gameActive, &event, &player, keys_ptr);
+		input.update(&gameActive, &event, &player);
+
+		//Update Tree
+		if (testTree != nullptr)
+		{
+			testTree->update();
+		}
 
 		//Clear Screen
 		SDL_RenderClear(renderer);
 		SDL_PumpEvents();
+
+
+
+
+
+
+
+
+
+
+
 
 		// ####################
 		// #### Draw Calls ####
@@ -247,7 +274,8 @@ int main(int argc, char *argv[])
 		* appear on screen and they worked like they should have.
 		*/
 		
-		if (KEYS[SDLK_b])
+		//if (KEYS[SDLK_b]) //@CLEANUP old implementation with bad key stuff
+		if (input.keystate[SDL_SCANCODE_B])
 		{
 			bool isUnique = true;
 			int placeX = ((input.mouse_x + camera.x) / 32) * 32;
@@ -270,7 +298,7 @@ int main(int argc, char *argv[])
 			{
 				testBuilding.emplace_back(Wall());
 				Wall* temp = &testBuilding[testBuilding.size() - 1];
-				temp->init(renderer, window, &player);
+				temp->init(GM);
 				temp->pos.x = placeX;
 				temp->pos.y = placeY;
 			}
@@ -280,12 +308,21 @@ int main(int argc, char *argv[])
 			//testBuilding.erase(unique(testBuilding.begin(), testBuilding.end()), testBuilding.end());
 		}
 	
-
+		//Draw Trees
+		if (testTree != nullptr)
+		{
+			testTree->draw_self();
+		}
+		else
+		{
+			//testTree.reset(nullptr);
+		}
 
 		//Draw Walls
 		for (int i = 0; i < testBuilding.size(); i++)
 		{
 			//skeletons[i].update();
+			testBuilding[i].update();
 			testBuilding[i].draw_self();
 			//SDL_RenderDrawRect(renderer, &testBuilding[i].box);
 		}
@@ -306,6 +343,7 @@ int main(int argc, char *argv[])
 		
 		//Update Player
 		player.update();
+
 		//Draw Player
 		player.draw_self();
 
@@ -331,6 +369,18 @@ int main(int argc, char *argv[])
 		SDL_SetRenderTarget(renderer, NULL);
 		SDL_RenderCopy(renderer, gameTexture, &camera, &port);
 
+
+
+
+
+
+
+
+
+
+
+
+
 		/* ################### */
 		/* #### GUI LAYER #### */
 		/* ################### */
@@ -342,8 +392,16 @@ int main(int argc, char *argv[])
 
 		//@BUG: Should probably have post-modifiable debug-text entries for X, Y, W and H. Since this is causing the bug of the text moving. I cannot call the debug-text width or position in the call itself, since it is still set to that of the previous string.
 		//@CLEANUP: Take this off of debug_text and make a new GUI text object.
-		debug_text.draw_text(tempFPSstring, w_width - 200, w_height - 32);
-		debug_text.draw_text(" ", 0, 0);
+		debug_text.draw_gui_text(tempFPSstring, w_width - 200, w_height - 32);
+		debug_text.draw_gui_text(" ", 0, 0);
+
+
+
+
+
+
+
+
 
 		/* ################### */
 		/* #### PAGE FLIP #### */
@@ -356,7 +414,15 @@ int main(int argc, char *argv[])
 		SDL_Delay(1000/gameFramerate);
 	}
 
-	//Quit
+
+
+
+
+
+	/* ############## */
+	/* #### QUIT #### */
+	/* ############## */
+
 	SDL_Log("Destroying Renderer");
 	SDL_DestroyRenderer(renderer);
 	SDL_Log("Destroying Window");

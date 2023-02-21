@@ -1,5 +1,5 @@
-#include "globals.h"
-#include "debug.h"
+#include "../system/globals.h"
+#include "../system/debug.h"
 #include "pong.h"
 #include "stdlib.h"
 #include <ctime>

@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity.h"
+#include "../entities/Entity.h"
 
 class Skeleton : public Entity
 {

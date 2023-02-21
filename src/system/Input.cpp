@@ -1,6 +1,6 @@
 #include "globals.h"
 #include "debug.h"
-#include "Entity.h"
+#include "../entities/Entity.h"
 #include "Input.h"
 
 Input::Input(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect* camera)
@@ -15,13 +15,16 @@ Input::~Input()
 
 }
 
-void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player, bool(*keys)[322])
+void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
 {
 	/*
 	//Mouse Events
 	mouse_buttons = SDL_GetMouseState(&rawMouse_x,&rawMouse_y); // Gets Mouse coords relative to window, not renderer. Needs scaling to work properly but doesn't fully account for non 16:9 aspect ratios.
 	*/
 	setMouseScale();
+	//Reset mouse buttons.
+	mouse_left = NOT_PRESSED;
+	mouse_right = NOT_PRESSED;
 
 	//Single Press
 	while (SDL_PollEvent(eventPtr))
@@ -47,8 +50,6 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player, bool(*k
 			default:
 				break;
 			}
-
-			(*keys)[eventPtr->key.keysym.sym] = false; // Set single release keystate in main
 			break;
 
 		case SDL_KEYDOWN:
@@ -59,11 +60,10 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player, bool(*k
 				break;
 			case SDLK_SPACE:
 				break;
-			
+
 			default:
 				break;
 			}
-			(*keys)[eventPtr->key.keysym.sym] = true; // Set single press keystate in main
 			break;
 
 		case SDL_MOUSEMOTION: // Alternative Mouse Coordinates (this is renderer-relative not window-relative)
@@ -71,35 +71,23 @@ void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player, bool(*k
 			rawMouse_y = eventPtr->motion.y;
 			break;
 
+		case SDL_MOUSEBUTTONDOWN:
+			switch (eventPtr->button.button)
+			{
+				case SDL_BUTTON_LEFT:
+						mouse_left = PRESSED;
+					break;
+				case SDL_BUTTON_RIGHT:
+						mouse_right = PRESSED;
+					break;
+			}
+			break;
+
 		case SDL_QUIT: // Press X on window to close game.
 			*gameState = false;
 			break;
 		}
 	}
-
-	//Continuous-respone Keys
-
-	/*
-	//@CLEANUP - MOVED TO PLAYER.CPP
-	//Player Inputs
-	if (keystate[SDL_SCANCODE_A])
-	{
-		player->hspeed = -player->speed;
-		
-	}
-	if (keystate[SDL_SCANCODE_D])
-	{
-		player->hspeed = player->speed;
-	}
-	if (keystate[SDL_SCANCODE_W])
-	{
-		player->vspeed = -player->speed;
-	}
-	if (keystate[SDL_SCANCODE_S])
-	{
-		player->vspeed = player->speed;
-	}
-	*/
 }
 
 bool Input::mouseIsHovering(Entity entity) // Entity-version

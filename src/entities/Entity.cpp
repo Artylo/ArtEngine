@@ -1,5 +1,5 @@
-#include "debug.h"
-#include "Entity.h"
+#include "../system/debug.h"
+#include "../entities/Entity.h"
 
 
 

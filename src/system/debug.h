@@ -46,6 +46,7 @@ public:
 	~DebugText();
 	void create_surface();
 	void draw_text(std::string inputText, int posX, int posY);
+	void draw_gui_text(std::string inputText, int posX, int posY);
 	void draw_outline(SDL_Colour colour);
 };
 

@@ -1,5 +1,5 @@
 ﻿#include "debug.h"
-#include "Entity.h"
+#include "../entities/Entity.h"
 
 bool checkCollision(SDL_Rect a, SDL_Rect b)
 {
@@ -254,6 +254,50 @@ void DebugText::draw_text(std::string inputText, int posX, int posY)
 		}
 	}
 	
+}
+
+void DebugText::draw_gui_text(std::string inputText, int posX, int posY)
+{
+
+	pos.x = posX;
+	pos.y = posY;
+
+	if (inputText != text)
+	{
+		text = inputText;
+		textChar = text.c_str();
+
+		create_surface();
+
+		if (textTexture != NULL)
+		{
+			SDL_DestroyTexture(textTexture);
+			textTexture = NULL;
+		}
+		if (textTexture == NULL)
+		{
+			textTexture = SDL_CreateTextureFromSurface(rend, textSurface);
+		}
+	}
+
+	TTF_SizeText(font, text.c_str(), &w, &h);
+
+	//@CLEANUP: I think it's redundant to have independent coords and a SDL_Rect.
+	textBox.x = pos.x;
+	textBox.y = pos.y;
+	textBox.w = w;
+	textBox.h = h;
+
+	//@CLEANUP: Debug text rectangle
+	//SDL_RenderDrawRect(rend, &textBox);
+
+
+	if (textTexture != NULL)
+	{
+		draw_outline(c_black);
+		SDL_RenderCopy(rend, textTexture, NULL, &textBox);
+	}
+
 }
 
 void DebugText::draw_outline(SDL_Colour colour)

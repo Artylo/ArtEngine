@@ -1,7 +1,8 @@
 #pragma once
-#include "Entity.h"
-#include "Input.h"
-#include "Wall.h"
+#include "../entities/Entity.h"
+#include "../interactables/Wall.h"
+#include "../system/Input.h"
+#include "../system/debug.h"
 #include <set>
 
 class Input; // Forward Declaration of Input for cyclic dependency;

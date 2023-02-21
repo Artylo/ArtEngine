@@ -1,6 +1,4 @@
-#include "globals.h"
-#include "Player.h"
-#include "debug.h"
+#include "../entities/Player.h"
 
 Player::Player()
 {

@@ -1,27 +1,22 @@
-#include "globals.h"
-#include "Entity.h"
-#include "Player.h"
-#include "debug.h"
 #include "Wall.h"
 
 Wall::Wall()
 {
-	
 	sprite = std::shared_ptr<SDL_Surface>(IMG_Load("img/tile.bmp"), SDL_FreeSurface);
 	assert(sprite.get() != NULL);
 
 	box.w = sprite.get()->w;
 	box.h = sprite.get()->h;
+
 }
 
-
-
-
-void Wall::init(SDL_Renderer* renderer, SDL_Window* window, Player* plr)
+void Wall::init(GameManager GM)
 {
-	gameRenderer = renderer;
-	gameWindow = window;
-	player = plr;
+	gameRenderer = GM.renderer;
+	gameWindow = GM.window;
+	player = GM.player;
+	input = GM.input;
+	generate_texture();
 }
 
 Wall::~Wall()
@@ -70,14 +65,11 @@ void Wall::update()
 
 void Wall::draw_self()
 {
-	update();
-	generate_texture();
-
 	//@TEMP:
 
 	if (texture.get() != NULL)
 	{
-		SDL_SetTextureAlphaMod(texture.get(), 10);
+		//SDL_SetTextureAlphaMod(texture.get(), 10); //@DEBUG: This doesn't work for some reason.
 		SDL_RenderCopy(gameRenderer, texture.get(), NULL, &box);
 	}
 }

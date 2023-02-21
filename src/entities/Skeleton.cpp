@@ -1,6 +1,6 @@
-#include "Skeleton.h"
-#include "globals.h"
-#include "debug.h"
+#include "../entities/Skeleton.h"
+#include "../system/globals.h"
+#include "../system/debug.h"
 
 Skeleton::Skeleton()
 {
