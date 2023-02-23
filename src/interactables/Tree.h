@@ -8,7 +8,7 @@ class Tree :
         std::unique_ptr<Tree>* selfptr;
 
         Tree();
-        void init(GameManager GM, std::unique_ptr<Tree>* sp);
+        void init(GameManager* GM, std::unique_ptr<Tree>* sp);
         void draw_self();
         void update();
 };

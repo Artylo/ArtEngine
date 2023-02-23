@@ -3,11 +3,12 @@
 #include "../entities/Entity.h"
 #include "Input.h"
 
-Input::Input(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect* camera)
+Input::Input(GameManager* gm)
 {
-	gameWindow = window;
-	gameRenderer = renderer;
-	gameCamera = camera;
+	GM = gm;
+	gameWindow = GM->window;
+	gameRenderer = GM->renderer;
+	gameCamera = GM->camera;
 }
 
 Input::~Input()
@@ -105,7 +106,7 @@ bool Input::mouseIsHovering(Entity entity) // Entity-version
 bool Input::mouseIsHovering(Wall wall) // Wall-version
 {
 	//@TODO: Convert to template for easier access.
-	SDL_Point mouse = { mouse_x, mouse_y };
+	SDL_Point mouse = { mouse_x + gameCamera->x, mouse_y + gameCamera->y};
 	SDL_Rect boxHover = { wall.box.x,wall.box.y,wall.box.w,wall.box.h };
 
 	if (SDL_EnclosePoints(&mouse, 1, &boxHover, nullptr))

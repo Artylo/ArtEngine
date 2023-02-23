@@ -9,8 +9,10 @@ class Wall
 {
 public:
 	SDL_Point pos = {0,0};
-	SDL_Renderer* gameRenderer = NULL;
-	SDL_Window* gameWindow = NULL;
+	GameManager* GM;
+	SDL_Renderer* gameRenderer = nullptr;
+	SDL_Window* gameWindow = nullptr;
+	SDL_Rect* gameCamera = nullptr;
 	std::shared_ptr<SDL_Surface> sprite = nullptr;
 	std::shared_ptr <SDL_Texture> texture = nullptr;
 	SDL_Rect box = { 0,0,1,1 };
@@ -27,7 +29,7 @@ public:
 
 	Wall();
 	~Wall();
-	void init(GameManager GM);
+	void init(GameManager* GM);
 	void update();
 	void draw_self();
 	void generate_texture();

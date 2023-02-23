@@ -3,6 +3,7 @@
 
 class Player; // Forward Declaration of Player for cyclic dependency;
 class Wall; // Forward Declaration of Wall for cyclic dependency;
+class GameManager;
 
 class Input
 {
@@ -15,10 +16,11 @@ class Input
 			RELEASED
 		};
 
-		Input(SDL_Renderer* renderer, SDL_Window* window, SDL_Rect* camera);
+		Input(GameManager* gm);
 		~Input();
 		
 		const Uint8* keystate = SDL_GetKeyboardState(NULL);
+		GameManager* GM;
 		SDL_Window* gameWindow = NULL;
 		SDL_Renderer* gameRenderer = NULL;
 		SDL_Rect* gameCamera = NULL;

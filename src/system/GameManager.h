@@ -10,6 +10,7 @@ class GameManager
 public:
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr;
+	SDL_Rect* camera = nullptr;
 	Player* player = nullptr;
 	Input* input = nullptr;
 };

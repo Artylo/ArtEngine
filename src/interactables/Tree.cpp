@@ -9,10 +9,12 @@ Tree::Tree()
 	box.h = sprite.get()->h;
 }
 
-void Tree::init(GameManager GM, std::unique_ptr<Tree>* sp)
+void Tree::init(GameManager* GM, std::unique_ptr<Tree>* sp)
 {
 	Wall::init(GM);
+	assert(sp != nullptr);
 	selfptr = sp;
+	assert(selfptr != nullptr);
 }
 
 void Tree::update()
@@ -34,7 +36,7 @@ void Tree::update()
 			{
 				if (input->mouse_left == 1)
 				{
-					this->durability -= 10;
+					this->durability -= 100;
 					//input.mouse_left = 0;
 				}
 			}

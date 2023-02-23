@@ -107,9 +107,6 @@
     <ClCompile Include="src\interactables\Wall.cpp" />
     <ClCompile Include="src\interactables\Tree.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="img\tree.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -16,7 +16,8 @@ int main(int argc, char *argv[])
 	//Seed RNG
 	srand((unsigned int)time(NULL));
 
-
+	//Initiate Game Manager
+	GameManager GM;
 
 	//Init SDL Components
 	SDL_Window* window;
@@ -55,6 +56,8 @@ int main(int argc, char *argv[])
 	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_SCALING, "0");
 	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 	SDL_RenderSetLogicalSize(renderer,w_width,w_height);
+	GM.window = window;
+	GM.renderer = renderer;
 
 
 
@@ -68,23 +71,21 @@ int main(int argc, char *argv[])
 
 	//Viewport or Camera
 	SDL_Rect worldBox = { 0,0,world_width,world_height };
-	SDL_Rect camera = { 0,0,640,480 };
+	SDL_Rect camera = { 0,0,w_width,w_height };
 	SDL_Rect port = { 0,0,w_width,w_height };
-
+	GM.camera = &camera;
 
 
 	//INIT INPUT HANDLER
-	Input input(renderer, window, &camera); // Init input handler.
+	Input input(&GM); // Init input handler.
+	GM.input = &input;
 
 
-
-	
 	//INIT PLAYER
 	Player player;
 	player.init(renderer, window, &camera);
 	player.get_input(&input);
-
-
+	GM.player = &player;
 
 
 	//Draw Tiled Background //@TODO: Make into its own class.
@@ -147,31 +148,32 @@ int main(int argc, char *argv[])
 	Uint32 getticks = SDL_GetTicks();
 	Uint32 count;
 
-
-	GameManager GM;
-	GM.window = window;
-	GM.renderer = renderer;
-	GM.player = &player;
-	GM.input = &input;
-
 	//Init Walls
 	std::vector<Wall> testBuilding;
 
 	//Init Trees
-	//Tree testTree;
-	//testTree.init(renderer, window, &player);
-	//testTree.pos = { 64,64 };
+	const int forest_size = 1000;
+	//std::vector<std::unique_ptr<Tree>> forest; //@TODO: Convert to list: https://cplusplus.com/reference/list/list/
+	std::list<std::unique_ptr<Tree>> forest;
 
-	//Tree* testTree = new Tree();
-	std::unique_ptr<Tree> testTree(new Tree());
+	for (int i = 0; i < forest_size; ++i)
+	{
+		//@CLEANUP: Vector implementation
+		//forest.push_back(std::make_unique<Tree>()); // Creates new Tree.
+		//forest[i].get()->init(GM, &forest[i]); // Initialises  Tree and hands it a pointer to itself.
+		//forest[i].get()->pos = {random(world_width),random(world_height)}; // Sets position of tree.
 
-	testTree->init(GM,&testTree);
-	testTree->pos = { 64,64 };
+		forest.push_back(std::make_unique<Tree>()); // Creates new Tree.
+		std::list<std::unique_ptr<Tree>>::iterator it = forest.begin(); 
+		std::advance(it, i);
+		it->get()->init(&GM, &(*it)); // Initialises  Tree and hands it a pointer to itself.
+		it->get()->pos = { rand() % world_width,rand() % world_height }; // Sets position of tree.
+	}
+
+	//y-depth sort //@CLEANUP: Move to update in class or think of some other wrapper
+	forest.sort([](const std::unique_ptr<Tree>& a, const std::unique_ptr<Tree>& b) {return a.get()->pos.y < b.get()->pos.y; });
+
 	
-
-
-	
-
 
 
 
@@ -221,11 +223,23 @@ int main(int argc, char *argv[])
 
 		//Handle Inputs
 		input.update(&gameActive, &event, &player);
-
-		//Update Tree
-		if (testTree != nullptr)
+	
+		for (int i = 0; i < forest.size(); i++)
 		{
-			testTree->update();
+			std::list<std::unique_ptr<Tree>>::iterator it = forest.begin();
+			std::advance(it, i);
+			if (*it == nullptr)
+			{
+				//Clean up Forest
+				forest.erase(it);
+			}
+			else
+			{
+
+				//Update Tree
+				it->get()->update();
+			}
+			
 		}
 
 		//Clear Screen
@@ -298,7 +312,7 @@ int main(int argc, char *argv[])
 			{
 				testBuilding.emplace_back(Wall());
 				Wall* temp = &testBuilding[testBuilding.size() - 1];
-				temp->init(GM);
+				temp->init(&GM);
 				temp->pos.x = placeX;
 				temp->pos.y = placeY;
 			}
@@ -309,13 +323,14 @@ int main(int argc, char *argv[])
 		}
 	
 		//Draw Trees
-		if (testTree != nullptr)
+		for (int i = 0; i < forest.size(); i++)
 		{
-			testTree->draw_self();
-		}
-		else
-		{
-			//testTree.reset(nullptr);
+			std::list<std::unique_ptr<Tree>>::iterator it = forest.begin();
+			std::advance(it, i);
+			if (*it != nullptr)
+			{
+				it->get()->draw_self();
+			}
 		}
 
 		//Draw Walls
