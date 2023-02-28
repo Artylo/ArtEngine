@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\system\Game.h" />
     <ClInclude Include="src\system\GameManager.h" />
     <ClInclude Include="src\system\debug.h" />
     <ClInclude Include="src\entities\Entity.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="src\interactables\Tree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\system\Game.cpp" />
     <ClCompile Include="src\system\GameManager.cpp" />
     <ClCompile Include="src\system\debug.cpp" />
     <ClCompile Include="src\entities\Entity.cpp" />

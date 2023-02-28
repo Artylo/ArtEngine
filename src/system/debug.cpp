@@ -175,11 +175,6 @@ DebugText::DebugText(SDL_Renderer* renderer, SDL_Rect* camera)
 {
 	rend = renderer;
 	gameCamera = camera;
-
-	font = TTF_OpenFont("arial.ttf", 24);
-
-	font_outline = TTF_OpenFont("arial.ttf", 24);
-	TTF_SetFontOutline(font_outline, outline_thickness);
 }
 
 DebugText::~DebugText()
@@ -190,13 +185,27 @@ DebugText::~DebugText()
 	font = NULL;
 
 	//Outline Font
+	/*
 	assert(font_outline != NULL);
 	TTF_CloseFont(font_outline);
 	font_outline = NULL;
+	*/
 }
 
 void DebugText::create_surface()
 {
+	if (font == nullptr)
+	{
+		font = TTF_OpenFont("arial.ttf", 24);
+		assert(font != nullptr);
+
+		//font_outline = TTF_OpenFont("arial.ttf", 24);
+		font_outline = font;
+		assert(font_outline != nullptr);
+		//TTF_SetFontOutline(font_outline, outline_thickness); //@TODO: Why wasn't this implemented?
+	}
+
+
 	if (textSurface != NULL)
 	{
 		SDL_FreeSurface(textSurface);

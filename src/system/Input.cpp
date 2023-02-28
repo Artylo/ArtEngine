@@ -5,10 +5,9 @@
 
 Input::Input(GameManager* gm)
 {
-	GM = gm;
-	gameWindow = GM->window;
-	gameRenderer = GM->renderer;
-	gameCamera = GM->camera;
+	gameWindow = gm->window;
+	gameRenderer = gm->renderer;
+	gameCamera = gm->camera;
 }
 
 Input::~Input()
@@ -103,6 +102,7 @@ bool Input::mouseIsHovering(Entity entity) // Entity-version
 	return false;
 
 }
+
 bool Input::mouseIsHovering(Wall wall) // Wall-version
 {
 	//@TODO: Convert to template for easier access.
