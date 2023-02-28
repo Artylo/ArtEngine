@@ -11,8 +11,6 @@ int main(int argc, char *argv[])
 	/* #### INIT #### */
 	/* ############## */
 
-
-
 	//Seed RNG
 	srand((unsigned int)time(NULL));
 
@@ -67,6 +65,18 @@ int main(int argc, char *argv[])
 	SDL_Event event;
 
 
+	//Init framerate counter
+	//CLEANUP: Probably should move into DEBUG
+	const Uint32 framenum = 20;
+	Uint32 framestart;
+	Uint32 frametimes[framenum];
+	Uint32 frametimelast = SDL_GetTicks();
+	Uint32 framecount = 0;
+	Uint32 framespersecond = 0;
+	memset(frametimes, 0, sizeof(frametimes)); // Essentially shorthand for looping though frametimes and setting to 0. Very C-like.
+	Uint32 frametimesindex = framecount % framenum;
+	Uint32 getticks = SDL_GetTicks();
+	Uint32 count;
 
 
 	//Viewport or Camera
@@ -74,6 +84,13 @@ int main(int argc, char *argv[])
 	SDL_Rect camera = { 0,0,w_width,w_height };
 	SDL_Rect port = { 0,0,w_width,w_height };
 	GM.camera = &camera;
+
+	//Setup Camera Render Texture
+	SDL_Texture* gameTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, world_width, world_height);
+
+
+	//Debug Text
+	DebugText debug_text(renderer, &camera);
 
 
 	//INIT INPUT HANDLER
@@ -108,14 +125,6 @@ int main(int argc, char *argv[])
 	SDL_SetRenderTarget(renderer, NULL);
 
 
-
-
-	//Setup Camera Render Texture
-	SDL_Texture* gameTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, world_width, world_height);
-
-
-
-
 	//@TEMP: GENERATE SKELETONS
 	const int numSkel = 500;
 	Skeleton originalskel;
@@ -130,39 +139,15 @@ int main(int argc, char *argv[])
 		//skeletons[i].init(renderer, window);
 	}
 
-
-
-	//Debug Text
-	DebugText debug_text(renderer, &camera);
-
-
-	//Init framerate counter
-	//CLEANUP: Probably should move into DEBUG
-	const Uint32 framenum = 20;
-	Uint32 frametimes[framenum];
-	Uint32 frametimelast = SDL_GetTicks();
-	Uint32 framecount = 0;
-	Uint32 framespersecond = 0;
-	memset(frametimes, 0, sizeof(frametimes)); // Essentially shorthand for looping though frametimes and setting to 0. Very C-like.
-	Uint32 frametimesindex = framecount % framenum;
-	Uint32 getticks = SDL_GetTicks();
-	Uint32 count;
-
-	//Init Walls
+	//@TEMP: Init Walls
 	std::vector<Wall> testBuilding;
 
 	//Init Trees
 	const int forest_size = 1000;
-	//std::vector<std::unique_ptr<Tree>> forest; //@TODO: Convert to list: https://cplusplus.com/reference/list/list/
 	std::list<std::unique_ptr<Tree>> forest;
 
 	for (int i = 0; i < forest_size; ++i)
 	{
-		//@CLEANUP: Vector implementation
-		//forest.push_back(std::make_unique<Tree>()); // Creates new Tree.
-		//forest[i].get()->init(GM, &forest[i]); // Initialises  Tree and hands it a pointer to itself.
-		//forest[i].get()->pos = {random(world_width),random(world_height)}; // Sets position of tree.
-
 		forest.push_back(std::make_unique<Tree>()); // Creates new Tree.
 		std::list<std::unique_ptr<Tree>>::iterator it = forest.begin(); 
 		std::advance(it, i);
@@ -189,19 +174,12 @@ int main(int argc, char *argv[])
 	while (gameActive)
 	{
 
-
-
-
-
-
-
-
-
 		/* ####################### */
 		/* #### LOGIC UPDATES #### */
 		/* ####################### */
 
 		//Calculate Average Framerate
+		framestart = SDL_GetTicks();
 		frametimesindex = framecount % framenum;
 		getticks = SDL_GetTicks();
 		count = 0;
@@ -224,6 +202,7 @@ int main(int argc, char *argv[])
 		//Handle Inputs
 		input.update(&gameActive, &event, &player);
 	
+		//Update Trees
 		for (int i = 0; i < forest.size(); i++)
 		{
 			std::list<std::unique_ptr<Tree>>::iterator it = forest.begin();
@@ -242,8 +221,7 @@ int main(int argc, char *argv[])
 			
 		}
 
-		//Clear Screen
-		SDL_RenderClear(renderer);
+		//Pump Event Queue
 		SDL_PumpEvents();
 
 
@@ -260,6 +238,9 @@ int main(int argc, char *argv[])
 		// ####################
 		// #### Draw Calls ####
 		// ####################
+
+		//Clear Screen
+		SDL_RenderClear(renderer);
 
 		//Set Render Target to Camera Texture
 		//SDL_RenderSetClipRect(renderer, &camera);
@@ -426,7 +407,11 @@ int main(int argc, char *argv[])
 		SDL_RenderPresent(renderer);
 
 		//Delay Before Next Frame
-		SDL_Delay(1000/gameFramerate);
+		//SDL_Delay(1000/gameFramerate);
+		if (1000 / gameFramerate > SDL_GetTicks() - framestart)
+		{
+			SDL_Delay(1000 / gameFramerate - (SDL_GetTicks() - framestart));
+		}
 	}
 
 
