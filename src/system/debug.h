@@ -1,6 +1,7 @@
 #pragma once
 
 #include "globals.h"
+#include "../system/GameManager.h"
 
 //Collision
 bool checkCollision(SDL_Rect a, SDL_Rect b);
@@ -33,17 +34,19 @@ public:
 	int h = 0;
 	std::string text = "ERROR";
 	const char* textChar = text.c_str();
-	SDL_Surface* textSurface = NULL;
-	SDL_Texture* textTexture = NULL;
+	SDL_Surface* textSurface = nullptr;
+	SDL_Texture* textTexture = nullptr;
 	SDL_Rect textBox = SDL_Rect{ 0,0,0,0 };
-	TTF_Font* font = NULL;
-	TTF_Font* font_outline = NULL;
+	TTF_Font* font = nullptr;
+	TTF_Font* font_outline = nullptr;
 	Uint16 outline_thickness = 1;
-	SDL_Renderer* rend = NULL;
-	SDL_Rect* gameCamera = NULL;
+	SDL_Renderer* rend = nullptr;
+	SDL_Rect* gameCamera = nullptr;
 
-	DebugText(SDL_Renderer* renderer, SDL_Rect* camera);
+	
+	DebugText();
 	~DebugText();
+	void init(GameManager* gm);
 	void create_surface();
 	void draw_text(std::string inputText, int posX, int posY);
 	void draw_gui_text(std::string inputText, int posX, int posY);

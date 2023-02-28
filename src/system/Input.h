@@ -16,11 +16,11 @@ class Input
 			RELEASED
 		};
 
-		Input(GameManager* gm);
+		Input();
 		~Input();
 		
 		const Uint8* keystate = SDL_GetKeyboardState(NULL);
-		GameManager* GM;
+		//GameManager* GM;
 		SDL_Window* gameWindow = NULL;
 		SDL_Renderer* gameRenderer = NULL;
 		SDL_Rect* gameCamera = NULL;
@@ -35,6 +35,7 @@ class Input
 		InputState mouse_left;
 		InputState mouse_right;
 		
+		void init(GameManager* gm);
 		void update(bool* gameState, SDL_Event* eventPtr, Player* player);
 		bool mouseIsHovering(Entity entity);
 		bool mouseIsHovering(Wall wall);

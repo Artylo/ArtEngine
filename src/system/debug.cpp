@@ -171,36 +171,42 @@ void draw_fillcircle2(SDL_Renderer* renderer, int x, int y, int radius)
 	}
 }
 
-DebugText::DebugText(SDL_Renderer* renderer, SDL_Rect* camera)
+DebugText::DebugText()
 {
-	rend = renderer;
-	gameCamera = camera;
+
 }
 
 DebugText::~DebugText()
 {
 	//Contents Font
-	assert(font != NULL);
+	//assert(font != NULL);
 	TTF_CloseFont(font);
 	font = NULL;
 
 	//Outline Font
-	/*
-	assert(font_outline != NULL);
+	//assert(font_outline != NULL);
 	TTF_CloseFont(font_outline);
 	font_outline = NULL;
-	*/
+}
+
+void DebugText::init(GameManager* gm)
+{
+	rend = gm->renderer;
+	//assert(rend != nullptr);
+	gameCamera = gm->camera;
+	//assert(gameCamera != nullptr);
 }
 
 void DebugText::create_surface()
 {
 	if (font == nullptr)
 	{
+		assert(font == nullptr);
 		font = TTF_OpenFont("arial.ttf", 24);
 		assert(font != nullptr);
 
 		//font_outline = TTF_OpenFont("arial.ttf", 24);
-		font_outline = font;
+		font_outline = TTF_OpenFont("arial.ttf", 24);
 		assert(font_outline != nullptr);
 		//TTF_SetFontOutline(font_outline, outline_thickness); //@TODO: Why wasn't this implemented?
 	}
@@ -267,7 +273,6 @@ void DebugText::draw_text(std::string inputText, int posX, int posY)
 
 void DebugText::draw_gui_text(std::string inputText, int posX, int posY)
 {
-
 	pos.x = posX;
 	pos.y = posY;
 

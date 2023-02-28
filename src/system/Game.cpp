@@ -92,7 +92,7 @@ void Game::init()
 	gameTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, world_width, world_height);
 
 	//INIT INPUT HANDLE
-	input = Input(&GM); //@CLEANUP: This is very hacky and may cause issues later.
+	input.init(&GM);
 	GM.input = &input;
 
 	//INIT PLAYER
@@ -101,7 +101,7 @@ void Game::init()
 	GM.player = &player;
 
 	//Init Debug Text
-	//debug_text = ;
+	debug_text.init(&GM);
 
 	//Draw Tiled Background //@TODO: Make into its own class.
 	SDL_Surface* tile = SDL_LoadBMP("img/tile2.bmp");
@@ -348,7 +348,7 @@ void Game::draw_gui()
 	//@BUG: Should probably have post-modifiable debug-text entries for X, Y, W and H. Since this is causing the bug of the text moving. I cannot call the debug-text width or position in the call itself, since it is still set to that of the previous string.
 	//@CLEANUP: Take this off of debug_text and make a new GUI text object.
 	debug_text.draw_gui_text(tempFPSstring, w_width - 200, w_height - 32);
-	debug_text.draw_gui_text(" ", 0, 0);
+	//debug_text.draw_gui_text(" ", 0, 0);
 }
 
 void Game::page_flip()

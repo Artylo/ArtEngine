@@ -42,10 +42,10 @@ class Game
 		SDL_Texture* gameTexture;
 
 		//Debug Text
-		DebugText debug_text = DebugText(renderer, &camera);
+		DebugText debug_text;
 
 		//INIT INPUT HANDLER
-		Input input = Input(&GM);
+		Input input;
 
 		//Player
 		Player player;

@@ -3,16 +3,23 @@
 #include "../entities/Entity.h"
 #include "Input.h"
 
-Input::Input(GameManager* gm)
+
+
+Input::Input()
 {
-	gameWindow = gm->window;
-	gameRenderer = gm->renderer;
-	gameCamera = gm->camera;
+
 }
 
 Input::~Input()
 {
 
+}
+
+void Input::init(GameManager* gm)
+{
+	gameWindow = gm->window;
+	gameRenderer = gm->renderer;
+	gameCamera = gm->camera;
 }
 
 void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
