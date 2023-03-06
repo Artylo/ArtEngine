@@ -179,12 +179,12 @@ DebugText::DebugText()
 DebugText::~DebugText()
 {
 	//Contents Font
-	//assert(font != NULL);
+	assert(font != NULL);
 	TTF_CloseFont(font);
 	font = NULL;
 
 	//Outline Font
-	//assert(font_outline != NULL);
+	assert(font_outline != NULL);
 	TTF_CloseFont(font_outline);
 	font_outline = NULL;
 }
@@ -208,7 +208,7 @@ void DebugText::create_surface()
 		//font_outline = TTF_OpenFont("arial.ttf", 24);
 		font_outline = TTF_OpenFont("arial.ttf", 24);
 		assert(font_outline != nullptr);
-		//TTF_SetFontOutline(font_outline, outline_thickness); //@TODO: Why wasn't this implemented?
+		TTF_SetFontOutline(font_outline, outline_thickness);
 	}
 
 

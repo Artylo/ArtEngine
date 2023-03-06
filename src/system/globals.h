@@ -12,7 +12,7 @@
 #include <tuple>
 
 //Window Constants
-#define gameFramerate 30
+#define gameFramerate 60
 #define w_width  640
 #define w_height 480
 #define world_width  1240

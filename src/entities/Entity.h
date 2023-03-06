@@ -10,7 +10,7 @@ public:
 	SDL_Point pos = {0,0};
 	int w = 32;
 	int h = 32;
-	int speed = 5;
+	int speed = 1;
 	int hspeed = 0;
 	int vspeed = 0;
 	SDL_Renderer* gameRenderer = NULL;

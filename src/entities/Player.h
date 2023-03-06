@@ -15,6 +15,8 @@ public:
 	Input* input = NULL;
 	double deg = 0;
 
+	int speed = 2;
+
 	bool izColliding           = false;
 	bool verticallyColliding   = false;
 	bool horizontallyColliding = false;
