@@ -2,7 +2,7 @@
 
 Game::Game()
 {
-	init_SDL();
+	init_lib();
 }
 
 Game::~Game()
@@ -24,7 +24,7 @@ Game::~Game()
 	SDL_Log("SUCCESSFULLY SHUT DOWN");
 }
 
-bool Game::init_SDL()
+bool Game::init_lib()
 {
 	bool init_success = true;
 
@@ -36,39 +36,72 @@ bool Game::init_SDL()
 	else
 	{
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+		init_success = false;
 	}
 
 	//Init SDL Window and Renderer
-	Uint32 WindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_OPENGL;
-	window = SDL_CreateWindow("ArtENGINE v0.3 - OPENGL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, WindowFlags);
-	SDL_GLContext Context = SDL_GL_CreateContext(window);
 
+	/* SDL2 Window */
+	//Uint32 WindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_OPENGL; // SDL Configuration
+	Uint32 WindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL; // OpenGL Configuration
+	window = SDL_CreateWindow("ArtENGINE v0.3 - OPENGL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, WindowFlags);
 	if (window == NULL)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "You did not init your SDL window!", window);
 	}
+	SDL_SetHint(SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "letterbox");
+	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_SCALING, "0");
+	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
+	/* OpenGL Renderer */
+	SDL_GLContext gl_renderer = SDL_GL_CreateContext(window); // Generate OpenGL render context.
+	if (gl_renderer == NULL)
+	{
+		SDL_Log("Failed to create OpenGL context! SDL Error: %s\n", SDL_GetError());
+		init_success = false;
+	}
+
+	/* Init GLEW */
+	if (glewInit() != GLEW_OK) // glewInit - requires an existing OpenGL render context at some point before being called
+	{
+		SDL_Log("Could not initialise GLEW!");
+		init_success = false;
+	}
+
+	SDL_Log("OPENGL LOADED: v.%s",glGetString(GL_VERSION)); // Get and print OpenGL version to test if latest drivers are loaded.
+
+	/* OpenGL Vsync */
+	if (SDL_GL_SetSwapInterval(1) < 0)
+	{
+		SDL_Log("Warning: Unable to set Vsync! SDL Error: %s\n", SDL_GetError());
+	}
+
+	/* Init OpenGL */
+	if (!initGL())
+	{
+		SDL_Log("Unable to initialize OpenGL!\n");
+		init_success = false;
+	}
+
+	/* SDL2 Renderer */
+	//@CLEANUP: Depricated in switch to OpenGL
 	Uint32 RendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 	renderer = SDL_CreateRenderer(window, -1, RendererFlags);
-
 	if (renderer == NULL)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "You did not init your SDL renderer!", window);
+		init_success = false;
 	}
-
 	draw_set_color(renderer, c_black);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-
+	SDL_RenderSetLogicalSize(renderer, w_width, w_height);
 
 	//Init PNG loading.
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL_Image Error", IMG_GetError(), window);
+		init_success = false;
 	}
-	SDL_SetHint(SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "letterbox");
-	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_SCALING, "0");
-	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-	SDL_RenderSetLogicalSize(renderer, w_width, w_height);
 
 	return init_success;
 }
@@ -375,4 +408,229 @@ void Game::page_flip()
 	{
 		SDL_Delay(1000 / gameFramerate - (SDL_GetTicks() - framestart));
 	}
+}
+
+//Shader loading utility programs
+void Game::printProgramLog(GLuint program)
+{
+	//@COPYPASTE: Figure out what this does
+	//Make sure name is shader
+	if (glIsProgram(program))
+	{
+		//Program log length
+		int infoLogLength = 0;
+		int maxLength = infoLogLength;
+
+		//Get info string length
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//Allocate string
+		char* infoLog = new char[maxLength];
+
+		//Get info log
+		glGetProgramInfoLog(program, maxLength, &infoLogLength, infoLog);
+		if (infoLogLength > 0)
+		{
+			//Print Log
+			printf("%s\n", infoLog);
+		}
+
+		//Deallocate string
+		delete[] infoLog;
+	}
+	else
+	{
+		printf("Name %d is not a program\n", program);
+	}
+}
+void Game::printShaderLog(GLuint shader)
+{
+	//@COPYPASTE: Figure out what this does
+	//Make sure name is shader
+	if (glIsShader(shader))
+	{
+		//Shader log length
+		int infoLogLength = 0;
+		int maxLength = infoLogLength;
+
+		//Get info string length
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//Allocate string
+		char* infoLog = new char[maxLength];
+
+		//Get info log
+		glGetShaderInfoLog(shader, maxLength, &infoLogLength, infoLog);
+		if (infoLogLength > 0)
+		{
+			//Print Log
+			printf("%s\n", infoLog);
+		}
+
+		//Deallocate string
+		delete[] infoLog;
+	}
+	else
+	{
+		printf("Name %d is not a shader\n", shader);
+	}
+}
+
+bool Game::initGL()
+{
+	gProgramID = glCreateProgram();
+
+	//Create Vertex Shader
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+	//Load Vertex Shader
+	const GLchar* vertexShaderSource[] =
+	{
+		"#version 140\nin vec2 LVertexPos2D; void main() { gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 ); }"
+	};
+
+	//Set Vertex Source
+	glShaderSource(vertexShader, 1, vertexShaderSource, NULL);
+
+	//Compile Vertex Source
+	glCompileShader(vertexShader);
+
+	//Check Vertex Shader for Errors
+	GLint vShaderCompiled = GL_FALSE;
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vShaderCompiled);
+	if (vShaderCompiled != GL_TRUE)
+	{
+		SDL_Log("Unable to compile vertex shader %d!\n", vertexShader);
+	}
+	else
+	{
+		//Attach Vertex Shader to Program
+		glAttachShader(gProgramID, vertexShader);
+
+		//Create Fragment Shader
+		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+		//Load Fragment Shader
+		const GLchar* fragmentShaderSource[] =
+		{
+			"#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 1.0, 1.0, 1.0, 1.0 ); }"
+		};
+
+		//Set Fragment Shader
+		glShaderSource(fragmentShader, 1, fragmentShaderSource, NULL);
+
+		//Compile Fragment Shader
+		glCompileShader(fragmentShader);
+
+		//Check fragment shader for errors
+		GLint fShaderCompiled = GL_FALSE;
+		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fShaderCompiled);
+		if (fShaderCompiled != GL_TRUE)
+		{
+			SDL_Log("Unable to compile fragment shader %d!\n", fragmentShader);
+		}
+		else
+		{
+			//Attach fragment shader to program
+			glAttachShader(gProgramID, fragmentShader);
+
+			//Link Program
+			glLinkProgram(gProgramID);
+
+			//Check for errors
+			GLint programSuccess = GL_TRUE;
+			glGetProgramiv(gProgramID, GL_LINK_STATUS, &programSuccess);
+			if (programSuccess != GL_TRUE)
+			{
+				SDL_Log("Error linking program %d!\n", gProgramID);
+			}
+			else
+			{
+				//Get vertex attribute location
+				gVertexPos2DLocation = glGetAttribLocation(gProgramID, "LVertexPos2D");
+				if (gVertexPos2DLocation == -1)
+				{
+					SDL_Log("LVertexPos2D is not a valid glsl program variable!\n");
+				}
+				else
+				{
+					//Init clear colour
+					glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+					//VBO data
+					GLfloat vertexData[] =
+					{
+						-0.5f, -0.5f,
+						 0.5f, -0.5f,
+						 0.5f,  0.5f,
+						-0.5f,  0.5f
+					};
+
+					//IBO data
+					GLuint indexData[] = { 0,1,2,3 };
+
+					//Create VBO
+					glGenBuffers(1, &gVBO);
+					glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+					glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
+
+					//Create IBO
+					glGenBuffers(1, &gIBO);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW);
+				}
+			}
+		}
+	}
+	return 1;
+}
+
+void Game::glinit()
+{
+	
+}
+
+void Game::glupdate()
+{
+
+}
+
+void Game::gldraw()
+{
+	//Clear Colour Buffer
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	//Render Quad
+	if (true)
+	{
+		//Bind Program
+		glUseProgram(gProgramID);
+
+		//Enable vertex position
+		glEnableVertexAttribArray(gVertexPos2DLocation);
+
+		//Set Vertex Data
+		glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+		glVertexAttribPointer(gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
+
+		//Set Index Data and Render
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIBO);
+		glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
+
+		//Disable Vertex Position
+		glDisableVertexAttribArray(gVertexPos2DLocation);
+
+		//Unbind Program
+		glUseProgram(NULL);
+	}
+}
+
+void Game::gldraw_gui()
+{
+
+}
+
+void Game::glpage_flip()
+{
+	SDL_GL_SwapWindow(window);
 }

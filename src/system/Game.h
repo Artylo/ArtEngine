@@ -70,11 +70,28 @@ class Game
 		Game();
 		~Game();
 
-		bool init_SDL();
+		bool init_lib();
 		void init();
 		void update();
 		void draw();
 		void draw_gui();
 		void page_flip();
+
+		//Shader loading utility programs
+		void printProgramLog(GLuint program);
+		void printShaderLog(GLuint shader);
+
+		//OpenGL variables
+		GLuint gProgramID = 0;
+		GLint gVertexPos2DLocation = -1;
+		GLuint gVBO = 0;
+		GLuint gIBO = 0;
+
+		bool initGL();
+		void glinit();
+		void glupdate();
+		void gldraw();
+		void gldraw_gui();
+		void glpage_flip();
 };
 

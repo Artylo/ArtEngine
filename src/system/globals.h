@@ -6,9 +6,9 @@
 #include "SDL_gpu.h"
 
 //OpenGL includes
-//#include <SDL_opengl.h>
-//#include <GL/glew.h>
-//#include <GL/glu.h>
+#include <GL/glew.h>
+#include <SDL_opengl.h>
+#include <GL/glu.h>
 
 //STL incldes
 #include <iostream>
