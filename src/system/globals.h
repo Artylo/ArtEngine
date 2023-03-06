@@ -1,7 +1,16 @@
 #pragma once
+//SDL includes
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "SDL_image.h"
+#include "SDL_gpu.h"
+
+//OpenGL includes
+//#include <SDL_opengl.h>
+//#include <GL/glew.h>
+//#include <GL/glu.h>
+
+//STL incldes
 #include <iostream>
 #include <string>
 #include <vector>

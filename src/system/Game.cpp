@@ -39,18 +39,27 @@ bool Game::init_SDL()
 	}
 
 	//Init SDL Window and Renderer
-	window = SDL_CreateWindow("ArtENGINE v0.1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
+	Uint32 WindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_OPENGL;
+	window = SDL_CreateWindow("ArtENGINE v0.3 - OPENGL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, WindowFlags);
+	SDL_GLContext Context = SDL_GL_CreateContext(window);
+
 	if (window == NULL)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "You did not init your SDL window!", window);
 	}
-	renderer = SDL_CreateRenderer(window, -1, 0);
+
+	Uint32 RendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+	renderer = SDL_CreateRenderer(window, -1, RendererFlags);
+
 	if (renderer == NULL)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "You did not init your SDL renderer!", window);
 	}
+
 	draw_set_color(renderer, c_black);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
+
 	//Init PNG loading.
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
