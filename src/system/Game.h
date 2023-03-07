@@ -86,5 +86,6 @@ class Game
 		void gldraw();
 		void gldraw_gui();
 		void glpage_flip();
+
 };
 

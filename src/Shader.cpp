@@ -100,6 +100,11 @@ void Shader::CreateVBO()
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), NULL);
 }
 
+void Shader::CreateIBO()
+{
+	
+}
+
 void Shader::init()
 {
 	src = ParseShader("shader/base.shader");

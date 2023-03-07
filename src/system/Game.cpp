@@ -412,20 +412,46 @@ void Game::page_flip()
 void Game::glinit()
 {
 	testShader.CreateVBO();
-
-	//testShader.ProgramID = testShader.CreateShader(vert, frag);
+	testShader.CreateIBO();
 	testShader.init();
 	
 }
 
 void Game::glupdate()
 {
+	//Pump Event Queue
+	SDL_PumpEvents();
+
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type) //@TEMP: Close window
+		{
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym)
+			{
+			case SDLK_ESCAPE:
+				gameActive = false;
+				break;
+			}
+			break;
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
+			{
+			case SDL_WINDOWEVENT_CLOSE:
+				gameActive = false;
+				break;
+			}
+			break;
+		}
+	}
+
 	testShader.update();
 }
 
 void Game::gldraw()
 {
 	//Clear Colour Buffer
+	glClearColor(0.5f, 0.5f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	testShader.draw();
@@ -440,7 +466,4 @@ void Game::glpage_flip()
 {
 	//Swap Buffers - page-flip
 	SDL_GL_SwapWindow(window);
-
-	//Pump Event Queue
-	SDL_PumpEvents();
 }

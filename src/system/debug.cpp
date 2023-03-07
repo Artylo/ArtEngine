@@ -179,12 +179,12 @@ DebugText::DebugText()
 DebugText::~DebugText()
 {
 	//Contents Font
-	assert(font != NULL);
+	//assert(font != NULL);
 	TTF_CloseFont(font);
 	font = NULL;
 
 	//Outline Font
-	assert(font_outline != NULL);
+	//assert(font_outline != NULL);
 	TTF_CloseFont(font_outline);
 	font_outline = NULL;
 }

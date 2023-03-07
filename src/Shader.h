@@ -24,6 +24,7 @@ public:
 	unsigned int CompileShader(unsigned int type, const std::string& source);
 	unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
 	void CreateVBO();
+	void CreateIBO();
 	void init();
 	void update();
 	void draw();
