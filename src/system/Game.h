@@ -6,6 +6,7 @@
 
 #include "../entities/Skeleton.h"
 #include "../interactables/Tree.h"
+#include "../Shader.h";
 
 
 
@@ -77,17 +78,9 @@ class Game
 		void draw_gui();
 		void page_flip();
 
-		//Shader loading utility programs
-		void printProgramLog(GLuint program);
-		void printShaderLog(GLuint shader);
+		//OpenGL Conversion
+		Shader testShader;
 
-		//OpenGL variables
-		GLuint gProgramID = 0;
-		GLint gVertexPos2DLocation = -1;
-		GLuint gVBO = 0;
-		GLuint gIBO = 0;
-
-		bool initGL();
 		void glinit();
 		void glupdate();
 		void gldraw();
