@@ -14,7 +14,10 @@ void main()
 #version 330 core
 
 out vec4 colour;
+
+uniform vec4 u_Colour = vec4(255.0f, 0.0f, 220.f, 1.0f);
+
 void main()
 {
-	colour = vec4(0.0, 0.0, 0.0, 1.0);
+	colour = u_Colour;
 };

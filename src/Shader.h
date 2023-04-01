@@ -17,6 +17,11 @@ public:
 	unsigned int IBO = 0;
 	int gVertexPos2DLocation = -1;
 
+	//Fragment Shader Variables
+	float r = 0.0f;
+	float g = 0.0f;
+	float b = 0.0f;
+
 	Shader();
 	~Shader();
 
@@ -28,6 +33,7 @@ public:
 	void init();
 	void update();
 	void draw();
+	void printShaderError();
 
 
 };

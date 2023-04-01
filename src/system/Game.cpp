@@ -411,20 +411,14 @@ void Game::page_flip()
 
 void Game::glinit()
 {
-	testShader.CreateVBO();
-	testShader.CreateIBO();
 	testShader.init();
-	
 }
 
 void Game::glupdate()
 {
-	//Pump Event Queue
-	SDL_PumpEvents();
-
-	while (SDL_PollEvent(&event))
+	while (SDL_PollEvent(&event)) //@TEMP: Close window
 	{
-		switch (event.type) //@TEMP: Close window
+		switch (event.type) 
 		{
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym)
@@ -466,4 +460,7 @@ void Game::glpage_flip()
 {
 	//Swap Buffers - page-flip
 	SDL_GL_SwapWindow(window);
+
+	//Pump Event Queue
+	SDL_PumpEvents();
 }
