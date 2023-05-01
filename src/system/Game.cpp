@@ -43,7 +43,13 @@ bool Game::init_lib()
 	//Init SDL Window and Renderer
 
 	/* SDL2 Window */
+
 	//Uint32 WindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED | SDL_WINDOW_OPENGL; // SDL Configuration
+
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
 	Uint32 WindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL; // OpenGL Configuration
 	std::string baseTitle = "ArtENGINE v0.3 - OPENGL"; // Window Title
 	window = SDL_CreateWindow(baseTitle.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w_width, w_height, WindowFlags);
@@ -459,8 +465,10 @@ void Game::gldraw_gui()
 void Game::glpage_flip()
 {
 	//Swap Buffers - page-flip
+	SDL_GL_SetSwapInterval(1);
 	SDL_GL_SwapWindow(window);
 
 	//Pump Event Queue
 	SDL_PumpEvents();
+	
 }

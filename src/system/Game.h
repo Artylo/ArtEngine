@@ -6,7 +6,7 @@
 
 #include "../entities/Skeleton.h"
 #include "../interactables/Tree.h"
-#include "../Shader.h";
+#include "../system/graphics/OpenGLTest.h";
 
 
 
@@ -79,7 +79,7 @@ class Game
 		void page_flip();
 
 		//OpenGL Conversion
-		Shader testShader;
+		OpenGLTest testShader;
 
 		void glinit();
 		void glupdate();

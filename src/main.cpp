@@ -1,5 +1,5 @@
 #include "system/Game.h"
-#include "Shader.h"
+#include "./system/graphics/OpenGLTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -36,6 +36,5 @@ int main(int argc, char *argv[])
 		if (UsingOpenGL) game.glpage_flip();
 		else game.page_flip();
 	}
-
 	return 0;
 }

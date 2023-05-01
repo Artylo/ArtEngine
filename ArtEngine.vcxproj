@@ -84,7 +84,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\system\graphics\Renderer.h" />
+    <ClInclude Include="src\system\graphics\OpenGLTest.h" />
     <ClInclude Include="src\system\Game.h" />
     <ClInclude Include="src\system\GameManager.h" />
     <ClInclude Include="src\system\debug.h" />
@@ -96,9 +97,12 @@
     <ClInclude Include="src\entities\Skeleton.h" />
     <ClInclude Include="src\interactables\Wall.h" />
     <ClInclude Include="src\interactables\Tree.h" />
+    <ClInclude Include="src\system\graphics\VertexBuffer.h" />
+    <ClInclude Include="src\system\graphics\IndexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\system\graphics\Renderer.cpp" />
+    <ClCompile Include="src\system\graphics\OpenGLTest.cpp" />
     <ClCompile Include="src\system\Game.cpp" />
     <ClCompile Include="src\system\GameManager.cpp" />
     <ClCompile Include="src\system\debug.cpp" />
@@ -110,6 +114,8 @@
     <ClCompile Include="src\entities\Skeleton.cpp" />
     <ClCompile Include="src\interactables\Wall.cpp" />
     <ClCompile Include="src\interactables\Tree.cpp" />
+    <ClCompile Include="src\system\graphics\VertexBuffer.cpp" />
+    <ClCompile Include="src\system\graphics\IndexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\base.shader" />
