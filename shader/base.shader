@@ -35,7 +35,7 @@ void main()
     float r = (sin(time) / 2.0f) + 0.5f;
     float g = (sin(time + 2.0f * 3.14159f / 3.0f) / 2.0f) + 0.5f;
     float b = (sin(time + 4.0f * 3.14159f / 3.0f) / 2.0f) + 0.5f;
-    col_shift = vec4(r, g, b, 0.5f);
+    col_shift = vec4(r, g, b, 0.1f);
 
     colour = tex_col * col_shift;
 };

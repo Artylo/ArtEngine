@@ -126,24 +126,22 @@ unsigned int OpenGLTest::CreateShader(const std::string& vertexShader, const std
 //@TODO: Make this changable at runtime somehow.
 void OpenGLTest::CreateVBO()
 {
-	//Vertex Array Object
-	GLCALL(glGenVertexArrays(1, &VAO));
-	GLCALL(glBindVertexArray(VAO));
+	vertex_array = std::make_shared<VertexArray>();
+	
+	vertex_buffer = std::make_shared<VertexBuffer>(vertices, sizeof(vertices));
 
-	vertex_buffer = std::make_unique<VertexBuffer>(vertices, sizeof(vertices));
-	//vertex_buffer = new VertexBuffer(vertices, sizeof(vertices));
+	vertex_buffer_layout = std::make_shared<VertexBufferLayout>();
+	vertex_buffer_layout.get()->Push<float>(2); // Position
+	vertex_buffer_layout.get()->Push<float>(2); // Texture Coordinates
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), NULL); // Positions 
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), NULL); // Texture Coordinates.
+	vertex_array.get()->AddBuffer(vertex_buffer, vertex_buffer_layout); //@DEBUG: May have unforseen consequences and not in the Half-Life sense.
 }
 
 //Creates the index array and loads it as an index buffer object.
 //@TODO: Make this changable at runtime somehow.
 void OpenGLTest::CreateIBO()
 {
-	index_buffer = std::make_unique<IndexBuffer>(indices, 6);
+	index_buffer = std::make_shared<IndexBuffer>(indices, 6);
 	//index_buffer = new IndexBuffer(indices, 6);
 }
 
@@ -204,6 +202,7 @@ void OpenGLTest::draw()
 		GLCALL(glUseProgram(ProgramID));
 		vertex_buffer.get()->Bind(); //@CLEANUP: Unnecessary.
 		 index_buffer.get()->Bind(); //@CLEANUP: Unnecessary.
+		 vertex_array.get()->Bind(); //@CLEANUP: Might be neccessary.
 			GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 		GLCALL(glUseProgram(NULL));
 		printShaderError();

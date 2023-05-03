@@ -99,6 +99,8 @@
     <ClInclude Include="src\interactables\Tree.h" />
     <ClInclude Include="src\system\graphics\VertexBuffer.h" />
     <ClInclude Include="src\system\graphics\IndexBuffer.h" />
+    <ClInclude Include="src\system\graphics\VertexArray.h" />
+    <ClInclude Include="src\system\graphics\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\system\graphics\Renderer.cpp" />
@@ -116,6 +118,8 @@
     <ClCompile Include="src\interactables\Tree.cpp" />
     <ClCompile Include="src\system\graphics\VertexBuffer.cpp" />
     <ClCompile Include="src\system\graphics\IndexBuffer.cpp" />
+    <ClCompile Include="src\system\graphics\VertexArray.cpp" />
+    <ClCompile Include="src\system\graphics\VertexBufferLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\base.shader" />
