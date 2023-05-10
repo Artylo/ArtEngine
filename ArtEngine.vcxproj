@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\system\graphics\Shader.h" />
     <ClInclude Include="src\system\graphics\Renderer.h" />
     <ClInclude Include="src\system\graphics\OpenGLTest.h" />
     <ClInclude Include="src\system\Game.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="src\system\graphics\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\system\graphics\Shader.cpp" />
     <ClCompile Include="src\system\graphics\Renderer.cpp" />
     <ClCompile Include="src\system\graphics\OpenGLTest.cpp" />
     <ClCompile Include="src\system\Game.cpp" />

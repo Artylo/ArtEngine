@@ -2,8 +2,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <fstream>
-#include <sstream>
 
 
 OpenGLTest::OpenGLTest()
@@ -13,52 +11,12 @@ OpenGLTest::OpenGLTest()
 
 OpenGLTest::~OpenGLTest()
 {
-	glDeleteProgram(ProgramID);
+	delete shader;
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &TextureID);
-
-	//@DEBUG: Figure out how to do this. Probably use smart pointers.
-	//delete vertex_buffer;
-	//delete index_buffer;
 }
 
-//Parses GLSL from the filepath and returns a vertex and fragment shader.
-OpenGLTest::ShaderProgramSource OpenGLTest::ParseShader(const std::string& filepath)
-{
-	std::ifstream stream(filepath);
-
-	enum class ShaderType
-	{
-		NONE = -1,
-		VERTEX = 0,
-		FRAGMENT =1
-	};
-	ShaderType type = ShaderType::NONE;
-
-	std::stringstream ss[2];
-	std::string line;
-	while (std::getline(stream, line) )
-	{
-		if (line.find("#shader") != std::string::npos) // Find Header
-		{
-			if (line.find("vertex") != std::string::npos) // Is it a vertex shader?
-			{
-				type = ShaderType::VERTEX;
-			}
-			else if (line.find("fragment") != std::string::npos)  // Is it a fragment shader?
-			{
-				type = ShaderType::FRAGMENT;
-			}
-		}
-		else
-		{
-			ss[(int)type] << line << '\n';
-		}
-	}
-
-	return { ss[0].str(), ss[1].str() };
-}
-
+//Flips a SDL_Surface vertically, so that its pixel data is in the correct format for being converted into an OpenGL texture.
 void OpenGLTest::FlipSurface(SDL_Surface* surface)
 {
 	SDL_LockSurface(surface);
@@ -81,45 +39,6 @@ void OpenGLTest::FlipSurface(SDL_Surface* surface)
 		delete[] temp;
 
 	SDL_UnlockSurface(surface);
-}
-
-//Compiles an individual vertex/fragment shader source.
-unsigned int OpenGLTest::CompileShader(unsigned int type, const std::string& source)
-{
-	unsigned int id = glCreateShader(type);
-	const char* src = source.c_str();
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
-
-	int  shaderCompileStatus;
-	char infoLog[512];
-	glGetShaderiv(id, GL_COMPILE_STATUS, &shaderCompileStatus);
-	if (shaderCompileStatus != GL_TRUE)
-	{
-		glGetShaderInfoLog(id, 512, NULL, infoLog);
-		SDL_Log("ERROR: Unable to compile %s shader %s!\n", (type == GL_VERTEX_SHADER ? "vertex" : "fragment"), infoLog);
-	}
-
-	return id;
-}
-
-//Links freshly compiled shaders to the program.
-unsigned int OpenGLTest::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
-{
-	unsigned int p = glCreateProgram();
-	unsigned int v = CompileShader(GL_VERTEX_SHADER, vertexShader);
-	unsigned int f = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-	glAttachShader(p, v);
-	glAttachShader(p, f);
-
-	glLinkProgram(p);
-	glValidateProgram(p);
-
-	glDeleteShader(v);
-	glDeleteShader(f);
-
-	return p;
 }
 
 //Creates the vertex array and loads it as a vertex buffer object.
@@ -151,8 +70,9 @@ void OpenGLTest::init()
 	CreateVBO();
 	CreateIBO();
 
-	src = ParseShader("shader/base.shader");
-	ProgramID = CreateShader(src.VertexSource, src.FragmentSource);
+	//Init Shader
+	shader = new Shader("shader/base.shader");
+	shader->Bind();
 
 	//Generate Texture
 	surface = IMG_Load("img/player.png");
@@ -179,17 +99,12 @@ void OpenGLTest::init()
 
 void OpenGLTest::update()
 {
-	GLCALL(glUseProgram(ProgramID));
+	shader->Bind();
 
-		//int location = glGetUniformLocation(ProgramID, "u_Colour");
-		int location2 = glGetUniformLocation(ProgramID, "u_Time");
-		int location3 = glGetUniformLocation(ProgramID, "u_Texture");
+		shader->SetUniform1f("u_Time", ((float)SDL_GetTicks())); // Current Time in Ticks
+		shader->SetUniform1i("u_Texture", 0); // Slot of Texture
 
-		//glUniform4f(location, r, g, b, 1.0f);
-		glUniform1f(location2, ((float)SDL_GetTicks()));
-		glUniform1i(location3, 0); // Slot of Texture
-
-	GLCALL(glUseProgram(NULL));
+	shader->Unbind();
 	printShaderError();
 }
 
@@ -199,12 +114,12 @@ void OpenGLTest::draw()
 	//Render
 	if (true) // If this thing is supposed to be rendered. Is it on screen, etc.?
 	{
-		GLCALL(glUseProgram(ProgramID));
-		vertex_buffer.get()->Bind(); //@CLEANUP: Unnecessary.
-		 index_buffer.get()->Bind(); //@CLEANUP: Unnecessary.
-		 vertex_array.get()->Bind(); //@CLEANUP: Might be neccessary.
+		shader->Bind();
+			vertex_buffer.get()->Bind(); //@CLEANUP: Unnecessary.
+			 index_buffer.get()->Bind(); //@CLEANUP: Unnecessary.
+			 vertex_array.get()->Bind(); //@CLEANUP: Might be neccessary.
 			GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-		GLCALL(glUseProgram(NULL));
+		shader->Unbind();
 		printShaderError();
 	}
 }
