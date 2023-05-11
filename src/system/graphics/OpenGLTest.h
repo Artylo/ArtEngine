@@ -22,6 +22,9 @@ private:
 		1, 2, 0,
 		0, 3, 1
 	};
+
+	//Projection Matrix
+	glm::mat4 projection_matrix = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f);
 public:
 
 	//OpenGL variables
@@ -30,16 +33,17 @@ public:
 	//unsigned int VBO = 0;
 	//unsigned int IBO = 0;
 	int gVertexPos2DLocation = -1;
+	Renderer renderer;
 	Shader* shader = nullptr;
-	std::shared_ptr<VertexArray> vertex_array;
-	std::shared_ptr<VertexBufferLayout> vertex_buffer_layout;
-	std::shared_ptr<VertexBuffer> vertex_buffer;
-	std::shared_ptr<IndexBuffer> index_buffer;
+	VertexArray* vertex_array = nullptr;
+	VertexBufferLayout* vertex_buffer_layout = nullptr;
+	VertexBuffer* vertex_buffer = nullptr;
+	IndexBuffer* index_buffer = nullptr;
 	//VertexBuffer* vertex_buffer;
 	//IndexBuffer* index_buffer;
 
 	//Texture Variables
-	SDL_Surface* surface;
+	SDL_Surface* surface = nullptr;
 	GLuint TextureID = 0;
 
 	OpenGLTest();

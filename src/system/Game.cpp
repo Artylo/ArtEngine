@@ -30,6 +30,8 @@ bool Game::init_lib()
 	bool init_success = true;
 
 	TTF_Init(); // Init TTF font loading.
+	std::cout << "TTF_init successful!" << std::endl;
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
 		SDL_Log("Successfully loaded SDL: %s", SDL_GetError());
@@ -39,6 +41,7 @@ bool Game::init_lib()
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		init_success = false;
 	}
+	std::cout << "SDL_INIT_EVERYTHING successful!" << std::endl;
 
 	//Init SDL Window and Renderer
 
@@ -60,6 +63,7 @@ bool Game::init_lib()
 	SDL_SetHint(SDL_HINT_RENDER_LOGICAL_SIZE_MODE, "letterbox");
 	SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_SCALING, "0");
 	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+	std::cout << "SDL_CreateWindow successful!" << std::endl;
 
 	/* OpenGL Renderer */
 	SDL_GLContext gl_renderer = SDL_GL_CreateContext(window); // Generate OpenGL render context.
@@ -450,10 +454,6 @@ void Game::glupdate()
 
 void Game::gldraw()
 {
-	//Clear Colour Buffer
-	glClearColor(0.5f, 0.5f, 0.6f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
 	testShader.draw();
 }
 

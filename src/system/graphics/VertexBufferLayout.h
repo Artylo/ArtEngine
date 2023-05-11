@@ -8,6 +8,7 @@
 #include <SDL_opengl.h>
 #include <GL/glu.h>
 
+
 struct VertexBufferElement
 {
 	unsigned int type;

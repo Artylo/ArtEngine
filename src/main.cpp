@@ -1,12 +1,16 @@
 #include "system/Game.h"
 #include "./system/graphics/OpenGLTest.h"
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
 	bool UsingOpenGL = true;
+	std::cout << "Pre-init Test.";
 
 	//Initiate Game
 	Game game;
+
+	std::cout << "Game Initialised.";
 
 	if(UsingOpenGL) game.glinit();
 	else game.init();

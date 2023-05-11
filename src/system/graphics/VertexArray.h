@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../globals.h"
 #include "VertexBuffer.h"
-#include "VertexBufferLayout.h"
+
+class VertexBufferLayout; //@DEBUG: Fixes cyclical dependency with VertexBufferLayout calling GLASSERT.
 
 class VertexArray
 {
@@ -14,6 +14,6 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
-	void AddBuffer(const std::shared_ptr<VertexBuffer>& vb, const std::shared_ptr<VertexBufferLayout>& layout);
+	void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 };
 

@@ -451,3 +451,6 @@ FodyWeavers.xsd
 
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
+
+#Ignore External Libraries
+vendor/glm/*

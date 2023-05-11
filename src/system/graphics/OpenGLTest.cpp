@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 OpenGLTest::OpenGLTest()
 {
@@ -12,6 +14,10 @@ OpenGLTest::OpenGLTest()
 OpenGLTest::~OpenGLTest()
 {
 	delete shader;
+	delete vertex_buffer;
+	delete index_buffer;
+	delete vertex_array;
+	delete vertex_buffer_layout;
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &TextureID);
 }
@@ -27,9 +33,8 @@ void OpenGLTest::FlipSurface(SDL_Surface* surface)
 		for (int i = 0; i < surface->h / 2; ++i)
 		{
 			//Get pointers to rows that need to be swapped.
-			//@CLEANUP: See how you can remove the overflow errors. Perhaps switching from char.
-			char* row1 = pixels + i * pitch;
-			char* row2 = pixels + (surface->h - i - 1) * pitch;
+			char* row1 = pixels + (static_cast<int64_t>(i) * pitch);
+			char* row2 = pixels + ((static_cast<int64_t>(surface->h) - i - 1) * pitch);
 
 			//Swap rows.
 			memcpy(temp, row1, pitch);
@@ -45,23 +50,25 @@ void OpenGLTest::FlipSurface(SDL_Surface* surface)
 //@TODO: Make this changable at runtime somehow.
 void OpenGLTest::CreateVBO()
 {
-	vertex_array = std::make_shared<VertexArray>();
+	//vertex_array = std::make_shared<VertexArray>();
+	vertex_array = new VertexArray();
+	vertex_buffer_layout = new VertexBufferLayout();
 	
-	vertex_buffer = std::make_shared<VertexBuffer>(vertices, sizeof(vertices));
+	vertex_buffer = new VertexBuffer(vertices, sizeof(vertices));
 
-	vertex_buffer_layout = std::make_shared<VertexBufferLayout>();
-	vertex_buffer_layout.get()->Push<float>(2); // Position
-	vertex_buffer_layout.get()->Push<float>(2); // Texture Coordinates
+	//vertex_buffer_layout = std::make_shared<VertexBufferLayout>();
+	vertex_buffer_layout->Push<float>(2); // Position
+	vertex_buffer_layout->Push<float>(2); // Texture Coordinates
 
-	vertex_array.get()->AddBuffer(vertex_buffer, vertex_buffer_layout); //@DEBUG: May have unforseen consequences and not in the Half-Life sense.
+	vertex_array->AddBuffer(*vertex_buffer, *vertex_buffer_layout); //@DEBUG: May have unforseen consequences and not in the Half-Life sense.
 }
 
 //Creates the index array and loads it as an index buffer object.
 //@TODO: Make this changable at runtime somehow.
 void OpenGLTest::CreateIBO()
 {
-	index_buffer = std::make_shared<IndexBuffer>(indices, 6);
-	//index_buffer = new IndexBuffer(indices, 6);
+	//index_buffer = std::make_shared<IndexBuffer>(indices, 6);
+	index_buffer = new IndexBuffer(indices, 6);
 }
 
 //Creates the Vertex Buffer Object, the Index Buffer Object, parses the shader from the filepath and loads it as the program.
@@ -69,6 +76,10 @@ void OpenGLTest::init()
 {
 	CreateVBO();
 	CreateIBO();
+
+	//Blending
+	GLCALL(glEnable(GL_BLEND));
+	GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 	//Init Shader
 	shader = new Shader("shader/base.shader");
@@ -103,8 +114,8 @@ void OpenGLTest::update()
 
 		shader->SetUniform1f("u_Time", ((float)SDL_GetTicks())); // Current Time in Ticks
 		shader->SetUniform1i("u_Texture", 0); // Slot of Texture
+		shader->SetUniformMat4f("u_MVP", projection_matrix);
 
-	shader->Unbind();
 	printShaderError();
 }
 
@@ -114,14 +125,10 @@ void OpenGLTest::draw()
 	//Render
 	if (true) // If this thing is supposed to be rendered. Is it on screen, etc.?
 	{
-		shader->Bind();
-			vertex_buffer.get()->Bind(); //@CLEANUP: Unnecessary.
-			 index_buffer.get()->Bind(); //@CLEANUP: Unnecessary.
-			 vertex_array.get()->Bind(); //@CLEANUP: Might be neccessary.
-			GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-		shader->Unbind();
-		printShaderError();
+		renderer.Clear();
+		renderer.Draw(*vertex_array, *index_buffer, *shader);
 	}
+	printShaderError();
 }
 
 void OpenGLTest::printShaderError()

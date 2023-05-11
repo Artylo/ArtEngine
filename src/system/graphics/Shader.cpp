@@ -119,6 +119,11 @@ void Shader::SetUniform1i(const std::string& name, int value)
 	GLCALL(glUniform1i(GetUniformLocation(name), value));
 }
 
+void Shader::SetUniformMat4f(const std::string& name, glm::mat4& matrix)
+{
+	GLCALL(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+}
+
 int Shader::GetUniformLocation(const std::string& name)
 {
 	if (UniformLocationCache.find(name) != UniformLocationCache.end()) return UniformLocationCache[name]; // Is this already cached?

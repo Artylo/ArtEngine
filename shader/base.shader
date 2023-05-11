@@ -6,9 +6,11 @@ layout(location = 1) in vec2 a_TexCoord;
 
 out vec2 v_TexCoord;
 
+uniform mat4 u_MVP;
+
 void main()
 {
-	gl_Position = a_Position;
+	gl_Position = a_Position * u_MVP;
     v_TexCoord = a_TexCoord;
 };
 
@@ -35,7 +37,7 @@ void main()
     float r = (sin(time) / 2.0f) + 0.5f;
     float g = (sin(time + 2.0f * 3.14159f / 3.0f) / 2.0f) + 0.5f;
     float b = (sin(time + 4.0f * 3.14159f / 3.0f) / 2.0f) + 0.5f;
-    col_shift = vec4(r, g, b, 0.1f);
+    col_shift = vec4(r, g, b, tex_col.a);
 
-    colour = tex_col * col_shift;
+    colour = mix(tex_col, col_shift, sin(time));
 };

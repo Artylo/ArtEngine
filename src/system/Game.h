@@ -6,9 +6,7 @@
 
 #include "../entities/Skeleton.h"
 #include "../interactables/Tree.h"
-#include "../system/graphics/OpenGLTest.h";
-
-
+#include "../system/graphics/OpenGLTest.h"
 
 class Game
 {
