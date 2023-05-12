@@ -5,12 +5,12 @@
 int main(int argc, char *argv[])
 {
 	bool UsingOpenGL = true;
-	std::cout << "Pre-init Test.";
+	std::cout << "Pre-init Test." << std::endl;
 
 	//Initiate Game
 	Game game;
 
-	std::cout << "Game Initialised.";
+	std::cout << "Game Initialised." << std::endl;
 
 	if(UsingOpenGL) game.glinit();
 	else game.init();

@@ -87,7 +87,7 @@ void OpenGLTest::init()
 
 	//Generate Texture
 	surface = IMG_Load("img/player.png");
-	FlipSurface(surface);
+	//FlipSurface(surface);
 	assert(surface != nullptr);
 	glGenTextures(1, &TextureID);
 	glActiveTexture(GL_TEXTURE0);
@@ -114,7 +114,7 @@ void OpenGLTest::update()
 
 		shader->SetUniform1f("u_Time", ((float)SDL_GetTicks())); // Current Time in Ticks
 		shader->SetUniform1i("u_Texture", 0); // Slot of Texture
-		shader->SetUniformMat4f("u_MVP", projection_matrix);
+		shader->SetUniformMat4f("u_MVP", model_view_projection);
 
 	printShaderError();
 }

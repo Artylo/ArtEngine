@@ -22,6 +22,9 @@ class Game
 		SDL_Event event;
 		bool gameActive = true;
 
+		//Init GUI variables
+		ImGuiIO* io_ptr = nullptr;
+
 		//Framerate counter
 		//CLEANUP: Probably should move into DEBUG or own class
 		static const Uint32 framenum = 20;

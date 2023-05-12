@@ -11,6 +11,12 @@ Game::~Game()
 	/* #### QUIT #### */
 	/* ############## */
 
+	/* ImGui Quits*/
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+	SDL_Log("ImGui Shutdown");
+
 	/* SDL Quits */
 	SDL_Log("Destroying Renderer");
 	SDL_DestroyRenderer(renderer);
@@ -82,7 +88,8 @@ bool Game::init_lib()
 
 	
 	std::string OpenGLVersion = (const char*)glGetString(GL_VERSION);
-	std::string title = baseTitle + " v." + OpenGLVersion;
+	std::string GLSLVersion = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+	std::string title = baseTitle + " v." + OpenGLVersion + " - GLSL v." + GLSLVersion;
 	SDL_Log("OPENGL LOADED: v.%s", glGetString(GL_VERSION)); // Get and print OpenGL version to test if latest drivers are loaded.
 	SDL_SetWindowTitle(window, title.c_str());
 
@@ -111,6 +118,20 @@ bool Game::init_lib()
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL_Image Error", IMG_GetError(), window);
 		init_success = false;
 	}
+
+	//Init ImGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io_ptr = &io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad  Controls
+
+	ImGui::StyleColorsDark(); //ImGui Style
+	
+	ImGui_ImplSDL2_InitForOpenGL(window, gl_renderer); // Setup Platform/Renderer backends
+	//ImGui_ImplOpenGL3_Init(GLSLVersion.c_str());
+	ImGui_ImplOpenGL3_Init("#version 460"); //@DEBUG: I think I should find a way to parse this from the GLSLVersion string because this will probably break.
 
 	return init_success;
 }
@@ -454,12 +475,46 @@ void Game::glupdate()
 
 void Game::gldraw()
 {
+	//@TEST
+	//@CLEANUP: Test ImGui Frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
 	testShader.draw();
 }
 
 void Game::gldraw_gui()
-{
+{	
+	//@TEST
 
+	 // Our state
+	bool show_demo_window = true;
+	bool show_another_window = false;
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+	static float f = 0.0f;
+	static int counter = 0;
+
+	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+	ImGui::Checkbox("Another Window", &show_another_window);
+
+	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		counter++;
+	ImGui::SameLine();
+	ImGui::Text("counter = %d", counter);
+
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io_ptr->Framerate, io_ptr->Framerate);
+	ImGui::End();
+	//@CLEANUP: Test ImGui Frame
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void Game::glpage_flip()
@@ -470,5 +525,4 @@ void Game::glpage_flip()
 
 	//Pump Event Queue
 	SDL_PumpEvents();
-	
 }

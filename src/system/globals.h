@@ -10,6 +10,11 @@
 #include <SDL_opengl.h>
 #include <GL/glu.h>
 
+//ImGUI includes
+#include "../vendor/imgui/imgui.h"
+#include "../vendor/imgui/imgui_impl_sdl2.h"
+#include "../vendor/imgui/imgui_impl_opengl3.h"
+
 //STL incldes
 #include <iostream>
 #include <string>

@@ -454,3 +454,6 @@ FodyWeavers.xsd
 
 #Ignore External Libraries
 vendor/glm/*
+!vendor/glm/.placeholder
+vendor/imgui/*
+!vendor/imgui/.placeholder

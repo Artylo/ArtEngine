@@ -13,18 +13,22 @@ class OpenGLTest
 private:
 	float vertices[16] = {
 		//position		//texture coords
-		-0.5f, -0.5f,	0.0f, 0.0f,		//Bottom Left
-		 0.5f,  0.5f,	1.0f, 1.0f,		//Top Right
-		 0.5f, -0.5f,	1.0f, 0.0f,		//Bottom Right
-		-0.5f,  0.5f,	0.0f, 1.0f		//Top Left
+		 0.0f, 0.0f,	0.0f, 0.0f,		//Top Left
+		 32.0f, 0.0f,	1.0f, 0.0f,		//Top Right
+		 0.0f, 32.0f,	0.0f, 1.0f,		//Bottom Left
+		 32.0f, 32.0f,	1.0f, 1.0f		//Bottom Right
+		
 	};
 	unsigned int indices[6] = {
-		1, 2, 0,
-		0, 3, 1
+		0, 1, 2,
+		2, 1, 3
 	};
 
 	//Projection Matrix
-	glm::mat4 projection_matrix = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f);
+	glm::mat4 projection_matrix = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
+	glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(100,0,0)); // Camera - moved 100 to the right
+	glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(64.0f,64.0f,0.0f)); // Translate all vertecies by an amount.
+	glm::mat4 model_view_projection = projection_matrix * view_matrix * model_matrix;
 public:
 
 	//OpenGL variables
