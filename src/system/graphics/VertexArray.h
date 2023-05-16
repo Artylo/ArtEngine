@@ -7,7 +7,7 @@ class VertexBufferLayout; //@DEBUG: Fixes cyclical dependency with VertexBufferL
 class VertexArray
 {
 private:
-	unsigned int RendererID;
+	unsigned int VAOID;
 public:
 	VertexArray();
 	~VertexArray();

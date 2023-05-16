@@ -1,4 +1,4 @@
-#include "Game.h"
+﻿#include "Game.h"
 
 Game::Game()
 {
@@ -131,7 +131,7 @@ bool Game::init_lib()
 	
 	ImGui_ImplSDL2_InitForOpenGL(window, gl_renderer); // Setup Platform/Renderer backends
 	//ImGui_ImplOpenGL3_Init(GLSLVersion.c_str());
-	ImGui_ImplOpenGL3_Init("#version 460"); //@DEBUG: I think I should find a way to parse this from the GLSLVersion string because this will probably break.
+	ImGui_ImplOpenGL3_Init("#version 330"); //@DEBUG: I think I should find a way to parse this from the GLSLVersion string because this will probably break.
 
 	return init_success;
 }
@@ -443,12 +443,15 @@ void Game::page_flip()
 void Game::glinit()
 {
 	testShader.init();
+	current_test = test_menu;
+	test_menu->AddTest<test::TestClearColour>("Clear Colour");
 }
 
 void Game::glupdate()
 {
 	while (SDL_PollEvent(&event)) //@TEMP: Close window
 	{
+		ImGui_ImplSDL2_ProcessEvent(&event); // This handles mouse input for ImGui.
 		switch (event.type) 
 		{
 		case SDL_KEYDOWN:
@@ -469,8 +472,9 @@ void Game::glupdate()
 			break;
 		}
 	}
-
+	
 	testShader.update();
+	if (current_test != nullptr) current_test->OnUpdate((float)SDL_GetTicks());
 }
 
 void Game::gldraw()
@@ -481,6 +485,8 @@ void Game::gldraw()
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
+	testShader.renderer.Clear();
+	if (current_test != nullptr) current_test->OnRender();
 	testShader.draw();
 }
 
@@ -488,32 +494,40 @@ void Game::gldraw_gui()
 {	
 	//@TEST
 
-	 // Our state
-	bool show_demo_window = true;
-	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	//if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window); //@CLEANUP: Built in documentation and demo window. Remove before release.
 
-	static float f = 0.0f;
-	static int counter = 0;
+	ImGui::Begin("ArtEngine Developer Menu v0.1"); // Create a window - also bind to it.
 
-	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+	ImGui::Text("Remember thee the acceptance of being unoriginal\nand bringing to bear external libraries,\nas a sin of the highest order.	 - Arty, 2023"); // Display some text (you can use a format strings too)
 
-	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-	ImGui::Checkbox("Another Window", &show_another_window);
+	ImGui::ColorEdit3("Clear Colour", (float*)&clear_color); // Edit Clear colour - @DEBUG cannot work in this scope
 
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+	testShader.model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
+	ImGui::DragFloat2("ModelProj Position", (float*)&position);
 
-	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+	if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
 		counter++;
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io_ptr->Framerate, io_ptr->Framerate);
 	ImGui::End();
+
+	if (current_test)
+	{
+		ImGui::Begin("Tests");
+			if (current_test != test_menu && ImGui::Button("<--"))
+			{
+				delete current_test;
+				current_test = test_menu;
+			}
+			current_test->OnGUIRender();
+		ImGui::End();
+	}
+
 	//@CLEANUP: Test ImGui Frame
 	ImGui::Render();
+	glViewport(0, 0, (int)io_ptr->DisplaySize.x, (int)io_ptr->DisplaySize.y);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 

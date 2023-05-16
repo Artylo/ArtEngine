@@ -7,20 +7,20 @@
 #include "Shader.h"
 #include "Renderer.h"
 
-Shader::Shader(const std::string& filepath) : shaderFilepath(filepath) , RendererID(0)
+Shader::Shader(const std::string& filepath) : shaderFilepath(filepath) , ProgramID(0)
 {
 	src = ParseShader(filepath);
-	RendererID = CreateShader(src.VertexSource, src.FragmentSource);
+	ProgramID = CreateShader(src.VertexSource, src.FragmentSource);
 }
 
 Shader::~Shader()
 {
-	glDeleteProgram(RendererID);
+	glDeleteProgram(ProgramID);
 }
 
 void Shader::Bind() const
 {
-	GLCALL(glUseProgram(RendererID));
+	GLCALL(glUseProgram(ProgramID));
 }
 
 void Shader::Unbind() const
@@ -128,7 +128,7 @@ int Shader::GetUniformLocation(const std::string& name)
 {
 	if (UniformLocationCache.find(name) != UniformLocationCache.end()) return UniformLocationCache[name]; // Is this already cached?
 
-	GLCALL(unsigned int location = glGetUniformLocation(RendererID, name.c_str()));
+	GLCALL(unsigned int location = glGetUniformLocation(ProgramID, name.c_str()));
 
 	if (location == -1)
 	{

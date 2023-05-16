@@ -14,7 +14,7 @@ public:
 		std::string FragmentSource;
 	};
 private:
-	unsigned int RendererID;
+	unsigned int ProgramID;
 	std::string shaderFilepath;
 	ShaderProgramSource src;
 	//Cache

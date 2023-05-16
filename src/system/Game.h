@@ -8,6 +8,8 @@
 #include "../interactables/Tree.h"
 #include "../system/graphics/OpenGLTest.h"
 
+#include "../tests/TestClearColour.h" //@TEMP @CLEANUP: Remove later.
+
 class Game
 {
 	public:
@@ -23,7 +25,17 @@ class Game
 		bool gameActive = true;
 
 		//Init GUI variables
-		ImGuiIO* io_ptr = nullptr;
+		ImGuiIO* io_ptr = nullptr; //@DEBUG: This feels very hacky.
+		bool show_demo_window = true;
+		bool show_another_window = false;
+		ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+		float f = 0.0f;
+		int counter = 0;
+		ImVec2 position;
+
+		//Tests
+		test::Test* current_test = nullptr;
+		test::TestMenu* test_menu = new test::TestMenu(current_test);
 
 		//Framerate counter
 		//CLEANUP: Probably should move into DEBUG or own class

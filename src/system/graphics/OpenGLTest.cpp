@@ -114,6 +114,8 @@ void OpenGLTest::update()
 
 		shader->SetUniform1f("u_Time", ((float)SDL_GetTicks())); // Current Time in Ticks
 		shader->SetUniform1i("u_Texture", 0); // Slot of Texture
+
+		model_view_projection = projection_matrix * view_matrix * model_matrix;
 		shader->SetUniformMat4f("u_MVP", model_view_projection);
 
 	printShaderError();
@@ -125,7 +127,7 @@ void OpenGLTest::draw()
 	//Render
 	if (true) // If this thing is supposed to be rendered. Is it on screen, etc.?
 	{
-		renderer.Clear();
+		//renderer.Clear(); //@CLEANUP: Removed for Test Framework
 		renderer.Draw(*vertex_array, *index_buffer, *shader);
 	}
 	printShaderError();

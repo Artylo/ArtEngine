@@ -102,6 +102,8 @@
     <ClInclude Include="src\system\graphics\IndexBuffer.h" />
     <ClInclude Include="src\system\graphics\VertexArray.h" />
     <ClInclude Include="src\system\graphics\VertexBufferLayout.h" />
+    <ClInclude Include="src\tests\Test.h" />
+    <ClInclude Include="src\tests\TestClearColour.h" />
     <ClInclude Include="vendor\glm\common.hpp" />
     <ClInclude Include="vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="vendor\glm\detail\compute_vector_relational.hpp" />
@@ -413,6 +415,8 @@
     <ClCompile Include="src\system\graphics\IndexBuffer.cpp" />
     <ClCompile Include="src\system\graphics\VertexArray.cpp" />
     <ClCompile Include="src\system\graphics\VertexBufferLayout.cpp" />
+    <ClCompile Include="src\tests\Test.cpp" />
+    <ClCompile Include="src\tests\TestClearColour.cpp" />
     <ClCompile Include="vendor\glm\detail\glm.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />

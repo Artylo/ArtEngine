@@ -2,7 +2,7 @@
 class VertexBuffer
 {
 	private:
-		unsigned int RendererID;
+		unsigned int VBOID;
 	public:
 		VertexBuffer(const void* data, unsigned int size);
 		~VertexBuffer();

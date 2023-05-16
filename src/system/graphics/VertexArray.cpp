@@ -6,17 +6,17 @@
 VertexArray::VertexArray()
 {
 	//Vertex Array Object
-	GLCALL(glGenVertexArrays(1, &RendererID));
+	GLCALL(glGenVertexArrays(1, &VAOID));
 }
 
 VertexArray::~VertexArray()
 {
-	glDeleteVertexArrays(1, &RendererID);
+	glDeleteVertexArrays(1, &VAOID);
 }
 
 void VertexArray::Bind() const
 {
-	GLCALL(glBindVertexArray(RendererID));
+	GLCALL(glBindVertexArray(VAOID));
 }
 
 void VertexArray::Unbind() const
