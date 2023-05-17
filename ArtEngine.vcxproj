@@ -104,6 +104,8 @@
     <ClInclude Include="src\system\graphics\VertexBufferLayout.h" />
     <ClInclude Include="src\tests\Test.h" />
     <ClInclude Include="src\tests\TestClearColour.h" />
+    <ClInclude Include="src\tests\TestTexture2D.h" />
+    <ClInclude Include="src\system\graphics\Texture.h" />
     <ClInclude Include="vendor\glm\common.hpp" />
     <ClInclude Include="vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="vendor\glm\detail\compute_vector_relational.hpp" />
@@ -417,6 +419,8 @@
     <ClCompile Include="src\system\graphics\VertexBufferLayout.cpp" />
     <ClCompile Include="src\tests\Test.cpp" />
     <ClCompile Include="src\tests\TestClearColour.cpp" />
+    <ClCompile Include="src\tests\TestTexture2D.cpp" />
+    <ClCompile Include="src\system\graphics\Texture.cpp" />
     <ClCompile Include="vendor\glm\detail\glm.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />

@@ -7,6 +7,7 @@
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
 #include "Shader.h"
+#include "Texture.h"
 
 class OpenGLTest
 {
@@ -42,16 +43,14 @@ public:
 	VertexBufferLayout* vertex_buffer_layout = nullptr;
 	VertexBuffer* vertex_buffer = nullptr;
 	IndexBuffer* index_buffer = nullptr;
-
-	//Texture Variables
-	SDL_Surface* surface = nullptr;
-	GLuint TextureID = 0;
+	Texture* texture;
+	
 
 	OpenGLTest();
 	~OpenGLTest();
 
 private:
-	void FlipSurface(SDL_Surface* surface);
+	
 
 public:
 	void CreateVBO();
