@@ -445,6 +445,7 @@ void Game::glinit()
 	testShader.init();
 	current_test = test_menu;
 	test_menu->AddTest<test::TestClearColour>("Clear Colour");
+	test_menu->AddTest<test::TestTexture2D>("Texture Test");
 }
 
 void Game::glupdate()

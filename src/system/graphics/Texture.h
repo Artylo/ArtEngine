@@ -7,6 +7,7 @@
 class Texture
 {
 public:
+	unsigned int texture_slot = 0;
 private:
 	unsigned int Texture_ID = 0;
 	std::string filepath;
@@ -18,7 +19,7 @@ public:
 	Texture(const std::string& path);
 	~Texture();
 
-	void Bind(unsigned int slot = 0) const;
+	void Bind(unsigned int slot = 0);
 	void Unbind() const;
 
 	inline int GetWidth() const { return width; }

@@ -68,6 +68,7 @@ void OpenGLTest::init()
 void OpenGLTest::update()
 {
 	shader->Bind();
+	texture->Bind();
 
 		shader->SetUniform1f("u_Time", ((float)SDL_GetTicks())); // Current Time in Ticks
 		shader->SetUniform1i("u_Texture", 0); // Slot of Texture

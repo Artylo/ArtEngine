@@ -9,7 +9,7 @@ Texture::Texture(const std::string& path) : filepath(path)
 	assert(surface != nullptr);
 	GLCALL(glGenTextures(1, &Texture_ID));
 
-	//Bind();
+	Bind();
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //Scaling Filtering?
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -31,8 +31,9 @@ Texture::~Texture()
 	glDeleteTextures(1, &Texture_ID);
 }
 
-void Texture::Bind(unsigned int slot) const
+void Texture::Bind(unsigned int slot)
 {
+	texture_slot = slot;
 	GLCALL(glActiveTexture(GL_TEXTURE0 + slot));
 	GLCALL(glBindTexture(GL_TEXTURE_2D, Texture_ID));
 }

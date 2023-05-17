@@ -26,7 +26,8 @@ private:
 	};
 
 	//Projection Matrix
-	glm::mat4 projection_matrix = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
+	//glm::mat4 projection_matrix = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
+	glm::mat4 projection_matrix = glm::ortho(0.0f, 320.0f, 248.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
 
 public:
 	glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,0)); // Camera - moved 100 to the right
