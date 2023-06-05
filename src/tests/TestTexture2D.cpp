@@ -1,20 +1,18 @@
 #include "TestTexture2D.h"
 
-
-
 namespace test
 {
 	TestTexture2D::TestTexture2D()
 	{
-		//@TODO: Setup desired blending for current text. Probably best if renderer does this in the future.
+		//@TODO: Setup desired blending for current test. Probably best if renderer does this in the future.
 		GLCALL(glEnable(GL_BLEND));
 		GLCALL(glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA));
 
 		vertex_array = std::make_unique<VertexArray>();
 		vertex_buffer = std::make_unique<VertexBuffer>(vertices, sizeof(vertices));
 		vertex_buffer_layout = std::make_unique<VertexBufferLayout>();
-		vertex_buffer_layout->Push<float>(2);
-		vertex_buffer_layout->Push<float>(2);
+		vertex_buffer_layout->Push<float>(2); // Position Coordinates
+		vertex_buffer_layout->Push<float>(2); //  Texture Coordinates
 		vertex_array->AddBuffer(*vertex_buffer, *vertex_buffer_layout);
 		index_buffer = std::make_unique<IndexBuffer>(indices, 6);
 
@@ -23,8 +21,6 @@ namespace test
 
 		texture = std::make_unique<Texture>("img/skeleton.png");
 		texture->Bind(1);
-
-		
 	}
 
 	TestTexture2D::~TestTexture2D()
@@ -39,6 +35,7 @@ namespace test
 	void TestTexture2D::OnUpdate(float deltaTime)
 	{
 		shader->Bind();
+		//texture->Bind(texture->texture_slot); //@CLEANUP: Might not be necessary
 
 		shader->SetUniform1f("u_Time", deltaTime); // Current Time in Ticks
 
@@ -55,6 +52,7 @@ namespace test
 
 	void TestTexture2D::OnGUIRender()
 	{
-		//ImGui::SliderFloat3("Translation")
+		model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
+		ImGui::DragFloat2("Position", (float*)&position);
 	}
 }

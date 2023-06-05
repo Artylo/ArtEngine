@@ -19,7 +19,7 @@ namespace test
 	class TestTexture2D : public Test
 	{
 	public:
-
+		ImVec2 position = {32,32};
 	private:
 		float vertices[16] = {
 			//position		//texture coords

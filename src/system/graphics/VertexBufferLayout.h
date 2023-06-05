@@ -40,8 +40,7 @@ public:
 	template<typename T>
 	void Push(unsigned int count)
 	{
-		static_assert(false);
-
+		assert(false); //@DEBUG: Used to be static_assert(false); but broke in VS2022 migration. Check this out.
 	}
 
 	template<>
