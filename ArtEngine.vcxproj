@@ -106,6 +106,7 @@
     <ClInclude Include="src\tests\TestClearColour.h" />
     <ClInclude Include="src\tests\TestTexture2D.h" />
     <ClInclude Include="src\system\graphics\Texture.h" />
+    <ClInclude Include="src\tests\TestInstancedRendering.h" />
     <ClInclude Include="vendor\glm\common.hpp" />
     <ClInclude Include="vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="vendor\glm\detail\compute_vector_relational.hpp" />
@@ -421,6 +422,7 @@
     <ClCompile Include="src\tests\TestClearColour.cpp" />
     <ClCompile Include="src\tests\TestTexture2D.cpp" />
     <ClCompile Include="src\system\graphics\Texture.cpp" />
+    <ClCompile Include="src\tests\TestInstancedRendering.cpp" />
     <ClCompile Include="vendor\glm\detail\glm.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
@@ -432,6 +434,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\base.shader" />
+    <None Include="shader\batch.shader" />
     <None Include="vendor\glm\detail\func_common.inl" />
     <None Include="vendor\glm\detail\func_common_simd.inl" />
     <None Include="vendor\glm\detail\func_exponential.inl" />

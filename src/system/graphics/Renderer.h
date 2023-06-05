@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glm/glm.hpp"
 #include <GL/glew.h>
 #include "IndexBuffer.h"
 #include "VertexArray.h"
@@ -13,6 +14,11 @@
 void GLClearError();
 bool GLLogCall(const char* function, const char* file, int line);
 
+static const size_t MaxQuadCount   = 1000;
+static const size_t MaxVertexCount = MaxQuadCount * 4;
+static const size_t MaxIndexCount  = MaxQuadCount * 6;
+static const size_t MaxTextures = 32; //@TODO: Query this from the drivers at some point.
+
 class Renderer
 {
 public:
@@ -24,3 +30,9 @@ public:
 private:
 };
 
+struct Vertex
+{
+	glm::vec3 position;
+	glm::vec2 texture_coordinates;
+	float texture_index;
+};

@@ -446,6 +446,7 @@ void Game::glinit()
 	current_test = test_menu;
 	test_menu->AddTest<test::TestClearColour>("Clear Colour");
 	test_menu->AddTest<test::TestTexture2D>("Texture Test");
+	test_menu->AddTest<test::TestInstancedRendering>("Instanced Rendering Test");
 }
 
 void Game::glupdate()

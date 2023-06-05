@@ -1,5 +1,26 @@
 #include "Renderer.h"
 #include <iostream>
+#include <array>
+
+struct RenderData
+{
+	GLuint QuadVA = 0;
+	GLuint QuadVB = 0;
+	GLuint QuadIB = 0;
+
+	GLuint WhiteTexture = 0;
+	uint32_t WhiteTextureSlot = 0;
+
+	uint32_t IndexCount = 0;
+
+	Vertex* QuadBuffer = nullptr;
+	Vertex* QuadBufferPtr = nullptr;
+
+	std::array<uint32_t, MaxTextures> TextureSlots;
+	uint32_t TextureSlotIndex = 1;
+
+	//@TODO: Finish writing.
+};
 
 void GLClearError()
 {

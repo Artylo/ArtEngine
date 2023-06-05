@@ -10,6 +10,7 @@
 
 #include "../tests/TestClearColour.h" //@TEMP @CLEANUP: Remove later.
 #include "../tests/TestTexture2D.h" //@TEMP @CLEANUP: Remove later.
+#include "../tests/TestInstancedRendering.h" //@TEMP @CLEANUP: Remove later.
 
 class Game
 {
