@@ -40,7 +40,9 @@ public:
 	template<typename T>
 	void Push(unsigned int count)
 	{
-		assert(false); //@DEBUG: Used to be static_assert(false); but broke in VS2022 migration. Check this out.
+		assert(false); 
+
+		//If you are here, then whatever you're pushing needs you to create a templated overload for Push().
 	}
 
 	template<>
@@ -62,6 +64,27 @@ public:
 	{
 		Elements.push_back({GL_UNSIGNED_BYTE,count,GL_TRUE});
 		stride += VertexBufferElement::GetSizeOfType(GL_UNSIGNED_BYTE) * count;
+	}
+
+	template<>
+	void Push<glm::vec2>(unsigned int count)
+	{
+		Elements.push_back({ GL_FLOAT,count * 2,GL_TRUE });
+		stride += VertexBufferElement::GetSizeOfType(GL_FLOAT) * (count * 2);
+	}
+
+	template<>
+	void Push<glm::vec3>(unsigned int count)
+	{
+		Elements.push_back({ GL_FLOAT,count * 3,GL_TRUE });
+		stride += VertexBufferElement::GetSizeOfType(GL_FLOAT) * (count * 3);
+	}
+
+	template<>
+	void Push<glm::vec4>(unsigned int count)
+	{
+		Elements.push_back({ GL_FLOAT,count * 4,GL_TRUE });
+		stride += VertexBufferElement::GetSizeOfType(GL_FLOAT) * (count * 4);
 	}
 
 	inline const std::vector<VertexBufferElement> GetElements() const { return Elements; }

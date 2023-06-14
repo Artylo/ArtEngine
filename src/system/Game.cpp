@@ -443,10 +443,13 @@ void Game::page_flip()
 void Game::glinit()
 {
 	testShader.init();
+
+	//Init Test Menu
 	current_test = test_menu;
 	test_menu->AddTest<test::TestClearColour>("Clear Colour");
 	test_menu->AddTest<test::TestTexture2D>("Texture Test");
 	test_menu->AddTest<test::TestInstancedRendering>("Instanced Rendering Test");
+	test_menu->AddTest<test::TestBatchedRendering>("Batched Rendering Test");
 }
 
 void Game::glupdate()
@@ -506,6 +509,10 @@ void Game::gldraw_gui()
 
 	testShader.model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
 	ImGui::DragFloat2("ModelProj Position", (float*)&position);
+
+	ImGui::DragFloat("Camera Zoom", (float*)&testShader.camera_scale, 0.01f);
+	testShader.scale_matrix = glm::scale(testShader.identity_matrix, glm::vec3(testShader.camera_scale, testShader.camera_scale, testShader.camera_scale));
+	ImGui::DragFloat("Camera Rotation", (float*)&testShader.camera_rotation, 0.1f);
 
 	if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
 		counter++;

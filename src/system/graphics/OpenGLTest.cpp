@@ -73,7 +73,11 @@ void OpenGLTest::update()
 		shader->SetUniform1f("u_Time", ((float)SDL_GetTicks())); // Current Time in Ticks
 		shader->SetUniform1i("u_Texture", 0); // Slot of Texture
 
+
+		transformation_matrix = scale_matrix * identity_matrix;
+		transformation_matrix = glm::rotate(transformation_matrix, glm::radians(camera_rotation), glm::vec3(0.0, 0.0, 1.0));
 		model_view_projection = projection_matrix * view_matrix * model_matrix;
+		model_view_projection = transformation_matrix * model_view_projection;
 		shader->SetUniformMat4f("u_MVP", model_view_projection);
 
 	printShaderError();

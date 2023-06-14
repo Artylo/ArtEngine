@@ -30,6 +30,15 @@ private:
 	glm::mat4 projection_matrix = glm::ortho(0.0f, 320.0f, 248.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
 
 public:
+	float camera_scale = 1.0f;
+	float camera_rotation = 0.0f;
+
+	glm::mat4 identity_matrix = glm::mat4(1.0f);
+	glm::mat4 scale_matrix = glm::scale(identity_matrix, glm::vec3(camera_scale, camera_scale, camera_scale));
+	//glm::mat4 rotation_matrix = glm::rotate(identity_matrix, glm::radians(camera_rotation),glm::vec3(0.0,0.0,1.0));
+	glm::mat4 transformation_matrix = scale_matrix * identity_matrix;
+	
+
 	glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,0)); // Camera - moved 100 to the right
 	glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,0)); // Translate all vertecies by an amount.
 	glm::mat4 model_view_projection = projection_matrix * view_matrix * model_matrix;

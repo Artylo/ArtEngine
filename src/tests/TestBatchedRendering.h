@@ -1,25 +1,26 @@
 #pragma once
-
 #include "Test.h"
 
 #include "../system/graphics/Renderer.h";
 #include "../system/graphics/IndexBuffer.h"
 #include "../system/graphics/VertexArray.h"
 #include "../system/graphics/VertexBuffer.h"
+#include "../system/graphics/VertexBufferDynamic.h"
 #include "../system/graphics/VertexBufferLayout.h"
 #include "../system/graphics/Texture.h"
 
 #include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include "imgui/imgui.h";
 
-#include <memory>
+#include <array>
 
 namespace test
 {
-	class TestInstancedRendering : public Test
-	{
+    class TestBatchedRendering :
+        public Test
+    {
 	public:
-		ImVec2 position = { 160,160 };
+		ImVec2 position = { 0,0 };
 	private:
 
 		//Batch Rendering
@@ -28,18 +29,27 @@ namespace test
 		float offset = 16.0f;
 
 
-		//Generic OpenGL
-		float vertices[32] = {
-			//position		//vert colours		//tex coords   //tex ID
-			 0.0f, 0.0f,	1.0f,0.0f,0.0f,		0.0f, 0.0f,		0.0f,	//Top Left
-			 32.0f, 0.0f,	0.0f,1.0f,0.0f,		1.0f, 0.0f,		0.0f,	//Top Right
-			 0.0f, 32.0f,	0.0f,0.0f,1.0f,		0.0f, 1.0f,		0.0f,	//Bottom Left
-			 32.0f, 32.0f,	0.0f,1.0f,1.0f,		1.0f, 1.0f,		0.0f	//Bottom Right
-		};
+		Vertex vertices[16];
+		std::array<Vertex, 4> q0; //@CLEANUP
+		std::array<Vertex, 4> q1;
+		std::array<Vertex, 4> q2;
+		std::array<Vertex, 4> q3;
 
-		unsigned int indices[6] = {
+
+		//Generic OpenGL
+
+		unsigned int indices[24] = { // @TODO: Make Dynamic as well. Every set increases by 4. But keep in mind you're not reusing the last pair of indecies, you're making 2 extra ones you could be saving. That's 72 bytes per pair, so you could save the size of a quad every three quads.
 			0, 1, 2,
-			2, 1, 3
+			2, 1, 3,
+
+			4, 5, 6,
+			6, 5, 7,
+
+			8, 9, 10,
+			10, 9, 11,
+
+			12, 13, 14,
+			14, 13, 15
 		};
 
 		//Projection Matrix
@@ -52,19 +62,23 @@ namespace test
 
 		Renderer renderer;
 		std::unique_ptr<VertexArray> vertex_array;
-		std::unique_ptr<VertexBuffer> vertex_buffer;
 		std::unique_ptr<VertexBufferLayout> vertex_buffer_layout;
 		std::unique_ptr<IndexBuffer> index_buffer;
 		std::unique_ptr<Shader> shader;
-		std::unique_ptr<Texture> texture;
+
+		//Batch Rendering-related members
+		std::unique_ptr<VertexBufferDynamic> vertex_buffer; // The thing we're actually testing here.
+		std::unique_ptr<Texture> texture1; // Checkerboard Texture
+		std::unique_ptr<Texture> texture2; // Grass Texture
 
 	public:
-		TestInstancedRendering();
-		~TestInstancedRendering();
+		TestBatchedRendering();
+		~TestBatchedRendering();
 
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;
 		void OnGUIRender() override;
 	private:
-	};
+		std::array<Vertex, 4> CreateQuad(float x, float y, float textureID);
+    };
 }

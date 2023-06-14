@@ -107,6 +107,7 @@
     <ClInclude Include="src\tests\TestTexture2D.h" />
     <ClInclude Include="src\system\graphics\Texture.h" />
     <ClInclude Include="src\tests\TestInstancedRendering.h" />
+    <ClInclude Include="src\tests\TestBatchedRendering.h" />
     <ClInclude Include="vendor\glm\common.hpp" />
     <ClInclude Include="vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="vendor\glm\detail\compute_vector_relational.hpp" />
@@ -398,6 +399,7 @@
     <ClInclude Include="vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\system\graphics\VertexBufferDynamic.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\system\graphics\Shader.cpp" />
@@ -423,6 +425,7 @@
     <ClCompile Include="src\tests\TestTexture2D.cpp" />
     <ClCompile Include="src\system\graphics\Texture.cpp" />
     <ClCompile Include="src\tests\TestInstancedRendering.cpp" />
+    <ClCompile Include="src\tests\TestBatchedRendering.cpp" />
     <ClCompile Include="vendor\glm\detail\glm.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
@@ -431,10 +434,12 @@
     <ClCompile Include="vendor\imgui\imgui_impl_sdl2.cpp" />
     <ClCompile Include="vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\system\graphics\VertexBufferDynamic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\base.shader" />
-    <None Include="shader\batch.shader" />
+    <None Include="shader\batched.shader" />
+    <None Include="shader\instanced.shader" />
     <None Include="vendor\glm\detail\func_common.inl" />
     <None Include="vendor\glm\detail\func_common_simd.inl" />
     <None Include="vendor\glm\detail\func_exponential.inl" />

@@ -30,9 +30,14 @@ public:
 private:
 };
 
+//This would be ideal form.
+//Structure of Vertex data, containing position, vertex colour, texture coordinates and a texture ID.
 struct Vertex
 {
-	glm::vec3 position;
+	glm::vec2 position;
+	glm::vec4 vertex_colour;
 	glm::vec2 texture_coordinates;
-	float texture_index;
+	float texture_ID;
 };
+
+

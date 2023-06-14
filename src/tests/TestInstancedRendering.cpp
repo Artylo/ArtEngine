@@ -19,10 +19,10 @@ namespace test
 		vertex_array->AddBuffer(*vertex_buffer, *vertex_buffer_layout);
 		index_buffer = std::make_unique<IndexBuffer>(indices, 6);
 
-		shader = std::make_unique<Shader>("shader/batch.shader");
+		shader = std::make_unique<Shader>("shader/instanced.shader");
 		shader->Bind();
 
-		texture = std::make_unique<Texture>("img/tree.png");
+		texture = std::make_unique<Texture>("img/tile2.png");
 		texture->Bind(1);
 	}
 

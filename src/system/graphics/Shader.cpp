@@ -119,6 +119,12 @@ void Shader::SetUniform1i(const std::string& name, int value)
 	GLCALL(glUniform1i(GetUniformLocation(name), value));
 }
 
+//Pass a uniform array of type int to shader.
+void Shader::SetUniform1iv(const std::string& name, int count, int* value)
+{
+	glUniform1iv(GetUniformLocation(name), count, value);
+}
+
 void Shader::SetUniformMat4f(const std::string& name, glm::mat4& matrix)
 {
 	GLCALL(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
