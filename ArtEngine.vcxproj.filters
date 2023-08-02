@@ -20,16 +20,16 @@
     <ClInclude Include="src\misc\pong.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\Entity.h">
+    <ClInclude Include="src\entities\old_Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\Skeleton.h">
+    <ClInclude Include="src\entities\old_Skeleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\system\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\Player.h">
+    <ClInclude Include="src\entities\old_Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\interactables\Wall.h">
@@ -959,6 +959,15 @@
     <ClInclude Include="src\system\graphics\VertexBufferDynamic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\BountyHunter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -967,16 +976,16 @@
     <ClCompile Include="src\system\debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Player.cpp">
+    <ClCompile Include="src\entities\old_Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\misc\pong.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Entity.cpp">
+    <ClCompile Include="src\entities\old_Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Skeleton.cpp">
+    <ClCompile Include="src\entities\old_Skeleton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\system\Input.cpp">
@@ -1058,6 +1067,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\system\graphics\VertexBufferDynamic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BountyHunter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entities\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entities\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

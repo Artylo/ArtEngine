@@ -191,9 +191,9 @@ DebugText::~DebugText()
 
 void DebugText::init(GameManager* gm)
 {
-	rend = gm->renderer;
+	//rend = gm->renderer;
 	//assert(rend != nullptr);
-	gameCamera = gm->camera;
+	//gameCamera = gm->camera;
 	//assert(gameCamera != nullptr);
 }
 

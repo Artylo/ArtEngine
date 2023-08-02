@@ -1,4 +1,5 @@
 #pragma once
+#include "../../tests/Test.h"
 
 #include "../globals.h"
 #include "Renderer.h"
@@ -9,7 +10,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
-class OpenGLTest
+#include "../GameManager.h";
+
+class OpenGLTest : public test::Test
 {
 private:
 	float vertices[16] = {
@@ -26,10 +29,11 @@ private:
 	};
 
 	//Projection Matrix
-	//glm::mat4 projection_matrix = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
-	glm::mat4 projection_matrix = glm::ortho(0.0f, 320.0f, 248.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
+	glm::mat4 projection_matrix = glm::ortho(0.0f, (float)w_width/2, (float)w_height/2, 0.0f, -1.0f, 1.0f); // Coordinate System
 
 public:
+	GameManager* GM;
+
 	float camera_scale = 1.0f;
 	float camera_rotation = 0.0f;
 

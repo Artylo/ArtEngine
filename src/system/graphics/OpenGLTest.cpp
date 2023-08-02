@@ -73,6 +73,10 @@ void OpenGLTest::update()
 		shader->SetUniform1f("u_Time", ((float)SDL_GetTicks())); // Current Time in Ticks
 		shader->SetUniform1i("u_Texture", 0); // Slot of Texture
 
+		int winW, winH;
+		SDL_GetWindowSize(GM->window, &winW, &winH);
+
+		projection_matrix = glm::ortho(0.0f, (float)winW/2, (float)winH/2, 0.0f, -1.0f, 1.0f);
 
 		transformation_matrix = scale_matrix * identity_matrix;
 		transformation_matrix = glm::rotate(transformation_matrix, glm::radians(camera_rotation), glm::vec3(0.0, 0.0, 1.0));

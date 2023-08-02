@@ -42,6 +42,7 @@ namespace test
 		memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(Vertex));
 		memcpy(vertices + q0.size() + q1.size(), q2.data(), q2.size() * sizeof(Vertex));
 		memcpy(vertices + q0.size() + q1.size() + q2.size(), q3.data(), q3.size() * sizeof(Vertex));
+
 	}
 
 	std::array<Vertex, 4> TestBatchedRendering::CreateQuad(float x, float y , float textureID)

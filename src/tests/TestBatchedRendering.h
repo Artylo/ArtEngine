@@ -54,11 +54,14 @@ namespace test
 
 		//Projection Matrix
 		//glm::mat4 projection_matrix = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
-		glm::mat4 projection_matrix = glm::ortho(0.0f, 320.0f, 248.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
+		
+		
+
+		glm::mat4 projection_matrix = glm::ortho(0.0f, (float)w_width / 2, (float)w_height / 2, 0.0f, -1.0f, 1.0f); // Coordinate System
 
 		glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // Camera - moved 100 to the right
 		glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(32, 32, 0)); // Translate all vertecies by an amount.
-		glm::mat4 model_view_projection = projection_matrix * view_matrix * model_matrix;
+		glm::mat4 model_view_projection;
 
 		Renderer renderer;
 		std::unique_ptr<VertexArray> vertex_array;

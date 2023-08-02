@@ -3,7 +3,7 @@
 #include "../entities/Entity.h"
 #include "Input.h"
 
-
+/*
 
 Input::Input()
 {
@@ -17,17 +17,17 @@ Input::~Input()
 
 void Input::init(GameManager* gm)
 {
-	gameWindow = gm->window;
-	gameRenderer = gm->renderer;
-	gameCamera = gm->camera;
+	//gameWindow = gm->window;
+	//gameRenderer = gm->renderer;
+	//gameCamera = gm->camera;
 }
 
 void Input::update(bool* gameState, SDL_Event* eventPtr, Player* player)
 {
-	/*
+	
 	//Mouse Events
-	mouse_buttons = SDL_GetMouseState(&rawMouse_x,&rawMouse_y); // Gets Mouse coords relative to window, not renderer. Needs scaling to work properly but doesn't fully account for non 16:9 aspect ratios.
-	*/
+	//mouse_buttons = SDL_GetMouseState(&rawMouse_x,&rawMouse_y); // Gets Mouse coords relative to window, not renderer. Needs scaling to work properly but doesn't fully account for non 16:9 aspect ratios.
+	
 	setMouseScale();
 	//Reset mouse buttons.
 	mouse_left = NOT_PRESSED;
@@ -128,13 +128,13 @@ void Input::setMouseScale()
 {
 	bool doScaling = false;
 
-	/*
+	
 	//Debug
-	SDL_Log("rMouseX = %d \n", rawMouse_x);
-	SDL_Log("rMouseY = %d \n", rawMouse_y);
-	SDL_Log("MouseX = %d \n", mouse_x);
-	SDL_Log("MouseY = %d \n", mouse_y);
-	*/
+	//SDL_Log("rMouseX = %d \n", rawMouse_x);
+	//SDL_Log("rMouseY = %d \n", rawMouse_y);
+	//SDL_Log("MouseX = %d \n", mouse_x);
+	//SDL_Log("MouseY = %d \n", mouse_y);
+	
 
 	if (doScaling) //@CLEANUP: This may come useful at some point, I do not fully anticipate needing it right now.
 	{
@@ -147,10 +147,10 @@ void Input::setMouseScale()
 		int currentWindowWidth;
 		int currentWindowHeight;
 
-		/*
-		int rendW, rendH;
-		SDL_RenderGetLogicalSize(rend,&rendW,&rendH);
-		*/
+		
+		//int rendW, rendH;
+		//SDL_RenderGetLogicalSize(rend,&rendW,&rendH);
+		
 
 		SDL_GetWindowSize(gameWindow, &currentWindowWidth, &currentWindowHeight);
 
@@ -170,3 +170,5 @@ void Input::setMouseScale()
 		mouse_y = rawMouse_y;
 	}
 }
+
+*/

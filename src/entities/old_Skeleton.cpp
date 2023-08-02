@@ -1,8 +1,8 @@
-#include "../entities/Skeleton.h"
+#include "../entities/old_Skeleton.h"
 #include "../system/globals.h"
 #include "../system/debug.h"
 
-Skeleton::Skeleton()
+old_Skeleton::old_Skeleton()
 {
 	//sprite = IMG_Load("img/skeleton.png");
 	//std::shared_ptr<SDL_Surface> shared_sprite(IMG_Load("img/skeleton.png"), SDL_FreeSurface);
@@ -13,12 +13,12 @@ Skeleton::Skeleton()
 	surf_pants = std::shared_ptr<SDL_Surface>(IMG_Load("img/pants_skeleton.png"), SDL_FreeSurface);
 }
 
-void Skeleton::update()
+void old_Skeleton::update()
 {
 	Entity::update();
 }
 
-void Skeleton::draw_self()
+void old_Skeleton::draw_self()
 {
 	Entity::draw_self(); // Draw The Skeleton
 	generate_clothes_textures(); // Generate Textures for Clothes
@@ -34,7 +34,7 @@ void Skeleton::draw_self()
 	//SDL_RenderCopyEx(gameRenderer, texture.get(), NULL, &box, 0, &origin, SDL_FLIP_NONE);
 }
 
-void Skeleton::generate_clothes_textures()
+void old_Skeleton::generate_clothes_textures()
 {
 	SDL_Color black = c_black;
 	SDL_Color white = c_white;

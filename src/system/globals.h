@@ -15,6 +15,9 @@
 #include "../vendor/imgui/imgui_impl_sdl2.h"
 #include "../vendor/imgui/imgui_impl_opengl3.h"
 
+//GLM includes
+#include "../vendor/glm/glm.hpp"
+
 //STL incldes
 #include <iostream>
 #include <string>
@@ -27,10 +30,10 @@
 
 //Window Constants
 #define gameFramerate 60
-#define w_width  640
-#define w_height 480
-#define world_width  1240
-#define world_height 720
+#define w_width  1240
+#define w_height 720
+#define world_width  1920
+#define world_height 1080
 
 //Premade Colors
 #define c_red {255,0,0,255}

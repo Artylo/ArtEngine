@@ -1,5 +1,7 @@
 #include "Wall.h"
 
+/*
+
 Wall::Wall()
 {
 	sprite = std::shared_ptr<SDL_Surface>(IMG_Load("img/tile.bmp"), SDL_FreeSurface);
@@ -12,11 +14,11 @@ Wall::Wall()
 
 void Wall::init(GameManager* GM)
 {
-	gameRenderer = GM->renderer;
-	gameWindow = GM->window;
-	gameCamera = GM->camera;
-	player = GM->player;
-	input = GM->input;
+	//gameRenderer = GM->renderer;
+	//gameWindow = GM->window;
+	//gameCamera = GM->camera;
+	//player = GM->player;
+	//input = GM->input;
 	generate_texture();
 }
 
@@ -88,3 +90,5 @@ void Wall::generate_texture()
 		assert(texture.get() != NULL);
 	}
 }
+
+*/

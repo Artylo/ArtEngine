@@ -1,5 +1,7 @@
 #include "Tree.h"
 
+/*
+
 Tree::Tree()
 {
 	sprite = std::shared_ptr<SDL_Surface>(IMG_Load("img/tree.png"), SDL_FreeSurface);
@@ -81,3 +83,5 @@ void Tree::draw_self()
 		}
 	}
 }
+
+*/

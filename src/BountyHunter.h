@@ -1,25 +1,15 @@
 #pragma once
 
-#include "Test.h"
+#include "tests/Test.h"
 
-#include "../system/graphics/Renderer.h";
-#include "../system/graphics/IndexBuffer.h"
-#include "../system/graphics/VertexArray.h"
-#include "../system/graphics/VertexBuffer.h"
-#include "../system/graphics/VertexBufferLayout.h"
-#include "../system/graphics/Texture.h"
-
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-
-#include <memory>
+#include "system/graphics/Texture.h";
 
 namespace test
 {
-	class TestTexture2D : public Test
+	class BountyHunter : public Test
 	{
 	public:
-		ImVec2 position = {32,32};
+		ImVec2 position = { (float)w_width / 4 -32, (float)w_height / 4 -32};
 	private:
 		float vertices[16] = {
 			//position		//texture coords
@@ -34,12 +24,9 @@ namespace test
 			2, 1, 3
 		};
 
-		//Projection Matrix
-		//glm::mat4 projection_matrix = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
 		glm::mat4 projection_matrix = glm::ortho(0.0f, (float)w_width / 2, (float)w_height / 2, 0.0f, -1.0f, 1.0f); // Coordinate System
-
-		glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // Camera - moved 100 to the right
-		glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(32, 32, 0)); // Translate all vertecies by an amount.
+		glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // Camera
+		glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(32, 32, 0));
 		glm::mat4 model_view_projection = projection_matrix * view_matrix * model_matrix;
 
 		Renderer renderer;
@@ -51,13 +38,14 @@ namespace test
 		std::unique_ptr<Texture> texture;
 
 	public:
-		TestTexture2D();
-		~TestTexture2D();
+		BountyHunter();
+		~BountyHunter() override;
 
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;
 		void OnGUIRender() override;
 	private:
+		//float clear_colour[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	};
 }
 

@@ -2,10 +2,12 @@
 #include "../system/globals.h"
 #include "../system/GameManager.h"
 #include "../system/debug.h"
-#include "../system/Input.h"
+//#include "../system/Input.h"
 
-#include "../entities/Skeleton.h"
-#include "../interactables/Tree.h"
+#include "../BountyHunter.h"
+//#include "../entities/Skeleton.h"
+//#include "../interactables/Tree.h"
+
 #include "../system/graphics/OpenGLTest.h"
 
 #include "../tests/TestClearColour.h" //@TEMP @CLEANUP: Remove later.
@@ -40,22 +42,29 @@ class Game
 		test::Test* current_test = nullptr;
 		test::TestMenu* test_menu = new test::TestMenu(current_test);
 
-		//Framerate counter
-		//CLEANUP: Probably should move into DEBUG or own class
-		static const Uint32 framenum = 20;
-		Uint32 frametimes[20];
-		Uint32 framestart;
-		Uint32 frametimelast;
-		Uint32 framecount;
-		Uint32 framespersecond;
-		Uint32 frametimesindex;
-		Uint32 getticks;
-		Uint32 count;
-
 		//Viewport or Camera
 		SDL_Rect worldBox = { 0,0,world_width,world_height };
 		SDL_Rect camera = { 0,0,w_width,w_height };
 		SDL_Rect port = { 0,0,w_width,w_height };
+
+		float camera_scale = 1.0f;
+		float camera_rotation = 0.0f;
+
+		//Projection Matrix
+		glm::mat4 projection_matrix = glm::ortho(0.0f, (float)w_width / 2, (float)w_height / 2, 0.0f, -1.0f, 1.0f); // Coordinate System
+
+		glm::mat4 identity_matrix = glm::mat4(1.0f);
+		glm::mat4 scale_matrix = glm::scale(identity_matrix, glm::vec3(camera_scale, camera_scale, camera_scale));
+		//glm::mat4 rotation_matrix = glm::rotate(identity_matrix, glm::radians(camera_rotation),glm::vec3(0.0,0.0,1.0));
+		glm::mat4 transformation_matrix = scale_matrix * identity_matrix;
+
+
+		glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // Camera - moved 100 to the right
+		glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // Translate all vertecies by an amount.
+		glm::mat4 model_view_projection = projection_matrix * view_matrix * model_matrix;
+
+		//Misc. Variables
+		bool wireframeMode = false;
 
 		//Setup Camera Render Texture
 		SDL_Texture* gameTexture;
@@ -64,24 +73,24 @@ class Game
 		DebugText debug_text;
 
 		//INIT INPUT HANDLER
-		Input input;
+		//Input input;
 
 		//Player
-		Player player;
+		//Player player;
 
 		//Draw Tiled Background
 		SDL_Texture* preTileTex;
 
 		//@TEMP:Init Skeletons
 		const int numSkel = 500;
-		std::vector<Skeleton> skeletons;
+		//std::vector<Skeleton> skeletons;
 
 		//@TEMP: Init Walls
-		std::vector<Wall> testBuilding;
+		//std::vector<Wall> testBuilding;
 
 		//@TEMP: Init Trees
 		const int forest_size = 1000;
-		std::list<std::unique_ptr<Tree>> forest;
+		//std::list<std::unique_ptr<Tree>> forest;
 
 		//Member Functions
 		Game();
@@ -95,7 +104,6 @@ class Game
 		void page_flip();
 
 		//OpenGL Conversion
-		OpenGLTest testShader;
 
 		void glinit();
 		void glupdate();
