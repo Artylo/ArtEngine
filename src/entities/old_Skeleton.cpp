@@ -15,12 +15,12 @@ old_Skeleton::old_Skeleton()
 
 void old_Skeleton::update()
 {
-	Entity::update();
+	old_Entity::update();
 }
 
 void old_Skeleton::draw_self()
 {
-	Entity::draw_self(); // Draw The Skeleton
+	old_Entity::draw_self(); // Draw The Skeleton
 	generate_clothes_textures(); // Generate Textures for Clothes
 
 	if (SDL_PointInRect(&pos, gameCamera))

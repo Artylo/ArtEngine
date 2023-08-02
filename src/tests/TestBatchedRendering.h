@@ -30,6 +30,7 @@ namespace test
 
 
 		Vertex vertices[16];
+		std::array<bool, 4> texture_select;
 		std::array<Vertex, 4> q0; //@CLEANUP
 		std::array<Vertex, 4> q1;
 		std::array<Vertex, 4> q2;

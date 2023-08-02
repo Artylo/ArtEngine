@@ -17,6 +17,7 @@
 
 //GLM includes
 #include "../vendor/glm/glm.hpp"
+#include "../vendor/glm/gtc/matrix_transform.hpp"
 
 //STL incldes
 #include <iostream>

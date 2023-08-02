@@ -4,8 +4,11 @@
 class Player : public Entity
 {
 public:
+private:
+
+public:
 	void init();
-	void update();
+	void update(float deltaTime);
 	void draw();
 
 	Player();

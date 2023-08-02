@@ -34,10 +34,11 @@ namespace test
 		texture2->Bind(2);
 
 		// @CLEANUP @DEBUG @TODO FUCKING DISGUSTING - Make into a vector or some shit
-		q0 = CreateQuad(64.0f, 0.0f, 0);
-		q1 = CreateQuad(96.0f, 0.0f, 1);
-		q2 = CreateQuad(128.0f, 0.0f, 1);
-		q3 = CreateQuad(160.0f, 0.0f, 1);
+		texture_select = { 0,0,0,0 };
+		q0 = CreateQuad(64.0f, 0.0f,  texture_select[0]);
+		q1 = CreateQuad(96.0f, 0.0f,  texture_select[1]);
+		q2 = CreateQuad(128.0f, 0.0f, texture_select[2]);
+		q3 = CreateQuad(160.0f, 0.0f, texture_select[3]);
 		memcpy(vertices, q0.data(), q0.size() * sizeof(Vertex));
 		memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(Vertex));
 		memcpy(vertices + q0.size() + q1.size(), q2.data(), q2.size() * sizeof(Vertex));
@@ -78,6 +79,19 @@ namespace test
 
 	void TestBatchedRendering::OnUpdate(float deltaTime)
 	{
+		//@TEST
+		// @CLEANUP @DEBUG @TODO FUCKING DISGUSTING - Make into a vector or some shit
+		
+		q0 = CreateQuad(64.0f, 0.0f,  texture_select[0]);
+		q1 = CreateQuad(96.0f, 0.0f,  texture_select[1]);
+		q2 = CreateQuad(128.0f, 0.0f, texture_select[2]);
+		q3 = CreateQuad(160.0f, 0.0f, texture_select[3]);
+		memcpy(vertices, q0.data(), q0.size() * sizeof(Vertex));
+		memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(Vertex));
+		memcpy(vertices + q0.size() + q1.size(), q2.data(), q2.size() * sizeof(Vertex));
+		memcpy(vertices + q0.size() + q1.size() + q2.size(), q3.data(), q3.size() * sizeof(Vertex));
+
+
 		vertex_buffer->Bind();
 		//GLCALL(glMapBuffer());
 		//GLCALL(glUnmapBuffer());
@@ -107,6 +121,14 @@ namespace test
 		model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
 		ImGui::DragFloat2("Position", (float*)&position);
 		ImGui::DragFloat("Offset", &offset);
+
+		if (ImGui::Button("T1")) texture_select[0] = !texture_select[0];
+		ImGui::SameLine();
+		if (ImGui::Button("T2")) texture_select[1] = !texture_select[1];
+		ImGui::SameLine();
+		if (ImGui::Button("T3")) texture_select[2] = !texture_select[2];
+		ImGui::SameLine();
+		if (ImGui::Button("T4")) texture_select[3] = !texture_select[3];
 
 	}
 
