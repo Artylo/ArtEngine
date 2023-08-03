@@ -22,8 +22,19 @@ namespace test
 		vertex_buffer_layout->Push<glm::vec2>(1);	// Texture Coordinates
 		vertex_buffer_layout->Push<float>(1);		// Texture ID
 
+		//Create Quads
+		for (int i = 0; i < quad_number; i++)
+		{
+			//{ i + 0,i + 1,i + 2,i + 2,i + 1,i + 3 }
+			std::array<unsigned int, 6> temp_index_array =
+			{0 + i * 4 , 1 + i * 4, 2 + i * 4, 2 + i * 4, 1 + i * 4, 3 + i * 4 };
+			texture_select.push_back(0);
+			indices.push_back(temp_index_array);
+			vertices.push_back(CreateQuad(i * 32.0f, 0.0f, texture_select[i]));
+		}
+
 		vertex_array->AddBuffer(*vertex_buffer, *vertex_buffer_layout);
-		index_buffer = std::make_unique<IndexBuffer>(indices, (sizeof(indices)/sizeof(unsigned int)));
+		index_buffer = std::make_unique<IndexBuffer>(&indices.front(), 6*indices.size()); //@TODO: The count of the indices is currently only ever set here, so it you make new quads, it cannot know about them without regenerating the whole index buffer. Find a way to change the count at runtime, like the dynamic vertex buffer.
 
 		shader = std::make_unique<Shader>("shader/batched.shader");
 		shader->Bind();
@@ -32,17 +43,6 @@ namespace test
 		texture1->Bind(1);
 		texture2 = std::make_unique<Texture>("img/tile2.png");
 		texture2->Bind(2);
-
-		// @CLEANUP @DEBUG @TODO FUCKING DISGUSTING - Make into a vector or some shit
-		texture_select = { 0,0,0,0 };
-		q0 = CreateQuad(64.0f, 0.0f,  texture_select[0]);
-		q1 = CreateQuad(96.0f, 0.0f,  texture_select[1]);
-		q2 = CreateQuad(128.0f, 0.0f, texture_select[2]);
-		q3 = CreateQuad(160.0f, 0.0f, texture_select[3]);
-		memcpy(vertices, q0.data(), q0.size() * sizeof(Vertex));
-		memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(Vertex));
-		memcpy(vertices + q0.size() + q1.size(), q2.data(), q2.size() * sizeof(Vertex));
-		memcpy(vertices + q0.size() + q1.size() + q2.size(), q3.data(), q3.size() * sizeof(Vertex));
 
 	}
 
@@ -79,24 +79,11 @@ namespace test
 
 	void TestBatchedRendering::OnUpdate(float deltaTime)
 	{
-		//@TEST
-		// @CLEANUP @DEBUG @TODO FUCKING DISGUSTING - Make into a vector or some shit
-		
-		q0 = CreateQuad(64.0f, 0.0f,  texture_select[0]);
-		q1 = CreateQuad(96.0f, 0.0f,  texture_select[1]);
-		q2 = CreateQuad(128.0f, 0.0f, texture_select[2]);
-		q3 = CreateQuad(160.0f, 0.0f, texture_select[3]);
-		memcpy(vertices, q0.data(), q0.size() * sizeof(Vertex));
-		memcpy(vertices + q0.size(), q1.data(), q1.size() * sizeof(Vertex));
-		memcpy(vertices + q0.size() + q1.size(), q2.data(), q2.size() * sizeof(Vertex));
-		memcpy(vertices + q0.size() + q1.size() + q2.size(), q3.data(), q3.size() * sizeof(Vertex));
-
-
 		vertex_buffer->Bind();
 		//GLCALL(glMapBuffer());
 		//GLCALL(glUnmapBuffer());
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-
+		//glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(o_vertices), o_vertices);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size()*sizeof(std::array<Vertex, 4>), &vertices.front());
 
 		shader->Bind();
 		int samplers[2] = { texture1->texture_slot , texture2->texture_slot };
@@ -120,16 +107,20 @@ namespace test
 	{
 		model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
 		ImGui::DragFloat2("Position", (float*)&position);
-		ImGui::DragFloat("Offset", &offset);
 
-		if (ImGui::Button("T1")) texture_select[0] = !texture_select[0];
-		ImGui::SameLine();
-		if (ImGui::Button("T2")) texture_select[1] = !texture_select[1];
-		ImGui::SameLine();
-		if (ImGui::Button("T3")) texture_select[2] = !texture_select[2];
-		ImGui::SameLine();
-		if (ImGui::Button("T4")) texture_select[3] = !texture_select[3];
-
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			std::string label_name = std::to_string(i+1);
+			if (ImGui::Button(label_name.c_str()))
+			{
+				texture_select[i] = !texture_select[i];
+				for (int j = 0; j < vertices[i].size(); j++)
+				{
+					vertices[i]._Elems[j].texture_ID = texture_select[i];
+				}
+			}
+			if((i+1)%5!=0) ImGui::SameLine();
+		}
 	}
 
 

@@ -273,6 +273,8 @@ void Game::gldraw_gui()
 
 void Game::glpage_flip()
 {
+	//SDL_Delay(1-io_ptr->DeltaTime);
+
 	//Swap Buffers - page-flip
 	SDL_GL_SetSwapInterval(1);
 	SDL_GL_SwapWindow(window);

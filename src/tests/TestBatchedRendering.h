@@ -26,42 +26,16 @@ namespace test
 		//Batch Rendering
 		glm::vec2 translations[100];
 		int index = 0;
-		float offset = 16.0f;
 
-
-		Vertex vertices[16];
-		std::array<bool, 4> texture_select;
-		std::array<Vertex, 4> q0; //@CLEANUP
-		std::array<Vertex, 4> q1;
-		std::array<Vertex, 4> q2;
-		std::array<Vertex, 4> q3;
-
-
-		//Generic OpenGL
-
-		unsigned int indices[24] = { // @TODO: Make Dynamic as well. Every set increases by 4. But keep in mind you're not reusing the last pair of indecies, you're making 2 extra ones you could be saving. That's 72 bytes per pair, so you could save the size of a quad every three quads.
-			0, 1, 2,
-			2, 1, 3,
-
-			4, 5, 6,
-			6, 5, 7,
-
-			8, 9, 10,
-			10, 9, 11,
-
-			12, 13, 14,
-			14, 13, 15
-		};
+		unsigned int quad_number = 20;
+		std::vector<std::array<Vertex, 4>> vertices;
+		std::vector<bool> texture_select;
+		std::vector<std::array<unsigned int, 6>> indices; // @TODO: Every set increases by 4. But keep in mind you're not reusing the last pair of indecies, you're making 2 extra ones you could be saving. That's 72 bytes per pair, so you could save the size of a quad every three quads.
 
 		//Projection Matrix
-		//glm::mat4 projection_matrix = glm::ortho(0.0f, 640.0f, 480.0f, 0.0f, -1.0f, 1.0f); // Coordinate System
-		
-		
-
 		glm::mat4 projection_matrix = glm::ortho(0.0f, (float)w_width / 2, (float)w_height / 2, 0.0f, -1.0f, 1.0f); // Coordinate System
-
 		glm::mat4 view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // Camera - moved 100 to the right
-		glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(32, 32, 0)); // Translate all vertecies by an amount.
+		glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // Translate all vertecies by an amount.
 		glm::mat4 model_view_projection;
 
 		Renderer renderer;
