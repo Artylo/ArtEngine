@@ -14,6 +14,8 @@
 #include "../tests/TestTexture2D.h" //@TEMP @CLEANUP: Remove later.
 #include "../tests/TestInstancedRendering.h" //@TEMP @CLEANUP: Remove later.
 #include "../tests/TestBatchedRendering.h" //@TEMP @CLEANUP: Remove later.
+#include "../tests/TestDrawPrimitives.h" //@TEMP @CLEANUP: Remove later.
+
 
 class Game
 {

@@ -135,6 +135,11 @@ void Shader::SetUniformVec2(const std::string& name, glm::vec2& vector)
 	GLCALL(glUniform2f(GetUniformLocation(name), vector.x, vector.y));
 }
 
+void Shader::SetUniformVec4(const std::string& name, glm::vec4& vector)
+{
+	GLCALL(glUniform4f(GetUniformLocation(name), vector.x, vector.y, vector.z, vector.w));
+}
+
 int Shader::GetUniformLocation(const std::string& name)
 {
 	if (UniformLocationCache.find(name) != UniformLocationCache.end()) return UniformLocationCache[name]; // Is this already cached?

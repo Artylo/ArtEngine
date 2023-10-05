@@ -27,7 +27,10 @@ namespace test
 		glm::vec2 translations[100];
 		int index = 0;
 
-		unsigned int quad_number = 20;
+		unsigned int quad_number = 50;
+		float quad_hori_offset = 0.0f;
+		float quad_vert_offset = 0.0f;
+
 		std::vector<std::array<Vertex, 4>> vertices;
 		std::vector<bool> texture_select;
 		std::vector<std::array<unsigned int, 6>> indices; // @TODO: Every set increases by 4. But keep in mind you're not reusing the last pair of indecies, you're making 2 extra ones you could be saving. That's 72 bytes per pair, so you could save the size of a quad every three quads.

@@ -968,6 +968,12 @@
     <ClInclude Include="src\entities\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\system\graphics\Line.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestDrawPrimitives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -1078,9 +1084,14 @@
     <ClCompile Include="src\entities\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\system\graphics\Line.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\TestDrawPrimitives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\base.shader" />
     <None Include="vendor\glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -1491,5 +1502,7 @@
     </None>
     <None Include="shader\instanced.shader" />
     <None Include="shader\batched.shader" />
+    <None Include="shader\base.shader" />
+    <None Include="shader\line.shader" />
   </ItemGroup>
 </Project>

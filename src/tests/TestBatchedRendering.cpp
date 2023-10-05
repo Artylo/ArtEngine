@@ -25,12 +25,19 @@ namespace test
 		//Create Quads
 		for (int i = 0; i < quad_number; i++)
 		{
-			//{ i + 0,i + 1,i + 2,i + 2,i + 1,i + 3 }
+			texture_select.push_back(0);
+
 			std::array<unsigned int, 6> temp_index_array =
 			{0 + i * 4 , 1 + i * 4, 2 + i * 4, 2 + i * 4, 1 + i * 4, 3 + i * 4 };
-			texture_select.push_back(0);
 			indices.push_back(temp_index_array);
-			vertices.push_back(CreateQuad(i * 32.0f, 0.0f, texture_select[i]));
+
+			if (i % 5 == 0)
+			{
+				quad_vert_offset += 32.0f;
+				quad_hori_offset = 0.0f;
+			}
+			vertices.push_back(CreateQuad(quad_hori_offset, quad_vert_offset, texture_select[i]));
+			quad_hori_offset += 32.0f;
 		}
 
 		vertex_array->AddBuffer(*vertex_buffer, *vertex_buffer_layout);
@@ -110,7 +117,10 @@ namespace test
 
 		for (int i = 0; i < vertices.size(); i++)
 		{
-			std::string label_name = std::to_string(i+1);
+			std::string label_name;
+			if (i > 8) label_name = std::to_string(i + 1);
+			else label_name = std::to_string(0) + std::to_string(i + 1);
+
 			if (ImGui::Button(label_name.c_str()))
 			{
 				texture_select[i] = !texture_select[i];

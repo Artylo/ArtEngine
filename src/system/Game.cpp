@@ -151,6 +151,7 @@ void Game::glinit()
 	test_menu->AddTest<test::TestTexture2D>("Texture Test");
 	test_menu->AddTest<test::TestInstancedRendering>("Instanced Rendering Test");
 	test_menu->AddTest<test::TestBatchedRendering>("Batched Rendering Test");
+	test_menu->AddTest<test::TestDrawPrimitives>("Draw Primitives Test");
 
 	//testShader.GM = &GM;
 }
