@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\system\graphics\LineThickness.h" />
     <ClInclude Include="src\system\graphics\Line.h" />
     <ClInclude Include="src\entities\Entity.h" />
     <ClInclude Include="src\entities\Player.h" />
@@ -407,6 +408,7 @@
     <ClInclude Include="src\system\graphics\VertexBufferDynamic.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\system\graphics\LineThickness.cpp" />
     <ClCompile Include="src\system\graphics\Line.cpp" />
     <ClCompile Include="src\entities\Entity.cpp" />
     <ClCompile Include="src\entities\Player.cpp" />
@@ -451,6 +453,7 @@
     <None Include="shader\batched.shader" />
     <None Include="shader\instanced.shader" />
     <None Include="shader\line.shader" />
+    <None Include="shader\line_thick.shader" />
     <None Include="vendor\glm\detail\func_common.inl" />
     <None Include="vendor\glm\detail\func_common_simd.inl" />
     <None Include="vendor\glm\detail\func_exponential.inl" />
