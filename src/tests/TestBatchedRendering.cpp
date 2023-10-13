@@ -31,7 +31,7 @@ namespace test
 			{0 + i * 4 , 1 + i * 4, 2 + i * 4, 2 + i * 4, 1 + i * 4, 3 + i * 4 };
 			indices.push_back(temp_index_array);
 
-			if (i % 5 == 0)
+			if (i % 25 == 0)
 			{
 				quad_vert_offset += 32.0f;
 				quad_hori_offset = 0.0f;
@@ -41,7 +41,7 @@ namespace test
 		}
 
 		vertex_array->AddBuffer(*vertex_buffer, *vertex_buffer_layout);
-		index_buffer = std::make_unique<IndexBuffer>(&indices.front(), 6*indices.size()); //@TODO: The count of the indices is currently only ever set here, so it you make new quads, it cannot know about them without regenerating the whole index buffer. Find a way to change the count at runtime, like the dynamic vertex buffer.
+		index_buffer = std::make_unique<IndexBufferDynamic>(&indices.front(), 6*indices.size()); //@TODO: The count of the indices is currently only ever set here, so it you make new quads, it cannot know about them without regenerating the whole index buffer. Find a way to change the count at runtime, like the dynamic vertex buffer.
 
 		shader = std::make_unique<Shader>("shader/batched.shader");
 		shader->Bind();

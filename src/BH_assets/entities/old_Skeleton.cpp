@@ -1,6 +1,6 @@
 #include "../entities/old_Skeleton.h"
-#include "../system/globals.h"
-#include "../system/debug.h"
+#include "../../system/globals.h"
+#include "../../system/debug.h"
 
 old_Skeleton::old_Skeleton()
 {

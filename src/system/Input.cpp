@@ -1,6 +1,6 @@
 #include "globals.h"
 #include "debug.h"
-#include "../entities/Entity.h"
+#include "../BH_assets/entities/Entity.h"
 #include "Input.h"
 
 /*

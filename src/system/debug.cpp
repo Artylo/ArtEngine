@@ -1,5 +1,5 @@
 ﻿#include "debug.h"
-#include "../entities/Entity.h"
+#include "../BH_assets/entities/Entity.h"
 
 bool checkCollision(SDL_Rect a, SDL_Rect b)
 {

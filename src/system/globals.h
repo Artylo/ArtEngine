@@ -31,8 +31,8 @@
 
 //Window Constants
 #define gameFramerate 60
-#define w_width  1240
-#define w_height 720
+#define w_width  1790
+#define w_height 1008
 #define world_width  1920
 #define world_height 1080
 

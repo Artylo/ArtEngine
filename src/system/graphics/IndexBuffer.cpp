@@ -1,7 +1,7 @@
 #include "IndexBuffer.h"
 #include "Renderer.h"
 
-IndexBuffer::IndexBuffer(const void* data, unsigned int count) : count(count)
+IndexBuffer::IndexBuffer(const void* data, unsigned int count) : count(count), IBOID(0)
 {
 	GLASSERT(sizeof(unsigned int) == sizeof(GLuint));
 

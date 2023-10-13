@@ -52,3 +52,4 @@ void Renderer::Draw(const VertexArray& vertex_array, const IndexBuffer& index_bu
 
 	GLCALL(glDrawElements(GL_TRIANGLES, index_buffer.GetCount(), GL_UNSIGNED_INT, nullptr));
 }
+

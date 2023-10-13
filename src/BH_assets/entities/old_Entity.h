@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../system/globals.h"
+#include "../../system/globals.h"
 
 class old_Entity
 {

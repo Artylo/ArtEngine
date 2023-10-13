@@ -1,9 +1,13 @@
 #include "Entity.h"
 
-#include "../system/graphics/VertexBufferLayout.h"
+#include "../src/system/graphics/VertexBufferLayout.h"
 
-void Entity::init()
+void Entity::init(GameManager* gamemanager)
 {
+	//Set Variables
+	GM = gamemanager;
+
+	//Graphics
 	GLCALL(glEnable(GL_BLEND));
 	GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
@@ -27,6 +31,8 @@ void Entity::init()
 
 void Entity::update(float deltaTime)
 {
+	shader->Bind(); //@TODO: The way this is currently handled is that everything breaks the moment your shader doesn't need these uniforms. Either have them in there and do nothing, or find a more elegant per entitiy system.
+
 	shader->SetUniform1f("u_Time", deltaTime); // Current Time in Ticks
 	shader->SetUniform1i("u_Texture", texture->texture_slot); // Slot of Texture
 

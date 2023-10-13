@@ -2,7 +2,7 @@
 #include "Test.h"
 
 #include "../system/graphics/Renderer.h";
-#include "../system/graphics/IndexBuffer.h"
+#include "../system/graphics/IndexBufferDynamic.h"
 #include "../system/graphics/VertexArray.h"
 #include "../system/graphics/VertexBuffer.h"
 #include "../system/graphics/VertexBufferDynamic.h"
@@ -27,7 +27,7 @@ namespace test
 		glm::vec2 translations[100];
 		int index = 0;
 
-		unsigned int quad_number = 50;
+		unsigned int quad_number = 250; //@TODO: DEBUG: THIS BREAKS AFTER 250
 		float quad_hori_offset = 0.0f;
 		float quad_vert_offset = 0.0f;
 
@@ -44,7 +44,7 @@ namespace test
 		Renderer renderer;
 		std::unique_ptr<VertexArray> vertex_array;
 		std::unique_ptr<VertexBufferLayout> vertex_buffer_layout;
-		std::unique_ptr<IndexBuffer> index_buffer;
+		std::unique_ptr<IndexBufferDynamic> index_buffer;
 		std::unique_ptr<Shader> shader;
 
 		//Batch Rendering-related members

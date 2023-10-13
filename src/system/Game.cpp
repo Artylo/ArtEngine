@@ -1,5 +1,19 @@
 ﻿#include "Game.h"
 
+void GLAPIENTRY
+MessageCallback(GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam)
+{
+	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+		type, severity, message);
+}
+
 Game::Game()
 {
 	init_lib();
@@ -92,6 +106,11 @@ bool Game::init_lib()
 	std::string title = baseTitle + " v." + OpenGLVersion + " - GLSL v." + GLSLVersion;
 	SDL_Log("OPENGL LOADED: v.%s", glGetString(GL_VERSION)); // Get and print OpenGL version to test if latest drivers are loaded.
 	SDL_SetWindowTitle(window, title.c_str());
+
+	/* OpenGL */
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
 
 	/* OpenGL Vsync */
 	if (SDL_GL_SetSwapInterval(1) < 0)

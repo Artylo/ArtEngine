@@ -20,16 +20,16 @@
     <ClInclude Include="src\misc\pong.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\old_Entity.h">
+    <ClInclude Include="src\BH_assets\entities\old_Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\old_Skeleton.h">
+    <ClInclude Include="src\BH_assets\entities\old_Skeleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\system\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\old_Player.h">
+    <ClInclude Include="src\BH_assets\entities\old_Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\interactables\Wall.h">
@@ -962,10 +962,10 @@
     <ClInclude Include="src\BountyHunter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\Player.h">
+    <ClInclude Include="src\BH_assets\entities\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\Entity.h">
+    <ClInclude Include="src\BH_assets\entities\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\system\graphics\Line.h">
@@ -977,6 +977,12 @@
     <ClInclude Include="src\system\graphics\LineThickness.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\BH_assets\BackgroundTiled.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\system\graphics\IndexBufferDynamic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -985,16 +991,16 @@
     <ClCompile Include="src\system\debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\old_Player.cpp">
+    <ClCompile Include="src\BH_assets\entities\old_Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\misc\pong.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\old_Entity.cpp">
+    <ClCompile Include="src\BH_assets\entities\old_Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\old_Skeleton.cpp">
+    <ClCompile Include="src\BH_assets\entities\old_Skeleton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\system\Input.cpp">
@@ -1081,10 +1087,10 @@
     <ClCompile Include="src\BountyHunter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Player.cpp">
+    <ClCompile Include="src\BH_assets\entities\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entities\Entity.cpp">
+    <ClCompile Include="src\BH_assets\entities\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\system\graphics\Line.cpp">
@@ -1094,6 +1100,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\system\graphics\LineThickness.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BH_assets\BackgroundTiled.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\system\graphics\IndexBufferDynamic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

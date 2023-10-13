@@ -7,7 +7,7 @@ public:
 private:
 
 public:
-	void init();
+	void init(GameManager* gamemanager);
 	void update(float deltaTime);
 	void draw();
 

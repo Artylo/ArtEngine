@@ -1,4 +1,4 @@
-#include "../system/debug.h"
+#include "../../system/debug.h"
 #include "../entities/old_Entity.h"
 
 

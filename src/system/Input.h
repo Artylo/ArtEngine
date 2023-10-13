@@ -1,5 +1,5 @@
 #pragma once
-#include "../entities/Player.h"
+#include "../BH_assets/entities/Player.h"
 
 class Player; // Forward Declaration of Player for cyclic dependency;
 class Wall; // Forward Declaration of Wall for cyclic dependency;

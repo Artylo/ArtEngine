@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../system/globals.h"
-#include "../system/graphics/Renderer.h"
-#include "../system/graphics/VertexArray.h"
-#include "../system/graphics/VertexBuffer.h"
-#include "../system/graphics/IndexBuffer.h"
-#include "../system/graphics/Shader.h"
-#include "../system/graphics/Texture.h"
-#include "../system/GameManager.h"
+#include "../../system/globals.h"
+#include "../../system/graphics/Renderer.h"
+#include "../../system/graphics/VertexArray.h"
+#include "../../system/graphics/VertexBuffer.h"
+#include "../../system/graphics/IndexBuffer.h"
+#include "../../system/graphics/Shader.h"
+#include "../../system/graphics/Texture.h"
+#include "../../system/GameManager.h"
 
 class Entity
 {
@@ -44,7 +44,7 @@ private:
 	std::unique_ptr<Texture> texture;
 
 public:
-	void init();
+	void init(GameManager* gamemanager);
 	void update(float deltaTime);
 	void draw();
 
