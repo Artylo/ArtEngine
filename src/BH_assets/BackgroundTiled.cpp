@@ -59,6 +59,13 @@ BackgroundTiled::BackgroundTiled(GameManager* gamemanager)
 		indices.push_back(temp_index_array);
 	}
 
+	GLCALL(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(std::array<Vertex, 4>), &vertices[0], GL_DYNAMIC_DRAW););
+
+	GLint buffersize = 0;
+	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &buffersize);
+	std::cout << "Buffer size: " << buffersize << std::endl;
+	std::cout << "Size of data: " << vertices.size() * sizeof(std::array<Vertex, 4>) << std::endl;
+
 	vertex_array->AddBuffer(*vertex_buffer, *vertex_buffer_layout);
 
 	unsigned int indices_count = 6 * indices.size();
@@ -73,10 +80,6 @@ BackgroundTiled::BackgroundTiled(GameManager* gamemanager)
 	texture1->Bind(1);
 	texture2 = std::make_unique<Texture>("img/tile2.png");
 	texture2->Bind(2);
-
-	//@TEMP:
-	//vertex_buffer->Bind();
-	//glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(std::array<Vertex, 4>), &vertices.fron//t());
 }
 
 BackgroundTiled::~BackgroundTiled()
@@ -92,10 +95,12 @@ BackgroundTiled::~BackgroundTiled()
 void BackgroundTiled::Update(float deltaTime)
 {
 	vertex_buffer->Bind();
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(std::array<Vertex, 4>), &vertices[0]);
+	GLCALL(glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(std::array<Vertex, 4>), &vertices[0]));
+
+	
 
 	index_buffer->Bind();
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(std::array<unsigned int, 6>), &indices[0]);
+	GLCALL(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(std::array<unsigned int, 6>), &indices[0]));
 
 	shader->Bind();
 	int samplers[2] = { texture1->texture_slot , texture2->texture_slot };
