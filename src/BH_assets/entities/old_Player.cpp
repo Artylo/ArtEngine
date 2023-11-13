@@ -1,5 +1,7 @@
 #include "../entities/old_Player.h"
 
+/*
+
 old_Player::old_Player()
 {
 	//sprite = IMG_Load("img/player.png");
@@ -167,3 +169,5 @@ void old_Player::draw_self()
 	}
 	else SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "Failed to render player texture.", gameWindow);
 }
+
+*/

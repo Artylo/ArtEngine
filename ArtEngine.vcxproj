@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\system\InputManager.h" />
     <ClInclude Include="src\system\graphics\IndexBufferDynamic.h" />
     <ClInclude Include="src\BH_assets\BackgroundTiled.h" />
     <ClInclude Include="src\system\graphics\LineThickness.h" />
@@ -98,7 +99,6 @@
     <ClInclude Include="src\system\debug.h" />
     <ClInclude Include="src\BH_assets\entities\old_Entity.h" />
     <ClInclude Include="src\BountyHunter.h" />
-    <ClInclude Include="src\system\Input.h" />
     <ClInclude Include="src\BH_assets\entities\old_Player.h" />
     <ClInclude Include="src\misc\pong.h" />
     <ClInclude Include="src\system\globals.h" />
@@ -410,6 +410,7 @@
     <ClInclude Include="src\system\graphics\VertexBufferDynamic.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\system\InputManager.cpp" />
     <ClCompile Include="src\system\graphics\IndexBufferDynamic.cpp" />
     <ClCompile Include="src\BH_assets\BackgroundTiled.cpp" />
     <ClCompile Include="src\system\graphics\LineThickness.cpp" />
@@ -424,7 +425,6 @@
     <ClCompile Include="src\system\debug.cpp" />
     <ClCompile Include="src\BH_assets\entities\old_Entity.cpp" />
     <ClCompile Include="src\BountyHunter.cpp" />
-    <ClCompile Include="src\system\Input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\BH_assets\entities\old_Player.cpp" />
     <ClCompile Include="src\misc\pong.cpp" />

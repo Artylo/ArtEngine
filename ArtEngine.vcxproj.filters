@@ -26,9 +26,6 @@
     <ClInclude Include="src\BH_assets\entities\old_Skeleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\system\Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\BH_assets\entities\old_Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -983,6 +980,9 @@
     <ClInclude Include="src\system\graphics\IndexBufferDynamic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\system\InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -1001,9 +1001,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\BH_assets\entities\old_Skeleton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\system\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\interactables\Wall.cpp">
@@ -1106,6 +1103,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\system\graphics\IndexBufferDynamic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\system\InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

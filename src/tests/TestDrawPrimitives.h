@@ -13,8 +13,7 @@ namespace test
             float line_colour[4] = {1.0, 1.0, 1.0, 1.0};
             float positions[4] = {32, 32, 64, 128};
 
-            LineThickness test_line_thickness;
-            float line_thickness = 1.0f;
+            LineThickness* test_line_thickness;
 
         public:
 

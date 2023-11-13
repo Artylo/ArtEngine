@@ -8,13 +8,13 @@ namespace test
 {
 	test::BountyHunter::BountyHunter()
 	{
-		GM.projection_matrix = &projection_matrix;
-		GM.view_matrix = &view_matrix;
+		BH_GM.projection_matrix = &projection_matrix;
+		BH_GM.view_matrix = &view_matrix;
 
-		background = new BackgroundTiled(&GM); //@CLEANUP
+		background = new BackgroundTiled(&BH_GM); //@CLEANUP
 
 
-		player.init(&GM);
+		player.init(&BH_GM);
 	}
 
 	test::BountyHunter::~BountyHunter()
@@ -29,6 +29,19 @@ namespace test
 
 		background->Update(deltaTime);
 		player.update(deltaTime);
+
+		//@TEMP: INPUT TEST
+		switch (GM->input_manager->event_ptr->type)
+		{
+		case SDL_KEYDOWN:
+			switch (GM->input_manager->event_ptr->key.keysym.sym)
+			{
+			case SDLK_RIGHT:
+				player.position.x += 1; //HUGE SUCCESS!!!!
+				break;
+			}
+			break;
+		}
 	}
 
 	void test::BountyHunter::OnRender()

@@ -160,10 +160,12 @@ void Game::glinit()
 	//Game Manages Setup
 	GM.window = window;
 	GM.projection_matrix = &projection_matrix;
+	GM.input_manager = &IM;
 
 	//testShader.init();
 
 	//Init Test Menu
+	test_menu->GM = &GM; //Sets the GameManager reference for all tests. Ideally.
 	current_test = test_menu;
 	test_menu->AddTest<test::BountyHunter>("Main Game");
 	test_menu->AddTest<test::TestClearColour>("Clear Colour");
@@ -181,6 +183,7 @@ void Game::glupdate()
 
 	while (SDL_PollEvent(&event)) //@TEMP: Close window
 	{
+		IM.ProcessEvent(&event); //@TODO Insert Event handler here.
 		ImGui_ImplSDL2_ProcessEvent(&event); // This handles mouse input for ImGui.
 		switch (event.type) 
 		{
@@ -207,8 +210,11 @@ void Game::glupdate()
 		}
 	}
 	
-	//testShader.update();
-	if (current_test != nullptr) current_test->OnUpdate((float)SDL_GetTicks());
+	//Update current test and pass data into test space.
+	if (current_test != nullptr)
+	{
+		current_test->OnUpdate((float)SDL_GetTicks());
+	}
 }
 
 void Game::gldraw()
@@ -237,7 +243,10 @@ void Game::gldraw()
 	ImGui::NewFrame();
 
 	//testShader.renderer.Clear();
-	if (current_test != nullptr) current_test->OnRender();
+	if (current_test != nullptr)
+	{
+		current_test->OnRender();
+	}
 	//testShader.draw();
 }
 

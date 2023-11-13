@@ -1,7 +1,7 @@
 #pragma once
 #include "../entities/old_Entity.h"
 #include "../../interactables/Wall.h"
-#include "../../system/Input.h"
+//#include "../../system/Input.h"
 #include "../../system/debug.h"
 #include <set>
 

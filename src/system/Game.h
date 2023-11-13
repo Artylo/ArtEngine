@@ -1,6 +1,7 @@
 #pragma once
 #include "../system/globals.h"
 #include "../system/GameManager.h"
+#include "../system/InputManager.h"
 #include "../system/debug.h"
 //#include "../system/Input.h"
 
@@ -26,6 +27,9 @@ class Game
 
 		//Initiate Game Manager
 		GameManager GM;
+
+		//Initiate Input Manager
+		InputManager IM;
 
 		//Init gamestate variables
 		SDL_Event event;

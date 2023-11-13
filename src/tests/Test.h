@@ -5,11 +5,15 @@
 #include <functional>
 #include <iostream>
 
+#include "../system/GameManager.h"
+
 namespace test 
 {
 	class Test
 	{
 	public:
+		GameManager* GM;
+
 		Test();
 		virtual ~Test();
 

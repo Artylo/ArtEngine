@@ -2,9 +2,9 @@
 
 namespace test
 {
-	TestDrawPrimitives::TestDrawPrimitives() : test_line({ 0,0 }, { 0,0 }), test_line_thickness({ 32,32 }, { 64,64 })
+	TestDrawPrimitives::TestDrawPrimitives() : test_line({ 0,0 }, { 0,0 })
 	{
-		
+		test_line_thickness = new LineThickness({ 0,0 }, { 32, 32 });
 	}
 	TestDrawPrimitives::~TestDrawPrimitives()
 	{
@@ -17,8 +17,7 @@ namespace test
 		test_line.Update(1);
 
 		//Thick Line
-		test_line_thickness.setThickness(line_thickness);
-		test_line_thickness.Update(1);
+		test_line_thickness->Update(deltaTime);
 	}
 	void TestDrawPrimitives::OnRender()
 	{
@@ -26,18 +25,17 @@ namespace test
 		//test_line.Draw();
 
 		//Thick Line
-		test_line_thickness.Draw();
+		test_line_thickness->Draw();
 	}
 	void TestDrawPrimitives::OnGUIRender()
 	{
 		//Simple Line
 		//ImGui::DragInt("Thickness", &line_thickness, 0.1f, 0, 0);
-		if (line_thickness < 0) line_thickness = 0;
 		//ImGui::DragFloat("Thickness", &line_thickness);
 		ImGui::DragFloat4("Position", positions);
-		ImGui::ColorPicker4("Line Colour", line_colour);
+		ImGui::ColorEdit3("Line Colour", line_colour);
 
 		//Thick Line
-		ImGui::DragFloat("Thickness", &line_thickness, 0.1f, 0, 0);
+		test_line_thickness->DrawGUI();
 	}
 }

@@ -16,6 +16,10 @@
 
 class LineThickness
 {
+public:
+	float line_thickness = 1.0f;
+	float position[2] = { 0.0f, 0.0f };
+
 private:
 	//Projection Matrix
 	glm::mat4 projection_matrix = glm::ortho(0.0f, (float)w_width / 2, (float)w_height / 2, 0.0f, -1.0f, 1.0f); // World
@@ -28,9 +32,11 @@ private:
 	GLuint ssbo; // Shared Storage Buffer Object
 
 	glm::vec2 resolution = {w_width, w_height};
-	float thickness = 20.0;
-	std::vector<glm::vec4> varray1; // Square
-	std::vector<glm::vec4> varray2; // Circle
+
+	std::vector<glm::vec4>* current_varray;
+	std::vector<glm::vec4> varray_line;
+	std::vector<glm::vec4> varray_square; // Square
+	std::vector<glm::vec4> varray_circle; // Circle
 
 public:
 	LineThickness(glm::vec2 start, glm::vec2 end);
@@ -46,5 +52,6 @@ public:
 
 	void Update(float deltaTime);
 	void Draw();
+	void DrawGUI();
 };
 

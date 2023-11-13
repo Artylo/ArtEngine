@@ -6,7 +6,7 @@ VertexBufferDynamic::VertexBufferDynamic()
 {
 	GLCALL(glGenBuffers(1, &VBO_ID));
 	GLCALL(glBindBuffer(GL_ARRAY_BUFFER, VBO_ID));
-	GLCALL(glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertex_count, nullptr, GL_DYNAMIC_DRAW));
+	GLCALL(glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * default_max_vertex_count, nullptr, GL_DYNAMIC_DRAW));
 }
 
 //Generates a VBO with the size and data requirements you provide.

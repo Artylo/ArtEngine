@@ -2,13 +2,14 @@
 #include "globals.h"
 #include "glm/glm.hpp"
 
-class Player;
-class Input;
+#include "InputManager.h"
 
 class GameManager
 {
 public:
 	SDL_Window* window = nullptr;
+
+	InputManager* input_manager = nullptr;
 
 	float* camera_scale;
 	float* camera_rotation;
