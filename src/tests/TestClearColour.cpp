@@ -4,7 +4,7 @@
 
 namespace test
 {
-	test::TestClearColour::TestClearColour()
+	test::TestClearColour::TestClearColour(GameManager* GM) : Test(GM)
 	{
 
 	}

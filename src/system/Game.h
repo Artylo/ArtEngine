@@ -26,10 +26,10 @@ class Game
 		SDL_Renderer* renderer;
 
 		//Initiate Game Manager
-		GameManager GM;
+		GameManager gameManager;
 
 		//Initiate Input Manager
-		InputManager IM;
+		InputManager inputManager;
 
 		//Init gamestate variables
 		SDL_Event event;
@@ -46,7 +46,7 @@ class Game
 
 		//Tests
 		test::Test* current_test = nullptr;
-		test::TestMenu* test_menu = new test::TestMenu(current_test);
+		test::TestMenu* test_menu = new test::TestMenu(&gameManager, current_test);
 
 		//Viewport or Camera
 		SDL_Rect worldBox = { 0,0,world_width,world_height };

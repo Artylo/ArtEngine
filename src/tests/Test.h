@@ -12,9 +12,9 @@ namespace test
 	class Test
 	{
 	public:
-		GameManager* GM;
+		GameManager* testGM;
 
-		Test();
+		Test(GameManager* GM);
 		virtual ~Test();
 
 		virtual void OnUpdate(float deltaTime) {}
@@ -26,18 +26,20 @@ namespace test
 	class TestMenu : public Test
 	{
 	public:
+		GameManager* TestMenuGM;
+
 		template <typename T>
 		void AddTest(const std::string& name)
 		{
 			std::cout << "Registering test " << name << std::endl;
-			tests.push_back(std::make_pair(name, []() { return new T(); }));
+			tests.push_back(std::make_pair(name, [](GameManager* GM) { return new T(GM); }));
 		}
 	private:
 		Test*& current_test;
-		std::vector<std::pair<std::string, std::function<Test* ()>>> tests;
+		std::vector<std::pair<std::string, std::function<Test* (GameManager* GM)>>> tests;
 
 	public:
-		TestMenu(Test*& current_test_ptr);
+		TestMenu(GameManager* GM, Test*& current_test_ptr);
 		~TestMenu();
 	
 		void OnGUIRender() override;

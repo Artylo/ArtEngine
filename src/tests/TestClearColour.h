@@ -8,7 +8,7 @@ namespace test
 	class TestClearColour : public Test
 	{
 	public:
-		TestClearColour();
+		TestClearColour(GameManager* GM);
 		~TestClearColour() override;
 
 		void OnUpdate(float deltaTime) override;

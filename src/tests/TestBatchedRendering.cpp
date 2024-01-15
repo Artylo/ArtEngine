@@ -2,7 +2,7 @@
 
 namespace test
 {
-	TestBatchedRendering::TestBatchedRendering()
+	TestBatchedRendering::TestBatchedRendering(GameManager* GM) : Test(GM)
 	{
 		GLCALL(glEnable(GL_BLEND));
 		GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));

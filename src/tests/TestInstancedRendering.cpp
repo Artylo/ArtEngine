@@ -2,7 +2,7 @@
 
 namespace test
 {
-	TestInstancedRendering::TestInstancedRendering()
+	TestInstancedRendering::TestInstancedRendering(GameManager* GM) : Test(GM)
 	{
 
 		//@TODO: Setup desired blending for current test. Probably best if renderer does this in the future.

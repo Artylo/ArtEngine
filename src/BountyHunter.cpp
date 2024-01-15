@@ -6,10 +6,12 @@
 
 namespace test
 {
-	test::BountyHunter::BountyHunter()
+	test::BountyHunter::BountyHunter(GameManager* GM) : Test(GM)
 	{
 		BH_GM.projection_matrix = &projection_matrix;
 		BH_GM.view_matrix = &view_matrix;
+
+		BH_GM.input_manager = GM->input_manager;
 
 		background = new BackgroundTiled(&BH_GM); //@CLEANUP
 
@@ -31,13 +33,13 @@ namespace test
 		player.update(deltaTime);
 
 		//@TEMP: INPUT TEST
-		switch (GM->input_manager->event_ptr->type)
+		switch (BH_GM.input_manager->event_ptr->type)
 		{
 		case SDL_KEYDOWN:
-			switch (GM->input_manager->event_ptr->key.keysym.sym)
+			switch (BH_GM.input_manager->event_ptr->key.keysym.sym)
 			{
 			case SDLK_RIGHT:
-				player.position.x += 1; //HUGE SUCCESS!!!!
+				//player.position.x += 1; //HUGE SUCCESS!!!!
 				break;
 			}
 			break;

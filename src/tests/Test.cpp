@@ -3,7 +3,7 @@
 
 namespace test
 {
-	Test::Test()
+	Test::Test(GameManager* GM)
 	{
 	}
 
@@ -11,9 +11,9 @@ namespace test
 	{
 	}
 
-	TestMenu::TestMenu(Test*& current_test_ptr) : current_test(current_test_ptr)
+	TestMenu::TestMenu(GameManager* GM, Test*& current_test_ptr) : current_test(current_test_ptr), Test(GM)  // Call the superclass constructor in the subclass' initialization list.
 	{
-
+		TestMenuGM = GM;
 	}
 
 	TestMenu::~TestMenu()
@@ -27,8 +27,8 @@ namespace test
 		{
 			if (ImGui::Button(test.first.c_str()))
 			{
-				current_test = test.second();
-				current_test->GM = GM; //@CLEANUP: Sets the current test's GM to the global one. Kind of a gamble whether or not this works.
+				current_test = test.second(TestMenuGM);
+				//current_test->testGM = testGM; //@CLEANUP: Sets the current test's GM to the global one. Kind of a gamble whether or not this works.
 			}
 			//ImGui::SameLine();
 		}

@@ -60,7 +60,7 @@ public:
 	Texture* texture;
 	
 
-	OpenGLTest();
+	OpenGLTest(GameManager* GM);
 	~OpenGLTest();
 
 private:

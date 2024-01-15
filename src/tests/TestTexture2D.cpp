@@ -2,7 +2,7 @@
 
 namespace test
 {
-	TestTexture2D::TestTexture2D()
+	TestTexture2D::TestTexture2D(GameManager* GM) : Test(GM)
 	{
 		//@TODO: Setup desired blending for current test. Probably best if renderer does this in the future.
 		GLCALL(glEnable(GL_BLEND));

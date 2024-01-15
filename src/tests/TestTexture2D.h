@@ -51,7 +51,7 @@ namespace test
 		std::unique_ptr<Texture> texture;
 
 	public:
-		TestTexture2D();
+		TestTexture2D(GameManager* GM);
 		~TestTexture2D();
 
 		void OnUpdate(float deltaTime) override;

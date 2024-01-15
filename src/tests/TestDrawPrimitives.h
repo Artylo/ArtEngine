@@ -17,7 +17,7 @@ namespace test
 
         public:
 
-        TestDrawPrimitives();
+        TestDrawPrimitives(GameManager* GM);
         ~TestDrawPrimitives();
 
         void OnUpdate(float deltaTime) override;

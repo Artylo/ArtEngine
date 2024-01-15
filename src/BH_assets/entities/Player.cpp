@@ -4,6 +4,7 @@ void Player::init(GameManager* gamemanager)
 {
 	sprite_filepath = "img/player.png";
 	shader_filepath = "shader/base.shader";
+	IM = gamemanager->input_manager;
 	Entity::init(gamemanager);
 }
 
@@ -17,7 +18,20 @@ void Player::update(float deltaTime)
 			switch (IM->event_ptr->key.keysym.sym)
 			{
 			case SDLK_RIGHT:
-				std::cout << "RIGHT key pressed! Success!" << std::endl;
+				position.x++;
+				//std::cout << "RIGHT key pressed! Success!" << std::endl;
+				break;
+			case SDLK_LEFT:
+				position.x--;
+				//std::cout << "LEFT key pressed! Success!" << std::endl;
+				break;
+			case SDLK_UP:
+				position.y--;
+				//std::cout << "UP key pressed! Success!" << std::endl;
+				break;
+			case SDLK_DOWN:
+				position.y++;
+				//std::cout << "DOWN key pressed! Success!" << std::endl;
 				break;
 			}
 			break;

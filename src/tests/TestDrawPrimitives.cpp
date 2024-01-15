@@ -2,7 +2,7 @@
 
 namespace test
 {
-	TestDrawPrimitives::TestDrawPrimitives() : test_line({ 0,0 }, { 0,0 })
+	TestDrawPrimitives::TestDrawPrimitives(GameManager* GM) : Test(GM), test_line({ 0,0 }, { 0,0 })
 	{
 		test_line_thickness = new LineThickness({ 0,0 }, { 32, 32 });
 	}

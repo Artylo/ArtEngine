@@ -158,14 +158,14 @@ bool Game::init_lib()
 void Game::glinit()
 {
 	//Game Manages Setup
-	GM.window = window;
-	GM.projection_matrix = &projection_matrix;
-	GM.input_manager = &IM;
+	gameManager.window = window;
+	gameManager.projection_matrix = &projection_matrix;
+	gameManager.input_manager = &inputManager;
 
 	//testShader.init();
 
 	//Init Test Menu
-	test_menu->GM = &GM; //Sets the GameManager reference for all tests. Ideally.
+	test_menu->testGM = &gameManager; //Sets the GameManager reference for all tests. Ideally.
 	current_test = test_menu;
 	test_menu->AddTest<test::BountyHunter>("Main Game");
 	test_menu->AddTest<test::TestClearColour>("Clear Colour");
@@ -173,8 +173,6 @@ void Game::glinit()
 	test_menu->AddTest<test::TestInstancedRendering>("Instanced Rendering Test");
 	test_menu->AddTest<test::TestBatchedRendering>("Batched Rendering Test");
 	test_menu->AddTest<test::TestDrawPrimitives>("Draw Primitives Test");
-
-	//testShader.GM = &GM;
 }
 
 void Game::glupdate()
@@ -183,7 +181,7 @@ void Game::glupdate()
 
 	while (SDL_PollEvent(&event)) //@TEMP: Close window
 	{
-		IM.ProcessEvent(&event); //@TODO Insert Event handler here.
+		inputManager.ProcessEvent(&event); //@TODO Insert Event handler here.
 		ImGui_ImplSDL2_ProcessEvent(&event); // This handles mouse input for ImGui.
 		switch (event.type) 
 		{
@@ -233,7 +231,7 @@ void Game::gldraw()
 
 	//Setup Matricies
 	int winW, winH;
-	SDL_GetWindowSize(GM.window, &winW, &winH);
+	SDL_GetWindowSize(gameManager.window, &winW, &winH);
 	projection_matrix = glm::ortho(0.0f, (float)winW / 2, (float)winH / 2, 0.0f, -1.0f, 1.0f);
 
 	//@TEST

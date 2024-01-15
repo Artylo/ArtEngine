@@ -53,7 +53,7 @@ namespace test
 		std::unique_ptr<Texture> texture2; // Grass Texture
 
 	public:
-		TestBatchedRendering();
+		TestBatchedRendering(GameManager* GM);
 		~TestBatchedRendering();
 
 		void OnUpdate(float deltaTime) override;

@@ -59,7 +59,7 @@ namespace test
 		std::unique_ptr<Texture> texture;
 
 	public:
-		TestInstancedRendering();
+		TestInstancedRendering(GameManager* GM);
 		~TestInstancedRendering();
 
 		void OnUpdate(float deltaTime) override;

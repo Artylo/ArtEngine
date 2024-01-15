@@ -39,7 +39,7 @@ namespace test
 		//Renderer renderer;
 
 	public:
-		BountyHunter();
+		BountyHunter(GameManager* GM);
 		~BountyHunter() override;
 
 		void OnUpdate(float deltaTime) override;
