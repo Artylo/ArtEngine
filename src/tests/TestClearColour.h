@@ -11,7 +11,7 @@ namespace test
 		TestClearColour(GameManager* GM);
 		~TestClearColour() override;
 
-		void OnUpdate(float deltaTime) override;
+		void OnUpdate() override;
 		void OnRender() override;
 		void OnGUIRender() override;
 	private:

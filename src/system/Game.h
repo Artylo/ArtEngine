@@ -76,7 +76,7 @@ class Game
 		SDL_Texture* gameTexture;
 
 		//Debug Text
-		DebugText debug_text;
+		//DebugText debug_text;
 
 		//INIT INPUT HANDLER
 		//Input input;

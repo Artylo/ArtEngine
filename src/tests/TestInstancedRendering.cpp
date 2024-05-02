@@ -26,7 +26,7 @@ namespace test
 		texture->Bind(1);
 	}
 
-	void TestInstancedRendering::OnUpdate(float deltaTime)
+	void TestInstancedRendering::OnUpdate()
 	{
 		shader->Bind();
 

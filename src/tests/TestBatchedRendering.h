@@ -56,7 +56,7 @@ namespace test
 		TestBatchedRendering(GameManager* GM);
 		~TestBatchedRendering();
 
-		void OnUpdate(float deltaTime) override;
+		void OnUpdate() override;
 		void OnRender() override;
 		void OnGUIRender() override;
 	private:

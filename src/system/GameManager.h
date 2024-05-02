@@ -14,6 +14,8 @@ public:
 	float* camera_scale;
 	float* camera_rotation;
 
+	float deltaTime = 0.0f;
+
 	//Projection Matrix
 	glm::mat4* projection_matrix; // Coordinate System
 	glm::mat4* identity_matrix;

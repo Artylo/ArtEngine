@@ -84,7 +84,7 @@ namespace test
 		return {v0, v1, v2, v3};
 	}
 
-	void TestBatchedRendering::OnUpdate(float deltaTime)
+	void TestBatchedRendering::OnUpdate()
 	{
 		vertex_buffer->Bind();
 		//GLCALL(glMapBuffer());

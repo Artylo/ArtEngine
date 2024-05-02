@@ -4,6 +4,7 @@
 namespace test
 {
 	Test::Test(GameManager* GM)
+		: testGM(GM)
 	{
 	}
 
@@ -28,7 +29,6 @@ namespace test
 			if (ImGui::Button(test.first.c_str()))
 			{
 				current_test = test.second(TestMenuGM);
-				//current_test->testGM = testGM; //@CLEANUP: Sets the current test's GM to the global one. Kind of a gamble whether or not this works.
 			}
 			//ImGui::SameLine();
 		}

@@ -6,17 +6,14 @@
 
 namespace test
 {
-	test::BountyHunter::BountyHunter(GameManager* GM) : Test(GM)
+	test::BountyHunter::BountyHunter(GameManager* GM) : Test(GM), BH_GM(GM)
 	{
-		BH_GM.projection_matrix = &projection_matrix;
-		BH_GM.view_matrix = &view_matrix;
+		BH_GM->projection_matrix = &projection_matrix;
+		BH_GM->view_matrix = &view_matrix;
 
-		BH_GM.input_manager = GM->input_manager;
+		background = new BackgroundTiled(BH_GM); //@CLEANUP
 
-		background = new BackgroundTiled(&BH_GM); //@CLEANUP
-
-
-		player.init(&BH_GM);
+		player.init(BH_GM);
 	}
 
 	test::BountyHunter::~BountyHunter()
@@ -24,26 +21,26 @@ namespace test
 		delete background;
 	}
 
-	void test::BountyHunter::OnUpdate(float deltaTime)
+	void test::BountyHunter::OnUpdate()
 	{
 		//glm::mat4 zoom_matrix = glm::identity() * glm::scale(camera_zoom, camera_zoom, 1.0f);
 		//view_matrix = view_matrix * zoom_matrix;
 
-		background->Update(deltaTime);
-		player.update(deltaTime);
+		background->Update(BH_GM->deltaTime);
+		player.update(BH_GM->deltaTime);
 
-		//@TEMP: INPUT TEST
-		switch (BH_GM.input_manager->event_ptr->type)
-		{
-		case SDL_KEYDOWN:
-			switch (BH_GM.input_manager->event_ptr->key.keysym.sym)
-			{
-			case SDLK_RIGHT:
-				//player.position.x += 1; //HUGE SUCCESS!!!!
-				break;
-			}
-			break;
-		}
+		//@CLEANUP: INPUT TEST
+		//switch (BH_GM.input_manager->event_ptr->type)
+		//{
+		//case SDL_KEYDOWN:
+		//	switch (BH_GM.input_manager->event_ptr->key.keysym.sym)
+		//	{
+		//	case SDLK_RIGHT:
+		//		//player.position.x += 1; //HUGE SUCCESS!!!!
+		//		break;
+		//	}
+		//	break;
+		//}
 	}
 
 	void test::BountyHunter::OnRender()

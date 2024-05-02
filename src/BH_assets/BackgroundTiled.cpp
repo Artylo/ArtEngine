@@ -63,8 +63,8 @@ BackgroundTiled::BackgroundTiled(GameManager* gamemanager)
 
 	GLint buffersize = 0;
 	glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &buffersize);
-	std::cout << "Buffer size: " << buffersize << std::endl;
-	std::cout << "Size of data: " << vertices.size() * sizeof(std::array<Vertex, 4>) << std::endl;
+	std::cout << "[DEBUG] Buffer size: " << buffersize << std::endl;
+	std::cout << "[DEBUG] Size of data: " << vertices.size() * sizeof(std::array<Vertex, 4>) << std::endl;
 
 	vertex_array->AddBuffer(*vertex_buffer, *vertex_buffer_layout);
 

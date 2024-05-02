@@ -9,7 +9,7 @@ namespace test
 	TestDrawPrimitives::~TestDrawPrimitives()
 	{
 	}
-	void TestDrawPrimitives::OnUpdate(float deltaTime)
+	void TestDrawPrimitives::OnUpdate()
 	{
 		//Simple Line
 		test_line.setPositions({ positions[0],positions[1] }, { positions[2], positions[3] });
@@ -17,7 +17,7 @@ namespace test
 		test_line.Update(1);
 
 		//Thick Line
-		test_line_thickness->Update(deltaTime);
+		test_line_thickness->Update(Test::testGM->deltaTime);
 	}
 	void TestDrawPrimitives::OnRender()
 	{

@@ -127,7 +127,7 @@ bool Game::init_lib()
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL ERROR!", "You did not init your SDL renderer!", window);
 		init_success = false;
 	}
-	draw_set_color(renderer, c_black);
+	//draw_set_color(renderer, c_black);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_RenderSetLogicalSize(renderer, w_width, w_height);
 
@@ -177,7 +177,7 @@ void Game::glinit()
 
 void Game::glupdate()
 {
-	
+	gameManager.deltaTime = (float)SDL_GetTicks(); // Update game manager to have the current time.
 
 	while (SDL_PollEvent(&event)) //@TEMP: Close window
 	{
@@ -211,7 +211,8 @@ void Game::glupdate()
 	//Update current test and pass data into test space.
 	if (current_test != nullptr)
 	{
-		current_test->OnUpdate((float)SDL_GetTicks());
+		
+		current_test->OnUpdate();
 	}
 }
 

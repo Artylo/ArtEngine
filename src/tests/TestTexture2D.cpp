@@ -32,12 +32,12 @@ namespace test
 		texture->Unbind();
 	}
 
-	void TestTexture2D::OnUpdate(float deltaTime)
+	void TestTexture2D::OnUpdate()
 	{
 		shader->Bind();
 		//texture->Bind(texture->texture_slot); //@CLEANUP: Might not be necessary
 
-		shader->SetUniform1f("u_Time", deltaTime); // Current Time in Ticks
+		shader->SetUniform1f("u_Time", Test::testGM->deltaTime); // Current Time in Ticks
 
 		shader->SetUniform1i("u_Texture", texture->texture_slot); // Slot of Texture
 

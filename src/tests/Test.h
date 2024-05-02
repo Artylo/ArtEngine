@@ -17,7 +17,7 @@ namespace test
 		Test(GameManager* GM);
 		virtual ~Test();
 
-		virtual void OnUpdate(float deltaTime) {}
+		virtual void OnUpdate() {}
 		virtual void OnRender() {}
 		virtual void OnGUIRender() {}
 	private:
@@ -29,11 +29,7 @@ namespace test
 		GameManager* TestMenuGM;
 
 		template <typename T>
-		void AddTest(const std::string& name)
-		{
-			std::cout << "Registering test " << name << std::endl;
-			tests.push_back(std::make_pair(name, [](GameManager* GM) { return new T(GM); }));
-		}
+		void AddTest(const std::string& name);
 	private:
 		Test*& current_test;
 		std::vector<std::pair<std::string, std::function<Test* (GameManager* GM)>>> tests;
@@ -45,6 +41,19 @@ namespace test
 		void OnGUIRender() override;
 	private:
 	};
+
+	template<typename T>
+	inline void TestMenu::AddTest(const std::string& name)
+	{
+		std::cout << "Registering test " << name << std::endl;
+		tests.push_back(std::make_pair(
+			name,
+			[](GameManager* GM)
+			{
+				return new T(GM);
+			}
+		));
+	}
 }
 
 

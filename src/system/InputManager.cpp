@@ -15,7 +15,7 @@ bool InputManager::ProcessEvent(const SDL_Event* event)
 		switch (event->key.keysym.sym)
 		{
 		case SDLK_LEFT:
-			std::cout << "Left key pressed." << std::endl;
+			//std::cout << "Left key pressed." << std::endl;
 			break;
 		}
 		break;

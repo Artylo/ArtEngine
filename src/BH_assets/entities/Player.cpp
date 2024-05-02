@@ -2,8 +2,8 @@
 
 void Player::init(GameManager* gamemanager)
 {
-	sprite_filepath = "img/player.png";
-	shader_filepath = "shader/base.shader";
+	Entity::sprite.sprite_filepath = "img/player.png";
+	Entity::sprite.shader_filepath = "shader/base.shader";
 	IM = gamemanager->input_manager;
 	Entity::init(gamemanager);
 }

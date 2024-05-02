@@ -16,7 +16,7 @@ namespace test
 	public:
 		//ImVec2 position = { (float)w_width / 4 -32, (float)w_height / 4 -32};
 
-		GameManager BH_GM;
+		GameManager* BH_GM;
 		Player player;
 
 		BackgroundTiled* background;
@@ -42,7 +42,7 @@ namespace test
 		BountyHunter(GameManager* GM);
 		~BountyHunter() override;
 
-		void OnUpdate(float deltaTime) override;
+		void OnUpdate() override;
 		void OnRender() override;
 		void OnGUIRender() override;
 	private:
