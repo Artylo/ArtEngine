@@ -112,15 +112,9 @@ bool Game::init_lib()
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
 
-	/* OpenGL Vsync */
-	if (SDL_GL_SetSwapInterval(1) < 0)
-	{
-		SDL_Log("Warning: Unable to set Vsync! SDL Error: %s\n", SDL_GetError());
-	}
-
 	/* SDL2 Renderer */
 	//@CLEANUP: Depricated in switch to OpenGL
-	Uint32 RendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+	Uint32 RendererFlags = SDL_RENDERER_ACCELERATED;
 	renderer = SDL_CreateRenderer(window, -1, RendererFlags);
 	if (renderer == NULL)
 	{
@@ -303,8 +297,11 @@ void Game::glpage_flip()
 {
 	//SDL_Delay(1-io_ptr->DeltaTime);
 
+	/* OpenGL Vsync */
+	if (SDL_GL_SetSwapInterval(1) < 0)
+		SDL_Log("Warning: Unable to set Vsync! SDL Error: %s\n", SDL_GetError());
+
 	//Swap Buffers - page-flip
-	SDL_GL_SetSwapInterval(1);
 	SDL_GL_SwapWindow(window);
 
 	//Pump Event Queue

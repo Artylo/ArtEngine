@@ -14,6 +14,11 @@ namespace test
 		background = new BackgroundTiled(BH_GM); //@CLEANUP
 
 		player.init(BH_GM);
+
+		//Init Camera
+		camera_zoom = camera_zoom_temp;
+		zoom_matrix = glm::scale(identity_matrix, glm::vec3(camera_zoom, camera_zoom, camera_zoom));
+		transform_matrix = zoom_matrix * identity_matrix;
 	}
 
 	test::BountyHunter::~BountyHunter()
@@ -28,6 +33,23 @@ namespace test
 
 		background->Update(BH_GM->deltaTime);
 		player.update(BH_GM->deltaTime);
+
+		//Camera
+		camera_box.p = w_width;
+		camera_box.q = w_height;
+		camera_box.x = (player.position.x + 16) - camera_box.p / (4 * camera_zoom);
+		camera_box.y = (player.position.y + 16) - camera_box.q / (4 * camera_zoom);
+		
+		
+
+		view_matrix = glm::translate(
+			glm::mat4(1.0f),
+			glm::vec3(-camera_box.x, -camera_box.y, 0)
+		);
+
+		view_matrix = transform_matrix * view_matrix;
+		
+		// Camera
 
 		//@CLEANUP: INPUT TEST
 		//switch (BH_GM.input_manager->event_ptr->type)
@@ -55,13 +77,14 @@ namespace test
 		ImGui::DragFloat("Camera Zoom", &camera_zoom_temp, 0.001f);
 		if (camera_zoom_temp != camera_zoom)
 		{
-			view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // Camera
 			camera_zoom = camera_zoom_temp;
 			zoom_matrix = glm::scale(identity_matrix, glm::vec3(camera_zoom, camera_zoom, camera_zoom));
 			transform_matrix = zoom_matrix * identity_matrix;
 			//model_view_projection = transform_matrix * model_view_projection;
-			view_matrix = transform_matrix * view_matrix;
+			//view_matrix = transform_matrix * view_matrix;
 		}
+
+		ImGui::Text("Distance between player and camera: %i", camera_box.x - player.position.x);
 
 		ImGui::SeparatorText("Player");
 		ImGui::DragFloat2("Player Position", (float*)&player.position);

@@ -28,6 +28,8 @@ namespace test
 		glm::mat4 transform_matrix = zoom_matrix * identity_matrix;
 		float camera_zoom_temp = 1.0f;
 		float camera_zoom = 1.0f;
+		glm::vec4 camera_box = {0,0,0,0};
+		
 
 
 

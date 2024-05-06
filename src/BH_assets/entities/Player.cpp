@@ -18,19 +18,19 @@ void Player::update(float deltaTime)
 			switch (IM->event_ptr->key.keysym.sym)
 			{
 			case SDLK_RIGHT:
-				position.x++;
+				position.x += speed;
 				//std::cout << "RIGHT key pressed! Success!" << std::endl;
 				break;
 			case SDLK_LEFT:
-				position.x--;
+				position.x -= speed;
 				//std::cout << "LEFT key pressed! Success!" << std::endl;
 				break;
 			case SDLK_UP:
-				position.y--;
+				position.y -= speed;
 				//std::cout << "UP key pressed! Success!" << std::endl;
 				break;
 			case SDLK_DOWN:
-				position.y++;
+				position.y += speed;
 				//std::cout << "DOWN key pressed! Success!" << std::endl;
 				break;
 			}

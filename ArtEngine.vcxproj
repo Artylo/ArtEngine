@@ -88,7 +88,6 @@
     <ClInclude Include="src\system\InputManager.h" />
     <ClInclude Include="src\system\graphics\IndexBufferDynamic.h" />
     <ClInclude Include="src\BH_assets\BackgroundTiled.h" />
-    <ClInclude Include="src\system\graphics\LineThickness.h" />
     <ClInclude Include="src\system\graphics\Line.h" />
     <ClInclude Include="src\BH_assets\entities\Entity.h" />
     <ClInclude Include="src\BH_assets\entities\Player.h" />
@@ -411,7 +410,6 @@
     <ClCompile Include="src\system\InputManager.cpp" />
     <ClCompile Include="src\system\graphics\IndexBufferDynamic.cpp" />
     <ClCompile Include="src\BH_assets\BackgroundTiled.cpp" />
-    <ClCompile Include="src\system\graphics\LineThickness.cpp" />
     <ClCompile Include="src\system\graphics\Line.cpp" />
     <ClCompile Include="src\BH_assets\entities\Entity.cpp" />
     <ClCompile Include="src\BH_assets\entities\Player.cpp" />

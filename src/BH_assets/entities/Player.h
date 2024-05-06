@@ -5,6 +5,7 @@
 class Player : public Entity
 {
 public:
+	int speed = 5;
 private:
 	InputManager* IM;
 
