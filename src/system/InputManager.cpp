@@ -48,5 +48,17 @@ bool InputManager::ProcessEvent(const SDL_Event* event)
 	return true;
 }
 
+glm::vec2 InputManager::GetMousePosition(int& x, int& y)
+{
+	x = mouse_x;
+	y = mouse_y;
+	return { mouse_x, mouse_y };
+}
+
+glm::vec2 InputManager::GetMousePosition()
+{
+	return { mouse_x, mouse_y };
+}
+
 
 

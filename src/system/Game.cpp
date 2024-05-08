@@ -110,6 +110,7 @@ bool Game::init_lib()
 	/* OpenGL */
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_SCISSOR_TEST); //@TEST: Scisor test.
 	glDebugMessageCallback(MessageCallback, 0);
 
 	/* SDL2 Renderer */
@@ -194,7 +195,14 @@ void Game::glupdate()
 				gameActive = false;
 				break;
 			case SDL_WINDOWEVENT_RESIZED:
-				//glViewport(0, 0, (int)io_ptr->DisplaySize.x, (int)io_ptr->DisplaySize.y);
+				//@TEMP:
+				int new_window_width  = 0;
+				int new_window_height = 0;
+				SDL_GetWindowSize(window, &new_window_width, &new_window_height);
+				glViewport(0, 0, new_window_width, new_window_height);
+				glScissor(0, 0, new_window_width, new_window_height);
+				projection_matrix = glm::ortho(0.0f, (float)new_window_width / 2, (float)new_window_height / 2, 0.0f, -1.0f, 1.0f);
+				
 
 				break;
 			}
@@ -249,20 +257,13 @@ void Game::gldraw_gui()
 
 	//if (show_demo_window) ImGui::ShowDemoWindow(&show_demo_window); //@CLEANUP: Built in documentation and demo window. Remove before release.
 
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+
 	ImGui::Begin("ArtEngine Developer Menu v0.1"); // Create a window - also bind to it.
 
 	ImGui::Text("Remember thee the acceptance of being unoriginal\nand bringing to bear external libraries,\nas a sin of the highest order.	 - Arty, 2023"); // Display some text (you can use a format strings too)
 
-	ImGui::ColorEdit3("Clear Colour", (float*)&clear_color); // Edit Clear colour - @DEBUG cannot work in this scope
-
-	//testShader.model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0));
-	//ImGui::DragFloat2("ModelProj Position", (float*)&position);
-
-	//ImGui::DragFloat("Camera Zoom", (float*)&testShader.camera_scale, 0.01f);
-	//testShader.scale_matrix = glm::scale(testShader.identity_matrix, glm::vec3(testShader.camera_scale, testShader.camera_scale, testShader.camera_scale));
-	//ImGui::DragFloat("Camera Rotation", (float*)&testShader.camera_rotation, 0.1f);
-
-	//if (ImGui::Button("Button")) counter++;
+	ImGui::ColorEdit3("Clear Colour", (float*)&clear_color); // Edit Clear colour
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);
 
@@ -271,10 +272,10 @@ void Game::gldraw_gui()
 	if (wireframeMode) ImGui::Text("ON");
 	else ImGui::Text("OFF");
 
-
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io_ptr->Framerate, io_ptr->Framerate);
 	ImGui::End();
 
+	//Test Menu
 	if (current_test)
 	{
 		ImGui::Begin("Tests");
@@ -286,6 +287,9 @@ void Game::gldraw_gui()
 			current_test->OnGUIRender();
 		ImGui::End();
 	}
+
+	ImGui::GetForegroundDrawList()->AddCircleFilled(io_ptr->MousePos, 10, ImGui::GetColorU32({ 1,1,1,1 })); // @Debug: This is surprisingly useful.
+	
 
 	//@CLEANUP: Test ImGui Frame
 	ImGui::Render();

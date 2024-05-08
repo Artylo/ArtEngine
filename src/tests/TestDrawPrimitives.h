@@ -1,7 +1,10 @@
 #pragma once
+#include <vector>
 #include "Test.h"
 #include "../system/graphics/Line.h"
-#include "../system/graphics/LineThickness.h"
+#include "../system/debug.h"
+
+#define IM Test::testGM->input_manager
 
 namespace test
 {
@@ -10,10 +13,11 @@ namespace test
     {
         public:
             Line test_line;
-            float line_colour[4] = {1.0, 1.0, 1.0, 1.0};
-            float positions[4] = {32, 32, 64, 128};
+            std::vector<float> line_colour = {1.0, 1.0, 1.0, 1.0};
+            std::vector<float> positions = {0, 0, 32, 32};
 
-            LineThickness* test_line_thickness;
+            //@TEST:
+            std::vector<Line> lines;
 
         public:
 

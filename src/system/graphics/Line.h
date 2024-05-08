@@ -15,7 +15,7 @@
 class Line
 {
 public:
-	//ImVec2 position = { 0,0 };
+	
 private:
 
 	std::vector<float> vertices;
@@ -36,6 +36,8 @@ private:
 	
 
 public:
+	Line();
+	Line(const Line& other);
 	Line(glm::vec2 start, glm::vec2 end);
 	~Line();
 
@@ -43,8 +45,11 @@ public:
 	void setMVP(glm::mat4 mvp);
 	void setColour(glm::vec4 colour);
 	void setColour(float colour[4]);
+	void setColour(std::vector<float> colour);
 
-	void Update(float deltaTime);
+	void getPositions(float* Ax, float* Ay, float* Bx, float* By);
+
+	void Update();
 	void Draw();
 	
 };

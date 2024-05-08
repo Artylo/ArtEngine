@@ -8,7 +8,9 @@ bool checkCollision(SDL_Rect a, SDL_Rect b);
 
 //Loose Math Functions
 Uint8 random(int max);
+float random(float X);
 int random_range(int min, int max);
+float random_range(float LO, float HI);
 double degtorad(double deg);
 double radtodeg(double rad);
 double lengthdir_x(int dist, double angle);

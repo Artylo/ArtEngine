@@ -8,9 +8,19 @@ Uint8 random(int max)
 	return rand() % (max+1);
 }
 
+float random(float X)
+{
+	return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / X));
+}
+
 int random_range(int min, int max)
 {
 	return (rand() % (max - min)) + min;
+}
+
+float random_range(float LO, float HI)
+{
+	return LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
 }
 
 double degtorad(double deg)
